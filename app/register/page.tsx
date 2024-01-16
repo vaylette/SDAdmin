@@ -7,7 +7,15 @@ export default function Register() {
     return (
         <>
             <AuthWrapper path={pathname ?? pathname}>
-                <p>djjj</p>
+                <div className="mt-[97px] flex justify-center">
+                    <div className='w-auto h-auto rounded-[20px]'>
+                        <div className='flex flex-row'>
+                            <div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </AuthWrapper>
         </>
     )

@@ -14,6 +14,9 @@ const config: Config = {
       backgroundImage: {
         'auth': "url('/images/background/auth.jpg')",
       },
+      dropShadow: {
+        'auth' : '0px 40px 50px rgba(0, 0, 0, 0.15)',
+      }
     },
     colors: {
       transparent: 'transparent',
