@@ -12,6 +12,7 @@ export default function DashboardLayout({
             <Aside />
             <div className='w-full flex flex-col'>
                 <Header />
+                {children}
             </div>
         </div>
       </div>
