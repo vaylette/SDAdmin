@@ -10,7 +10,7 @@ export default function AuthWrapper({
     path: string
 }) {
     return (
-        <div className="w-full h-screen bg-auth bg-no-repeat pt-[51px] px-[74px]">
+        <div className="w-full h-full bg-auth bg-no-repeat pt-[51px] px-[74px]">
             <div className="flex flex-col gap-[50px]">
                 <div className="flex flex-row justify-between items-center px-[26px]">
                     <Link href='#'>
