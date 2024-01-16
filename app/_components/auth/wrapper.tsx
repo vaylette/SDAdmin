@@ -3,10 +3,8 @@ import Image from "next/image"
 import logo from '../../../public/images/logo.png'
 
 export default function AuthWrapper({
-    children, 
     path,
 }: {
-    children: React.ReactNode,
     path: string
 }) {
     return (
@@ -22,7 +20,6 @@ export default function AuthWrapper({
                 </div>
                 <div className="w-full h-[1px] bg-black-300"></div>
             </div>
-            {children}
         </div>
     )
 }

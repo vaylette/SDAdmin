@@ -7,9 +7,7 @@ export default function Login() {
 
   return (
     <>
-      <AuthWrapper path={pathname ?? pathname}>
-        <p></p>
-      </AuthWrapper>
+      <AuthWrapper path={pathname ?? pathname}></AuthWrapper>
     </>
   )
 }
