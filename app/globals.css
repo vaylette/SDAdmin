@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.radial:hover {
+    background: radial-gradient(1066.74% 81.65% at 50% 50%, rgba(255, 206, 134, 0.80) 0%, rgba(255, 181, 73, 0.90) 100%);
+}
