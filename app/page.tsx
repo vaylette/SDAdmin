@@ -1,7 +1,11 @@
+import AuthWrapper from "./_components/auth/wrapper";
 
-export default function Home() {
+export default function Login() {
   return (
-    <main>
-    </main>
+    <>
+      <AuthWrapper>
+        <p>jj</p>
+      </AuthWrapper>
+    </>
   )
 }
