@@ -1,7 +1,9 @@
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../../../public/images/logo.png'
 import bulb from '../../../public/images/bulb.png'
+import intlTelInput from 'intl-tel-input'
 
 export default function AuthWrapper({
     path,
@@ -36,9 +38,7 @@ export default function AuthWrapper({
                                     <form className='flex flex-col items-center gap-[10px] w-[377px]'>
                                         <input type='text' className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Full name' />
                                         <input type='email' className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Email address' />
-                                        <div className='w-full bg-black-200 h-[54px] rounded-[5px] px-6 py-5 flex flex-row items-center'>
-                                            
-                                        </div>
+                                        <input type='text' className='w-full bg-black-200 h-[54px] rounded-[5px] px-6 py-5 flex flex-row items-center' />
                                         <input type='password' className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Create password' />
                                         <div className='mt-[9px] flex flex-row items-center gap-2 text-black-300 text-sm leading-[21px]'>
                                             <input type='checkbox' className='w-[14px] h-[14px] border-black-300' />

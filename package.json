@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "intl-tel-input": "^19.0.2",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18"
