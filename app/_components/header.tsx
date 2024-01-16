@@ -49,10 +49,11 @@ export default function Header() {
       <div className={`${drop.notifications || drop.profile ? 'fixed inset-0 bg-black-100 bg-blend-multiply' : 'hidden' }`}>
         {drop.notifications && (
             <>
-                <div className="flex justify-end pt-[125px] pr-[148px] relative">
-                    <div className="w-[366px] h-[468px] rounded-lg bg-white-default shadow-drop">
-
+                <div className="flex justify-end pt-[125px] pr-[148px]">
+                    <div className="w-[366px] h-[468px] rounded-lg bg-white-default shadow-drop relative">
+                        <div className="absolute -top-[6px] right-8 w-[13.24px] h-[13.24px] bg-white-default" style={{ transform: 'rotate(135deg)' }}></div>
                     </div>
+                    
                 </div>
             </>
         )}
