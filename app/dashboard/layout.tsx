@@ -8,9 +8,9 @@ export default function DashboardLayout({
   }) {
     return (
       <div className='min-w-screen h-screen bg-white-100'>
-        <div className='w-full grid grid-cols-2 h-full'>
+        <div className='w-full flex flex-row h-full'>
             <Aside />
-            <div className='flex flex-col'>
+            <div className='w-full flex flex-col'>
                 <Header />
             </div>
         </div>
