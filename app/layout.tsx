@@ -34,7 +34,8 @@ const helvetica = localFont({
         weight: '700',
         style: 'normal'
       },
-    ]
+    ],
+    variable: '--font-helvetica-now-display'
   })
 
 export const metadata: Metadata = {
@@ -49,7 +50,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={helvetica.className}>{children}</body>
+      <body className={`${helvetica.variable} font-sans`}>{children}</body>
     </html>
   )
 }
