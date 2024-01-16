@@ -39,8 +39,8 @@ const helvetica = localFont({
   })
 
 export const metadata: Metadata = {
-  title: 'Smart Darasa - Dashboard',
-  description: 'This is the smart darasa admin dashboard',
+  title: 'SmartDarasa - Dashboard',
+  description: 'This is the SmartDarasa admin dashboard',
 }
 
 export default function RootLayout({
@@ -50,7 +50,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${helvetica.variable} font-sans`}>{children}</body>
+      <body className={`${helvetica.variable} font-sans hidden lg:block`}>
+        <main className='min-w-screen min-h-screen'>
+          {children}
+        </main>
+      </body>
     </html>
   )
 }
