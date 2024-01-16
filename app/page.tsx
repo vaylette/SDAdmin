@@ -1,9 +1,13 @@
-import AuthWrapper from "./_components/auth/wrapper";
+'use client'
+import AuthWrapper from "./_components/auth/wrapper"
+import { usePathname } from "next/navigation"
 
 export default function Login() {
+  const pathname = usePathname()
+
   return (
     <>
-      <AuthWrapper route=''>
+      <AuthWrapper path={pathname ?? pathname}>
         <p></p>
       </AuthWrapper>
     </>

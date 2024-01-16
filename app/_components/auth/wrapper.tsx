@@ -1,10 +1,10 @@
 
 export default function AuthWrapper({
     children, 
-    route,
+    path,
 }: {
     children: React.ReactNode,
-    route: string
+    path: string
 }) {
     return (
         <div className="w-full h-screen bg-auth bg-no-repeat bg-contain">
