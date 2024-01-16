@@ -46,8 +46,16 @@ export default function Header() {
             </li>
         </ul>
       </header>
-      <div className={`${drop.notifications || drop.profile ? 'fixed inset-0 bg-black-100 bg-blend-multiply' : '' }`}>
+      <div className={`${drop.notifications || drop.profile ? 'fixed inset-0 bg-black-100 bg-blend-multiply' : 'hidden' }`}>
+        {drop.notifications && (
+            <>
+                <div className="flex justify-end pt-[125px] pr-[148px] relative">
+                    <div className="w-[366px] h-[468px] rounded-lg bg-white-default shadow-drop">
 
+                    </div>
+                </div>
+            </>
+        )}
       </div>
     </>
   )

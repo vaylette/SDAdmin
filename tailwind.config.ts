@@ -18,6 +18,9 @@ const config: Config = {
       dropShadow: {
         'auth' : '0px 40px 50px rgba(0, 0, 0, 0.15)',
       },
+      boxShadow: {
+        'drop': '0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 0px 2px 0px rgba(0, 0, 0, 0.06), 0px 4px 8px 0px rgba(0, 0, 0, 0.04)'
+      }
     },
     colors: {
       transparent: 'transparent',
