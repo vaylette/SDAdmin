@@ -1,8 +1,10 @@
 
 export default function Header() {
   return (
-    <div>
-      
-    </div>
+    <>
+      <header className="w-full h-[150px]">
+
+      </header>
+    </>
   )
 }
