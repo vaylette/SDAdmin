@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../../../public/images/logo.png'
 import bulb from '../../../public/images/bulb.png'
 
-export default function AuthWrapper() {
+export default async function AuthWrapper() {
+    console.log(process.env.API_URL)
     return (
         <div className='w-full h-auto bg-auth bg-no-repeat py-[51px] px-[74px]'>
             <div className='flex flex-col gap-[50px]'>
