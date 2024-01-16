@@ -11,6 +11,9 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-helvetica-now-display)']
       },
+      backgroundImage: {
+        'auth': "url('/images/background/auth.jpg')",
+      },
     },
     colors: {
       transparent: 'transparent',

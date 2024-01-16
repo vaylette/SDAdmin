@@ -5,7 +5,7 @@ export default function AuthWrapper({
     children: React.ReactNode
 }) {
     return (
-        <div className="w-full h-full bg-white-default">
+        <div className="w-full h-screen bg-auth bg-no-repeat bg-contain">
             {children}
         </div>
     )
