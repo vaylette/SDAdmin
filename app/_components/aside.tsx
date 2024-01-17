@@ -12,7 +12,7 @@ export default function Aside() {
          <div className="pt-[60px]">
             <Image src={logo} className="w-[159px] h-[91.2px]" alt="SmartDarasa" />
         </div>
-        <ul className="flex flex-col pt-[82px] gap-3 text-lg text-white-default">
+        <ul className="flex flex-col pt-14 gap-3 text-lg text-white-default">
             <li>
                 <Link href='/dashboard' className={`w-auto h-auto py-[22px] px-8 flex flex-row items-center cursor-pointer gap-[22px] rounded-lg radial ${pathname === '/dashboard' && 'radial_active mb-2'}`}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
