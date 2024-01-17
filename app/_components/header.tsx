@@ -60,10 +60,10 @@ export default function Header() {
             </li>
         </ul>
       </header>
-      <div className={`${drop.notifications || drop.profile ? 'fixed inset-0 bg-black-100 bg-blend-multiply z-50' : 'hidden' }`}>
+      <div className={`${drop.notifications || drop.profile ? 'absolute inset-0 bg-black-100 bg-blend-multiply z-50' : 'hidden' }`}>
         {drop.notifications && (
             <>
-                <div className="flex justify-end pt-[95px] pr-[118px]">
+                <div className="absolute top-[115px] right-[118px]">
                     <div className="w-[366px] h-[468px] rounded-lg bg-white-default shadow-drop relative">
                         <div className="absolute -top-[6px] right-8 w-[13.24px] h-[13.24px] bg-white-default" style={{ transform: 'rotate(135deg)' }}></div>
                     </div>
@@ -73,7 +73,7 @@ export default function Header() {
         )}
         {drop.profile && (
             <>
-                <div className="flex justify-end pt-[95px] pr-10">
+                <div className="absolute top-[115px] right-10">
                     <div className="w-[237px] h-[242px] rounded-lg bg-white-default shadow-drop relative">
                         <div className="absolute -top-[6px] right-8 w-[13.24px] h-[13.24px] bg-white-default" style={{ transform: 'rotate(135deg)' }}></div>
                     </div>
