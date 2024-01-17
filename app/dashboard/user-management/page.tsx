@@ -1,13 +1,23 @@
 'use client'
+import { ColumnDef, useReactTable } from "@tanstack/react-table"
 import { useState } from "react"
 
-interface Tab {
-  admins: boolean,
-  students: boolean,
-  parents: boolean,
-  teachers: boolean
-}
 export default function UserManagement() {
+  interface Tab {
+    admins: boolean,
+    students: boolean,
+    parents: boolean,
+    teachers: boolean
+  }
+
+  type Users = {
+    name: string,
+    email: string,
+    phone: string,
+    role: string,
+    permission: string
+  }
+
   const [tab, setTab] = useState<Tab>({
     admins:true,
     students:false,
