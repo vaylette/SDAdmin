@@ -45,6 +45,7 @@ const config: Config = {
         100: '#FF9D0D26',
         200: '#FF9D0D80',
         300: '#FFCE86',
+        400: '#FF9D0D1A'
       },
       'red': {
         default: '#FF0000',
