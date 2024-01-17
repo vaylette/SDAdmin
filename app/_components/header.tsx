@@ -1,13 +1,15 @@
 'use client'
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 
 interface Drop {
     notifications: boolean,
     profile: boolean
 }
   
-
 export default function Header() {
+    const [title, setTitle] = useState<string | null >(null)
+
     const [drop, setDrop] = useState<Drop>({
         notifications: false,
         profile: false
@@ -16,10 +18,24 @@ export default function Header() {
     const handleDrop = (dropType: string): void => {
         setDrop((prev) => ({ ...prev, [dropType]: true }))
     }
+
+    const pathname: string = usePathname()
+
+    console.log(pathname)
+
+    useEffect(() => {
+        switch(pathname) {
+            case '/dashboard': return setTitle('Overview'); break;
+            case '/dashboard/user-management': return setTitle('User Management'); break;
+            case '/dashboard/content-management': return setTitle('Content Management'); break;
+            default: setTitle('Overview')
+        }
+    }, [pathname])
+
   return (
     <>
       <header className="w-full h-[150px] bg-header flex flex-row justify-between items-center px-8">
-        <h6 className="font-bold text-orange-default text-[40px]">Overview</h6>
+        <h6 className="font-bold text-orange-default text-[40px]">{title}</h6>
         <ul className="flex flex-row gap-4 items-center">
             <li>
                 <button onClick={() => handleDrop('notifications')} className='bg-orange-default w-[50px] h-[50px] rounded-full flex items-center justify-center'>
