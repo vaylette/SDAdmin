@@ -8,7 +8,7 @@ export default function Aside() {
     const pathname = usePathname()
   return (
     <>
-      <aside className="h-full lg:w-[354px] 2xl:w-[404px] bg-orange-default flex flex-col items-center px-4">
+      <aside className="min-h-screen lg:w-[354px] 2xl:w-[404px] bg-orange-default flex flex-col items-center px-4">
          <div className="pt-[60px]">
             <Image src={logo} className="w-[159px] h-[91.2px]" alt="SmartDarasa" />
         </div>

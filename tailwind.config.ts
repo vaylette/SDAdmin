@@ -38,17 +38,20 @@ const config: Config = {
         default: '#FFFFFF',
         100: '#F4F4F4',
         200: '#FFFFFFCC',
-        300: '#F7F7F7'
+        300: '#F7F7F7',
       },
       'orange': {
         default: '#FF9D0D',
         100: '#FF9D0D26',
         200: '#FF9D0D80',
-        300: '#FFCE86'
+        300: '#FFCE86',
       },
       'red': {
-        default: '#FF0000'
-      }
+        default: '#FF0000',
+      },
+      'green': {
+        100: '#2FB21B',
+      },
     }
   },
   plugins: [],
