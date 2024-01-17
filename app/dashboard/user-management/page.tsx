@@ -8,6 +8,13 @@ interface Tab {
   teachers: boolean
 }
 export default function UserManagement() {
+  const [tab, setTab] = useState<Tab>({
+    admins:true,
+    students:false,
+    parents:false,
+    teachers:false,
+  })
+
   return (
     <>
       <div className='w-full h-full p-6'>
