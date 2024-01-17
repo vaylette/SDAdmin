@@ -21,8 +21,6 @@ export default function Header() {
 
     const pathname: string = usePathname()
 
-    console.log(pathname)
-
     useEffect(() => {
         switch(pathname) {
             case '/dashboard': return setTitle('Overview'); break;
