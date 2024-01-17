@@ -34,6 +34,72 @@ export default function UserManagement() {
     },
   ]
 
+  const users = [
+    {
+      name: 'Carlos Mtibwa',
+      email: 'carlos@gmail.com',
+      phone: '255765381198',
+      role: 'Admin',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Samwel Yanga',
+      email: 'samwel@gmail.com',
+      phone: '255765381198',
+      role: 'Teacher',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Zulfa Ihefu',
+      email: 'zulfa@gmail.com',
+      phone: '255765381198',
+      role: 'Admin',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Fetty Simba',
+      email: 'fetty@gmail.com',
+      phone: '255765381198',
+      role: 'Teacher',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Sajidu Mlandege',
+      email: 'sajidu@gmail.com',
+      phone: '255765381198',
+      role: 'Admin,Teacher',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Dany Mashujaa',
+      email: 'dany@gmail.com',
+      phone: '255765381198',
+      role: 'Admin,Teacher',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Jean Yanga',
+      email: 'jean@gmail.com',
+      phone: '255765381198',
+      role: 'Teacher',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Abdul Arsenal',
+      email: 'abdul@gmail.com',
+      phone: '255765381198',
+      role: 'Admin',
+      permission: 'Level 1'
+    },
+    {
+      name: 'Waissa Mwaisa',
+      email: 'waissa@gmail.com',
+      phone: '255765381198',
+      role: 'Admin,Teacher',
+      permission: 'Level 1'
+    },
+  ]
+
   const handleActiveTab = (activeTab: keyof Tab): void => {
     setTab((prev) => ({
       admins: false,
@@ -57,6 +123,24 @@ export default function UserManagement() {
               ))}
             </div>
             <button className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add {tab.admins ? 'Admin' : (tab.parents ? 'Parent' : (tab.students ? 'Student' : 'Teacher'))} +</button>
+          </div>
+          <div>
+            <table className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default text-[15px]'>
+              <thead className='uppercase font-medium'>
+                <tr className='border-b-[1px] border-b-black-700 w-full'>
+                  <th className='px-8 py-9'>S/O</th>
+                  <th className='px-8 py-9'>Name</th>
+                  <th className='px-8 py-9'>Email</th>
+                  <th className='px-8 py-9'>Phone</th>
+                  <th className='px-8 py-9'>Identity</th>
+                  <th className='px-8 py-9'>Permission</th>
+                  <th className='px-8 py-9'></th>
+                </tr>
+              </thead>
+              <tbody className='text-black-100'>
+
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
