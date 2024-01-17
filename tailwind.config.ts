@@ -48,6 +48,9 @@ const config: Config = {
       },
       'red': {
         default: '#FF0000'
+      },
+      'green': {
+        100: '#2FB21B'
       }
     }
   },
