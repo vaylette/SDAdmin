@@ -1,7 +1,7 @@
 'use client'
 import DataTable from '@/app/_components/datatable'
 // import DataTable from "@/app/_components/datatable"
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getPaginationRowModel } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import { useState } from "react"
 
 interface Tab {
@@ -195,18 +195,6 @@ export default function UserManagement() {
   ]
 
   const [data, setData] = useState(() => [...users])
-
-  const table = useReactTable({ 
-    data, 
-    columns, 
-    getCoreRowModel: getCoreRowModel(), 
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: {
-      pagination: {
-        pageSize: 8
-      }
-    }
-  })
 
   const handleModal = (modalType: string): void => {
     setModal((prev) => ({ ...prev, [modalType]: true }))
