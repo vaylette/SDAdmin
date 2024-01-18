@@ -304,7 +304,7 @@ export default function UserManagement() {
               </button>
             </div>
             <div className='flex flex-col gap-10'>
-                <h6 className='text-black-100 text-3xl font-bold'>Add {tab.admins ? 'Admin' : (tab.parents ? 'Parent' : (tab.students ? 'Student' : 'Teacher'))}</h6>
+                <h6 className='text-black-100 text-3xl font-bold'>Add Admin</h6>
                 <div className='w-full h-[1px] bg-black-200'></div>
             </div>
           </div>
