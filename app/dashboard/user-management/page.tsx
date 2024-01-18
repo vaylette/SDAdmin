@@ -211,6 +211,11 @@ export default function UserManagement() {
     setModal((prev) => ({ ...prev, [modalType]: true }))
   }
 
+  const handleModalClose = (): void => {
+    setModal({ create: false, edit: false });
+  };
+
+
   return (
     <>
       <div className='w-full h-full p-6'>
@@ -288,8 +293,8 @@ export default function UserManagement() {
       <div className={`${modal.create || modal.edit ? 'fixed inset-0 bg-black-100 bg-blend-multiply z-50 justify-end' : 'hidden'}`}>
         <div className='w-full h-full flex justify-end'>
           <div className='block bg-white-100 w-[432px] h-full relative'>
-            <div className='absolute top-8 -left-[50px]'>
-              <button className='w-[50px] h-[60px] bg-orange-default flex items-center justify-center rounded-l-md'>
+            <div className='absolute top-10 -left-[50px]'>
+              <button onClick={handleModalClose} className='w-[50px] h-[60px] bg-orange-default flex items-center justify-center rounded-l-sm'>
                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M16 1L1 16" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M1 1L16 16" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
