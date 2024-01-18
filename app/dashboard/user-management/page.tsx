@@ -146,7 +146,7 @@ export default function UserManagement() {
   const columns = [
     columnHelper.accessor('s_no', {
       header: () => 'S/No',
-      cell: (info) => info.row.index +1,
+      cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
       
     }),
     columnHelper.accessor('name', {
