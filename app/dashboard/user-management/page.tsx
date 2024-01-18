@@ -185,7 +185,7 @@ export default function UserManagement() {
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            <button className='text-orange-default'>Edit</button>
+            <button onClick={() => handleModal('edit')} className='text-orange-default'>Edit</button>
             <button className='text-red-default'>Restrict</button>
           </div>
         </>
@@ -304,7 +304,7 @@ export default function UserManagement() {
               </button>
             </div>
             <div className='flex flex-col gap-10'>
-                <h6 className='text-black-100 text-3xl font-bold'>Add Admin</h6>
+                <h6 className='text-black-100 text-3xl font-bold'>{modal.create ? 'Add Admin' : 'Edit Profile'}</h6>
                 <div className='w-full h-[1px] bg-black-200'></div>
                 <form className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>
                   <div className='flex flex-col gap-2'>
@@ -331,7 +331,7 @@ export default function UserManagement() {
                       <option>Level 2 (Content download)</option>
                     </select>
                   </div>
-                  <button className='w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default font-medium text-xl'>Confirm</button>
+                  <button className='w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl'>{modal.create ? 'Confirm' : 'Save Changes'}</button>
                 </form>
             </div>
           </div>
