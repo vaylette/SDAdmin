@@ -12,11 +12,13 @@ export default function UserManagement() {
   }
 
   type User = {
+    s_no: string | number | null | undefined
     name: string,
     email: string,
     phone: string,
     role: string,
-    permission: string
+    permission: string,
+    action: null
   }
 
   const [tab, setTab] = useState<Tab>({
@@ -47,67 +49,85 @@ export default function UserManagement() {
 
   const users: User[] = [
     {
+      s_no: '',
       name: 'Carlos Mtibwa',
       email: 'carlos@gmail.com',
       phone: '255765381198',
       role: 'Admin',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Samwel Yanga',
       email: 'samwel@gmail.com',
       phone: '255765381198',
       role: 'Teacher',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Zulfa Ihefu',
       email: 'zulfa@gmail.com',
       phone: '255765381198',
       role: 'Admin',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Fetty Simba',
       email: 'fetty@gmail.com',
       phone: '255765381198',
       role: 'Teacher',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Sajidu Mlandege',
       email: 'sajidu@gmail.com',
       phone: '255765381198',
       role: 'Admin,Teacher',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Dany Mashujaa',
       email: 'dany@gmail.com',
       phone: '255765381198',
       role: 'Admin,Teacher',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Jean Yanga',
       email: 'jean@gmail.com',
       phone: '255765381198',
       role: 'Teacher',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Abdul Arsenal',
       email: 'abdul@gmail.com',
       phone: '255765381198',
       role: 'Admin',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
     {
+      s_no: '',
       name: 'Waissa Mwaisa',
       email: 'waissa@gmail.com',
       phone: '255765381198',
       role: 'Admin,Teacher',
-      permission: 'Level 1'
+      permission: 'Level 1',
+      action: null
     },
   ]
 
@@ -124,6 +144,11 @@ export default function UserManagement() {
   const columnHelper = createColumnHelper<User>()
 
   const columns = [
+    columnHelper.accessor('s_no', {
+      header: () => 'Serial Number',
+      cell: (info) => info.row.index +1,
+      
+    }),
     columnHelper.accessor('name', {
       header: () => 'Name',
       cell: info => info.getValue()
