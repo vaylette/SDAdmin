@@ -234,13 +234,13 @@ export default function UserManagement() {
               <div className='flex flex-row items-center gap-[10px]'>
                 <span>Showing 1 to 8 of 25 entries</span>      
                 <div className='flex flex-row gap-[10px] items-center'>
-                  <button className='bg-black-400 w-6 h-6 flex items-center justify-center rounded-sm'>
+                  <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className='cursor-pointer bg-black-400 w-6 h-6 flex items-center justify-center rounded-sm'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" viewBox="0 0 7 10" fill="none">
                       <path fillRule="evenodd" clipRule="evenodd" d="M6.65807 8.69893L2.89593 4.92857L6.65807 1.15821L5.49986 0L0.571289 4.92857L5.49986 9.85714L6.65807 8.69893Z" fill="white"/>
                     </svg>
                   </button>
                   <span className='leading-normal'>Page 1</span>
-                  <button className='bg-orange-default w-6 h-6 flex items-center justify-center rounded-sm'>
+                  <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className='cursor-pointer bg-orange-default w-6 h-6 flex items-center justify-center rounded-sm'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" viewBox="0 0 7 10" fill="none">
                       <path fillRule="evenodd" clipRule="evenodd" d="M0 8.69893L3.76214 4.92857L0 1.15821L1.15821 0L6.08679 4.92857L1.15821 9.85714L0 8.69893Z" fill="white"/>
                     </svg>
