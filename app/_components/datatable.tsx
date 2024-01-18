@@ -14,7 +14,7 @@
 //     const tableInstance = useReactTable({
 //         columns: columnDef,
 //         data: tableData,
-//         getCoreRowModel: getCoreRowModel(),
+//         getCoreRowModel: getCoreRowModel(),#22222299
 //     })
 //   return (
 //     <>
