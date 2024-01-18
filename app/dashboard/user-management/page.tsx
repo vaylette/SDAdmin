@@ -223,7 +223,7 @@ export default function UserManagement() {
                 </button>
               ))}
             </div>
-            <button className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add {tab.admins ? 'Admin' : (tab.parents ? 'Parent' : (tab.students ? 'Student' : 'Teacher'))} +</button>
+            <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add {tab.admins ? 'Admin' : (tab.parents ? 'Parent' : (tab.students ? 'Student' : 'Teacher'))} +</button>
           </div>
           <div className='flex flex-col gap-10 text-[15px]'>
             <table className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default'>
@@ -285,8 +285,12 @@ export default function UserManagement() {
           </div>
         </div>
       </div>
-      <div className={`${modal.create || modal.edit ? 'fixed inset-0 bg-black-100 bg-blend-multiply z-50' : 'hidden'}`}>
+      <div className={`${modal.create || modal.edit ? 'fixed inset-0 bg-black-100 bg-blend-multiply z-50 justify-end' : 'hidden'}`}>
+        <div className='w-full h-full flex justify-end'>
+          <div className='block bg-white-100 w-[432px] h-full'>
 
+          </div>
+        </div>
       </div>
     </>
   )
