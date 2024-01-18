@@ -1,6 +1,6 @@
 'use client'
 // import DataTable from "@/app/_components/datatable"
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getPaginationRowModel } from '@tanstack/react-table'
 import { useState, useReducer } from "react"
 
 export default function UserManagement() {
@@ -184,7 +184,17 @@ export default function UserManagement() {
 
   const [data, setData] = useState(() => [...users])
 
-  const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel()})
+  const table = useReactTable({ 
+    data, 
+    columns, 
+    getCoreRowModel: getCoreRowModel(), 
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 8
+      }
+    }
+  })
 
   return (
     <>
@@ -232,7 +242,16 @@ export default function UserManagement() {
             </table>
             <div className='flex justify-end text-black-400 leading-4'>
               <div className='flex flex-row items-center gap-[10px]'>
-                <span>Showing 1 to 8 of 25 entries</span>      
+              <span>
+                Showing&nbsp;    
+                {table.getState().pagination?.pageIndex !== undefined && table.options.state.pagination?.pageSize !== undefined &&
+                  (table.getState().pagination.pageIndex * table.options.state.pagination.pageSize + 1)
+                } to&nbsp;
+                {table.getState().pagination?.pageIndex !== undefined && table.options.state.pagination?.pageSize !== undefined &&
+                  Math.min((table.getState().pagination.pageIndex + 1) * table.options.state.pagination.pageSize as number, users.length)
+                } of {users.length} entries
+                </span>
+
                 <div className='flex flex-row gap-[10px] items-center'>
                   <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className='cursor-pointer bg-black-400 w-6 h-6 flex items-center justify-center rounded-sm'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" viewBox="0 0 7 10" fill="none">
