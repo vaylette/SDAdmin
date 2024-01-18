@@ -1,5 +1,5 @@
 'use client'
-import DataTable from "@/app/_components/datatable"
+// import DataTable from "@/app/_components/datatable"
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useState, useReducer } from "react"
 
@@ -89,7 +89,7 @@ export default function UserManagement() {
       name: 'Sajidu Mlandege',
       email: 'sajidu@gmail.com',
       phone: '255765381198',
-      role: 'Admin,Teacher',
+      role: 'Admin, Teacher',
       permission: 'Level 1',
       action: null
     },
@@ -98,7 +98,7 @@ export default function UserManagement() {
       name: 'Dany Mashujaa',
       email: 'dany@gmail.com',
       phone: '255765381198',
-      role: 'Admin,Teacher',
+      role: 'Admin, Teacher',
       permission: 'Level 1',
       action: null
     },
@@ -125,7 +125,7 @@ export default function UserManagement() {
       name: 'Waissa Mwaisa',
       email: 'waissa@gmail.com',
       phone: '255765381198',
-      role: 'Admin,Teacher',
+      role: 'Admin, Teacher',
       permission: 'Level 1',
       action: null
     },
@@ -147,7 +147,7 @@ export default function UserManagement() {
     columnHelper.accessor('s_no', {
       header: () => 'S/No',
       cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
-      
+      size: 75,
     }),
     columnHelper.accessor('name', {
       header: () => 'Name',
