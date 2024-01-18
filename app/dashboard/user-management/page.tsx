@@ -1,26 +1,27 @@
 'use client'
 // import DataTable from "@/app/_components/datatable"
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getPaginationRowModel } from '@tanstack/react-table'
-import { useState, useReducer } from "react"
+import { useState } from "react"
+
+interface Tab {
+  admins: boolean,
+  students: boolean,
+  parents: boolean,
+  teachers: boolean
+}
+
+type User = {
+  s_no: string | number | null | undefined
+  name: string,
+  email: string,
+  phone: string,
+  role: string,
+  permission: string,
+  action: null
+}
 
 export default function UserManagement() {
-  interface Tab {
-    admins: boolean,
-    students: boolean,
-    parents: boolean,
-    teachers: boolean
-  }
-
-  type User = {
-    s_no: string | number | null | undefined
-    name: string,
-    email: string,
-    phone: string,
-    role: string,
-    permission: string,
-    action: null
-  }
-
+  
   const [tab, setTab] = useState<Tab>({
     admins:true,
     students:false,
