@@ -1,4 +1,5 @@
 'use client'
+import DataTable from '@/app/_components/datatable'
 // import DataTable from "@/app/_components/datatable"
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getPaginationRowModel } from '@tanstack/react-table'
 import { useState } from "react"
@@ -232,64 +233,7 @@ export default function UserManagement() {
               <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
             )}
           </div>
-          <div className='flex flex-col gap-10 text-[15px]'>
-            <table className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default'>
-              <thead className='uppercase font-medium'>
-                {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={headerGroup.id} className='border-b-[1px] border-b-black-700'>
-                    {headerGroup.headers.map(header => (
-                      <th key={header.id} className='p-8'>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map(row => (
-                  <tr key={row.id} className='text-centere border-b-[1px] border-b-black-700'>
-                    {row.getVisibleCells().map(cell => (
-                      <td key={cell.id} className='p-8 text-center'>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className='flex justify-end text-black-400 leading-4'>
-              <div className='flex flex-row items-center gap-[10px]'>
-              <span>
-                Showing&nbsp;    
-                {table.getState().pagination?.pageIndex !== undefined && table.options.state.pagination?.pageSize !== undefined &&
-                  (table.getState().pagination.pageIndex * table.options.state.pagination.pageSize + 1)
-                } to&nbsp;
-                {table.getState().pagination?.pageIndex !== undefined && table.options.state.pagination?.pageSize !== undefined &&
-                  Math.min((table.getState().pagination.pageIndex + 1) * table.options.state.pagination.pageSize as number, users.length)
-                } of {users.length} entries
-                </span>
-
-                <div className='flex flex-row gap-[10px] items-center'>
-                  <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className='cursor-pointer bg-black-400 w-6 h-6 flex items-center justify-center rounded-sm'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" viewBox="0 0 7 10" fill="none">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M6.65807 8.69893L2.89593 4.92857L6.65807 1.15821L5.49986 0L0.571289 4.92857L5.49986 9.85714L6.65807 8.69893Z" fill="white"/>
-                    </svg>
-                  </button>
-                  <span className='leading-normal'>Page {table.options.state.pagination?.pageIndex as number + 1}</span>
-                  <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className='cursor-pointer bg-orange-default w-6 h-6 flex items-center justify-center rounded-sm'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" viewBox="0 0 7 10" fill="none">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M0 8.69893L3.76214 4.92857L0 1.15821L1.15821 0L6.08679 4.92857L1.15821 9.85714L0 8.69893Z" fill="white"/>
-                    </svg>
-                  </button>  
-                </div>
-              </div>
-            </div>
-          </div>
+          <DataTable columns={columns} data={data} />
         </div>
       </div>
       <div className={`${modal.create || modal.edit ? 'absolute min-h-screen inset-0 bg-black-100 bg-blend-multiply z-50 justify-end' : 'hidden'}`}>
