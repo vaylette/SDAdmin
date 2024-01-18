@@ -20,6 +20,11 @@ type User = {
   action: null
 }
 
+interface Modal {
+  create: boolean,
+  edit: boolean
+}
+
 export default function UserManagement() {
   
   const [tab, setTab] = useState<Tab>({
@@ -28,6 +33,11 @@ export default function UserManagement() {
     parents:false,
     teachers:false,
   })
+
+  const [modal, setModal] = useState<Modal>({
+    create: false,
+    edit: false
+})
 
   const tabList = [
     {
@@ -197,6 +207,10 @@ export default function UserManagement() {
     }
   })
 
+  const handleModal = (modalType: string): void => {
+    setModal((prev) => ({ ...prev, [modalType]: true }))
+  }
+
   return (
     <>
       <div className='w-full h-full p-6'>
@@ -270,6 +284,9 @@ export default function UserManagement() {
             </div>
           </div>
         </div>
+      </div>
+      <div className={`${modal.create || modal.edit ? 'fixed inset-0 bg-black-100 bg-blend-multiply z-50' : 'hidden'}`}>
+
       </div>
     </>
   )
