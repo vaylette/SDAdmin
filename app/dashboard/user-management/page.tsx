@@ -169,6 +169,17 @@ export default function UserManagement() {
       header: () => 'Permission',
       cell: info => info.getValue()
     }),
+    columnHelper.accessor('action', {
+      header: () => '',
+      cell: (info) => (
+        <>
+          <div className='flex flex-row gap-6 font-medium'>
+            <button className='text-orange-default'>Edit</button>
+            <button className='text-red-default'>Restrict</button>
+          </div>
+        </>
+      )
+    }),
   ]
 
   const [data, setData] = useState(() => [...users])
