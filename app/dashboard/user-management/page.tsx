@@ -145,7 +145,7 @@ export default function UserManagement() {
 
   const columns = [
     columnHelper.accessor('s_no', {
-      header: () => 'Serial Number',
+      header: () => 'S/No',
       cell: (info) => info.row.index +1,
       
     }),
@@ -212,7 +212,7 @@ export default function UserManagement() {
                 {table.getRowModel().rows.map(row => (
                   <tr key={row.id} className='text-centere border-b-[1px] border-b-black-700'>
                     {row.getVisibleCells().map(cell => (
-                      <td key={cell.id} className='p-8'>
+                      <td key={cell.id} className='p-8 text-center'>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
                     ))}
