@@ -1,6 +1,7 @@
 'use client'
-import { ColumnDef, useReactTable } from "@tanstack/react-table"
-import { useState } from "react"
+import DataTable from "@/app/_components/datatable"
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { useState, useReducer } from "react"
 
 export default function UserManagement() {
   interface Tab {
@@ -10,7 +11,7 @@ export default function UserManagement() {
     teachers: boolean
   }
 
-  type Users = {
+  type User = {
     name: string,
     email: string,
     phone: string,
@@ -44,7 +45,7 @@ export default function UserManagement() {
     },
   ]
 
-  const users = [
+  const users: User[] = [
     {
       name: 'Carlos Mtibwa',
       email: 'carlos@gmail.com',
@@ -120,6 +121,36 @@ export default function UserManagement() {
     }));
   };
 
+  const columnHelper = createColumnHelper<User>()
+
+  const columns = [
+    columnHelper.accessor('name', {
+      header: () => 'Name',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('email', {
+      header: () => 'Email',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('phone', {
+      header: () => 'Phone',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('role', {
+      header: () => 'Role',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('permission', {
+      header: () => 'Permission',
+      cell: info => info.getValue()
+    }),
+  ]
+
+  const [data, setData] = useState(() => [...users])
+  const rerender = useReducer(() => ({}), {})[1]
+
+  const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel()})
+
   return (
     <>
       <div className='w-full h-full p-6'>
@@ -137,18 +168,31 @@ export default function UserManagement() {
           <div>
             <table className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default text-[15px]'>
               <thead className='uppercase font-medium'>
-                <tr className='border-b-[1px] border-b-black-700 w-full'>
-                  <th className='px-8 py-9'>S/O</th>
-                  <th className='px-8 py-9'>Name</th>
-                  <th className='px-8 py-9'>Email</th>
-                  <th className='px-8 py-9'>Phone</th>
-                  <th className='px-8 py-9'>Identity</th>
-                  <th className='px-8 py-9'>Permission</th>
-                  <th className='px-8 py-9'></th>
-                </tr>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <tr key={headerGroup.id} className='border-b-[1px] border-b-black-700'>
+                    {headerGroup.headers.map(header => (
+                      <th key={header.id} className='p-8'>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
               </thead>
-              <tbody className='text-black-100'>
-
+              <tbody>
+                {table.getRowModel().rows.map(row => (
+                  <tr key={row.id} className='text-centere border-b-[1px] border-b-black-700'>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id} className='p-8'>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
