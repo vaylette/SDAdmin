@@ -1,6 +1,6 @@
 'use client'
 import { useMemo } from "react"
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getPaginationRowModel } from '@tanstack/react-table'
+import { flexRender, getCoreRowModel, useReactTable, getPaginationRowModel } from '@tanstack/react-table'
 interface DataTableProps {
     columns: Array<any>;
     data: Array<any>;
