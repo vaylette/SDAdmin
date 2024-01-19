@@ -50,12 +50,10 @@ export default function Dashboard() {
   ]
   return (
     <>
-      <div className='w-full h-full p-6'>
-        <div className='grid grid-cols-4 gap-5'>
-          {data.map((item, index) => (
-            <OverviewCard key={index} title={item.title} quantity={item.quantity} growth={item.growth} />
-          ))}
-        </div>
+      <div className='grid grid-cols-4 gap-5'>
+        {data.map((item, index) => (
+          <OverviewCard key={index} title={item.title} quantity={item.quantity} growth={item.growth} />
+        ))}
       </div>
     </>
   )

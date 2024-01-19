@@ -12,7 +12,9 @@ export default function DashboardLayout({
             <Aside />
             <div className='w-full flex flex-col'>
                 <Header />
-                {children}
+                <div className='w-full h-full p-6'>
+                  {children}
+                </div>
             </div>
         </div>
       </div>
