@@ -25,7 +25,7 @@ export default function ContentManagement() {
   ]
   return (
     <>
-      <div className='grid grid-cols-4 gap-5'>
+      <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
         {data.map((item, index) => (
           <OverviewCard key={index} title={item.title} quantity={item.quantity} growth={item.growth} />
         ))}
