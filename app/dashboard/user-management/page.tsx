@@ -207,22 +207,20 @@ export default function UserManagement() {
 
   return (
     <>
-      <div className='w-full h-full p-6'>
-        <div className='flex flex-col gap-5'>
-          <div className='flex flex-row justify-between text-[20px]'>
-            <div className='flex flex-row gap-[10px]'>
-              {tabList?.map((item, index) => (
-                <button key={index} className={`w-[128px] h-[60px] rounded-[5px] flex items-center justify-center ${tab[item.tab as keyof Tab] ? 'bg-orange-default text-white-default' : 'text-orange-default border-[0.5px] border-solid border-orange-200 bg-orange-400'}`} onClick={() => handleActiveTab(item.tab as keyof Tab)}>
-                  {item.name}
-                </button>
-              ))}
-            </div>
-            {tab.admins && (
-              <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
-            )}
+      <div className='flex flex-col gap-5'>
+        <div className='flex flex-row justify-between text-[20px]'>
+          <div className='flex flex-row gap-[10px]'>
+            {tabList?.map((item, index) => (
+              <button key={index} className={`w-[128px] h-[60px] rounded-[5px] flex items-center justify-center ${tab[item.tab as keyof Tab] ? 'bg-orange-default text-white-default' : 'text-orange-default border-[0.5px] border-solid border-orange-200 bg-orange-400'}`} onClick={() => handleActiveTab(item.tab as keyof Tab)}>
+                {item.name}
+              </button>
+            ))}
           </div>
-          <DataTable columns={columns} data={data} />
+          {tab.admins && (
+            <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
+          )}
         </div>
+        <DataTable columns={columns} data={data} />
       </div>
       <div className={`${modal.create || modal.edit ? 'absolute min-h-screen inset-0 bg-black-100 bg-blend-multiply z-50 justify-end' : 'hidden'}`}>
         <div className='w-full h-full flex justify-end'>
