@@ -1,6 +1,5 @@
 'use client'
 import DataTable from '@/app/_components/datatable'
-// import DataTable from "@/app/_components/datatable"
 import { createColumnHelper } from '@tanstack/react-table'
 import { useState } from "react"
 
