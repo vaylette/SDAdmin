@@ -9,9 +9,11 @@ export default function OverviewCard({ title, quantity, growth }: { title: strin
             <div className='absolute bottom-2'>
               <span className='text-orange-default text-[50px] font-bold text-center'>{quantity}</span>
             </div>
-            <div className={`absolute top-[11px] right-[14px] w-auto rounded-[3px] h-auto ${growth && growth < 0 ? 'bg-red-default' : 'bg-green-100'} py-[1px] px-[7px] bg-opacity-10`}>
-              <span className={`${growth && growth < 0 ? 'text-red-default' : 'text-green-100'} font-medium text-[14px]`}>{growth} %</span>
-            </div>
+            {growth && (
+                <div className={`absolute top-[11px] right-[14px] w-auto rounded-[3px] h-auto ${growth < 0 ? 'bg-red-default' : 'bg-green-100'} py-[1px] px-[7px] bg-opacity-10`}>
+                    <span className={`${growth < 0 ? 'text-red-default' : 'text-green-100'} font-medium text-[14px]`}>{growth} %</span>
+                </div>
+            )}
         </div>
     </>
   )

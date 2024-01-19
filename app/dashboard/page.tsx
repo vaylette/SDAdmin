@@ -1,5 +1,37 @@
 
 export default function Dashboard() {
+  const data = [
+    {
+      title: 'Daily Active Users',
+      quantity: 235,
+      growth: +3.5
+    },
+    {
+      title: 'Total App Downloads',
+      quantity: 235,
+      growth: +3.5
+    },
+    {
+      title: 'Daily Active Users',
+      quantity: 235,
+      growth: +3.5
+    },
+    {
+      title: 'Daily Active Users',
+      quantity: 235,
+      growth: +3.5
+    },
+    {
+      title: 'Daily Active Users',
+      quantity: 235,
+      growth: +3.5
+    },
+    {
+      title: 'Daily Active Users',
+      quantity: 235,
+      growth: +3.5
+    },
+  ]
   return (
     <>
       <div className='w-full h-full p-6'>
