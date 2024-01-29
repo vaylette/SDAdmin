@@ -9,3 +9,11 @@
 .radial_active {
     background: radial-gradient(1066.74% 81.65% at 50% 50%, rgba(255, 206, 134, 0.80) 0%, rgba(255, 181, 73, 0.90) 100%);
 }
+
+@keyframes blink { 50% { fill: transparent }}
+.dot { 
+  animation: 1s blink infinite;
+  fill: #FFFFFF;
+}
+.dot:nth-child(2) { animation-delay: 250ms }
+.dot:nth-child(3) { animation-delay: 500ms }

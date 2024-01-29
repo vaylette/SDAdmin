@@ -87,6 +87,13 @@ export default function AuthWrapper() {
                                         <div className='mt-[10px]'>
                                             <button type='submit' className={`w-[377px] h-[54px] bg-orange-default uppercase text-white-default text-lg font-medium leading-[21px] flex items-center justify-center rounded-full ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
                                                 <span>log in</span>
+                                                {loading && (
+                                                    <svg height="40" width="40" className="text-white-default">
+                                                        <circle className="dot" cx="10" cy="20" r="3" />
+                                                        <circle className="dot" cx="20" cy="20" r="3" />
+                                                        <circle className="dot" cx="30" cy="20" r="3" />
+                                                  </svg>
+                                                )}
                                             </button>
                                         </div>
                                     </form>
