@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
+import useAuthStore, { AuthStore } from "../store/useAuthStore"
+import Logout from "../actions/logout"
 
 interface Drop {
     notifications: boolean,
@@ -9,6 +11,12 @@ interface Drop {
   
 export default function Header() {
     const [title, setTitle] = useState<string | null >(null)
+
+    const authStore = useAuthStore((state) => state) as AuthStore
+
+    const logout = Logout()
+
+    const { user } = authStore
 
     const [drop, setDrop] = useState<Drop>({
         notifications: false,
@@ -74,8 +82,14 @@ export default function Header() {
         {drop.profile && (
             <>
                 <div className="absolute top-[115px] right-10">
-                    <div className="w-[237px] h-[242px] rounded-lg bg-white-default shadow-drop relative">
+                    <div className="w-[237px] h-[242px] rounded-lg py-9 px-[30px] bg-white-default shadow-drop relative">
                         <div className="absolute -top-[6px] right-8 w-[13.24px] h-[13.24px] bg-white-default" style={{ transform: 'rotate(135deg)' }}></div>
+                        <div className='flex flex-col'>
+                            <ul className='flex flex-col ga-[13px]'>
+                                <li className='text-orange-default text-lg'>Admin</li>
+                                <li className=''></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </>

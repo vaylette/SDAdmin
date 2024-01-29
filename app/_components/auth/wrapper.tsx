@@ -36,6 +36,7 @@ export default function AuthWrapper() {
     const handleSubmit = async (e: any) => {
         e.preventDefault()
         const response = await authenticate(form)
+        console.log(response)
         if(response.status === 401){
             toast.error(response.data.message)
         } else {
