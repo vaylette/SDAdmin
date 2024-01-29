@@ -23,6 +23,8 @@ export default function AuthWrapper() {
         password: ""
     })
 
+    const [loading, setLoading] = useState(false)
+
     const handleChange = (event: any) => {
         const {name, value} = event.target
         setForm(prevForm => {
@@ -35,17 +37,25 @@ export default function AuthWrapper() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        const response = await authenticate(form)
-        console.log(response)
-        if(response.status === 401){
-            toast.error(response.data.message)
-        } else {
-            setAuthentication(true)
-            setUser(response.user)
-            setToken(response.access_token)
-            document.cookie = `token=${response.access_token};secure;`
-            router.push('/dashboard')
+        setLoading(true)
+
+        try {
+            const response = await authenticate(form)
+            if(response.status === 401){
+                toast.error(response.data.message)
+            } else {
+                setAuthentication(true)
+                setUser(response.user)
+                setToken(response.access_token)
+                document.cookie = `token=${response.access_token};secure;`
+                router.push('/dashboard')
+            }
+        } catch (error) {
+            toast.error('Authentication failed')
+        } finally { 
+            setLoading(false)
         }
+        
     }
 
     return (
@@ -75,7 +85,9 @@ export default function AuthWrapper() {
                                         <input type='email' onChange={handleChange} value={form.username} name="username" className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Email address' />
                                         <input type='password' onChange={handleChange} value={form.password} name="password" className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Password' />
                                         <div className='mt-[10px]'>
-                                            <button type='submit' className='w-[377px] h-[54px] bg-orange-default uppercase text-white-default text-lg font-medium leading-[21px] flex items-center justify-center rounded-full'>log in</button>
+                                            <button type='submit' className={`w-[377px] h-[54px] bg-orange-default uppercase text-white-default text-lg font-medium leading-[21px] flex items-center justify-center rounded-full ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
+                                                <span>log in</span>
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
