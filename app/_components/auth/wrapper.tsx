@@ -1,10 +1,52 @@
+'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../../../public/images/logo.png'
 import bulb from '../../../public/images/bulb.png'
+import toast from 'react-hot-toast'
+import { authenticate } from '@/app/actions/authenticate'
+import useAuthStore, { AuthStore } from '@/app/store/useAuthStore'
+import { useRouter } from 'next/navigation'
 
-export default async function AuthWrapper() {
+export default function AuthWrapper() {
+    const router = useRouter()
+    const authStore = useAuthStore((state) => state) as AuthStore
+
+    const setAuthentication = authStore.setAuthentication
+    const setUser = authStore.setUser
+    const setToken = authStore.setToken
+
+    const [form, setForm] = useState({
+        username: "",
+        password: ""
+    })
+
+    const handleChange = (event: any) => {
+        const {name, value} = event.target
+        setForm(prevForm => {
+          return {
+            ...prevForm,
+            [name]: value,
+          }
+        })
+    }
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault()
+        const response = await authenticate(form)
+        if(response.status === 401){
+            toast.error(response.data.message)
+        } else {
+            setAuthentication(true)
+            setUser(response.user)
+            setToken(response.access_token)
+            document.cookie = `token=${response.access_token};secure;`
+            router.push('/dashboard')
+        }
+    }
+
     return (
         <div className='w-full h-auto bg-auth bg-no-repeat py-[51px] px-[74px]'>
             <div className='flex flex-col gap-[50px]'>
@@ -20,7 +62,7 @@ export default async function AuthWrapper() {
                     <div className='w-auto h-auto rounded-[20px] drop-shadow-auth'>
                         <div className='flex flex-row h-[547px]'>
                             <div>
-                                <Image className='w-[350px] h-full'  src={bulb} alt='SmartDarasa' />
+                                <Image className='w-[350px] h-full' priority src={bulb} alt='SmartDarasa' />
                             </div>
                             <div className='w-auto h-full flex items-center bg-white-300 py-[50px] px-[55px] rounded-r-[20px]'>
                                 <div className='flex flex-col gap-[26px]'>
