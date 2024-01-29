@@ -5,14 +5,14 @@ export interface Tab<T extends string>{
 }
 
 export interface TabItem<T extends string | number> {
-    name: string;
-    tab: T;
+    name: string
+    tab: T
 }
   
 export interface TabProps<T extends string > {
-    tab: Tab<T>;
-    tabList: TabItem<T>[];
-    handleActiveTab: (activeTab: T) => void;
+    tab: Tab<T>
+    tabList: TabItem<T>[]
+    handleActiveTab: (activeTab: T) => void
 }
 
 export const TabComponent = <T extends string>({ tab, tabList, handleActiveTab }: TabProps<T>) => {
@@ -30,6 +30,6 @@ export const TabComponent = <T extends string>({ tab, tabList, handleActiveTab }
           </button>
         ))}
       </div>
-    );
-};
+    )
+}
   

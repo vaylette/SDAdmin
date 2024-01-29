@@ -2,17 +2,18 @@
 import { useState } from "react"
 import OverviewCard from "@/app/_components/overviewCard"
 import { TabComponent, TabItem } from "@/app/_components/tab"
-import DataTable from "@/app/_components/datatable";
+import DataTable from "@/app/_components/datatable"
+import { createColumnHelper } from "@tanstack/react-table"
 
 interface ContentTab {
-  topics: boolean;
-  models: boolean;
-  experiments: boolean;
-  videos: boolean;
-  [key: string]: boolean;
+  topics: boolean
+  models: boolean
+  experiments: boolean
+  videos: boolean
+  [key: string]: boolean
 }
 
-type User = {
+type Topic = {
   ref_no: string | number | null | undefined
   topic_name: string,
   subject: string,
@@ -60,7 +61,7 @@ export default function ContentManagement() {
     { name: 'Models', tab: 'models' },
     { name: 'Experiments', tab: 'experiments' },
     { name: 'Videos', tab: 'videos' },
-  ];
+  ]
 
   const handleActiveTab = (activeTab: keyof ContentTab): void => {
     setTab((prev) => ({
@@ -69,10 +70,167 @@ export default function ContentManagement() {
       experiments: false,
       videos: false,
       [activeTab]: true,
-    }));
-  };
+    }))
+  }
 
-  
+  const topics: Topic[] = [
+    {
+      ref_no: '',
+      topic_name: 'Carlos Mtibwa',
+      subject: 'carlos@gmail.com',
+      level: '255765381198',
+      curriculum: 'Admin',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Samwel Yanga',
+      subject: 'samwel@gmail.com',
+      level: '255765381198',
+      curriculum: 'Teacher',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Zulfa Ihefu',
+      subject: 'zulfa@gmail.com',
+      level: '255765381198',
+      curriculum: 'Admin',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Fetty Simba',
+      subject: 'fetty@gmail.com',
+      level: '255765381198',
+      curriculum: 'Teacher',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Sajidu Mlandege',
+      subject: 'sajidu@gmail.com',
+      level: '255765381198',
+      curriculum: 'Admin, Teacher',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Dany Mashujaa',
+      subject: 'dany@gmail.com',
+      level: '255765381198',
+      curriculum: 'Admin, Teacher',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Jean Yanga',
+      subject: 'jean@gmail.com',
+      level: '255765381198',
+      curriculum: 'Teacher',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Abdul Arsenal',
+      subject: 'abdul@gmail.com',
+      level: '255765381198',
+      curriculum: 'Admin',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+    {
+      ref_no: '',
+      topic_name: 'Waissa Mwaisa',
+      subject: 'waissa@gmail.com',
+      level: '255765381198',
+      curriculum: 'Admin, Teacher',
+      sections: 'Level 1',
+      questions: 184,
+      uploaded: 'SmartDarasa',
+      action: null
+    },
+  ]
+
+  const columnHelper = createColumnHelper<Topic>()
+
+  const columns = [
+    columnHelper.accessor('ref_no', {
+      header: () => 'REF NO',
+      cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
+      size: 20,
+    }),
+    columnHelper.accessor('topic_name', {
+      header: () => 'Topic Name',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('subject', {
+      header: () => 'Subject',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('level', {
+      header: () => 'Level',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('curriculum', {
+      header: () => 'Curriculum',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('sections', {
+      header: () => 'Sections',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('questions', {
+      header: () => 'Questions',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('uploaded', {
+      header: () => 'Uploader',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('action', {
+      header: () => '',
+      cell: (info) => (
+        <>
+          <div className='flex flex-row gap-6 font-medium'>
+            <button className='text-orange-default'>Edit</button>
+            <button className='text-red-default'>Restrict</button>
+          </div>
+        </>
+      )
+    }),
+  ]
+
+  const [data, setData] = useState(() => [...topics])
 
   return (
     <>
@@ -96,7 +254,7 @@ export default function ContentManagement() {
           )}
         </div>
         <div className='mt-5'>
-            <DataTable />
+            <DataTable columns={columns} data={data} />
         </div>
       </div>
     </>

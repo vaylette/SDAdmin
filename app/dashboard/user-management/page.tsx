@@ -37,7 +37,7 @@ export default function UserManagement() {
   const [modal, setModal] = useState<Modal>({
     create: false,
     edit: false
-})
+  })
 
   const tabList = [
     {
@@ -149,8 +149,8 @@ export default function UserManagement() {
       parents: false,
       teachers: false,
       [activeTab]: true,
-    }));
-  };
+    }))
+  }
 
   const columnHelper = createColumnHelper<User>()
 
@@ -200,9 +200,8 @@ export default function UserManagement() {
   }
 
   const handleModalClose = (): void => {
-    setModal({ create: false, edit: false });
-  };
-
+    setModal({ create: false, edit: false })
+  }
 
   return (
     <>
