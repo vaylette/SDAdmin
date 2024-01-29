@@ -70,11 +70,11 @@ export default function AuthWrapper() {
                                         <h5 className='text-orange-default text-[40px] font-bold leading-[30px]'>Welcome back!</h5>
                                         <p className='text-black-300 text-[20px] leading-[30px]'>Enter your details to continue</p>
                                     </div>
-                                    <form className='flex flex-col items-center gap-[10px] w-[377px]'>
-                                        <input type='email' className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Email address' />
-                                        <input type='password' className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Password' />
+                                    <form onSubmit={handleSubmit} className='flex flex-col items-center gap-[10px] w-[377px]'>
+                                        <input type='email' onChange={handleChange} value={form.username} name="username" className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Email address' />
+                                        <input type='password' onChange={handleChange} value={form.password} name="password" className='w-full h-[54px] rounded-[5px] bg-black-200 px-6 py-5 text-black-300 text-lg leading-[21px] placeholder:text-black-300 placeholder:text-lg placeholder:leading-[21px] focus:ring-0 focus:outline-none' placeholder='Password' />
                                         <div className='mt-[10px]'>
-                                            <Link href='/dashboard' className='w-[377px] h-[54px] bg-orange-default uppercase text-white-default text-lg font-medium leading-[21px] flex items-center justify-center rounded-full'>log in</Link>
+                                            <button type='submit' className='w-[377px] h-[54px] bg-orange-default uppercase text-white-default text-lg font-medium leading-[21px] flex items-center justify-center rounded-full'>log in</button>
                                         </div>
                                     </form>
                                 </div>
