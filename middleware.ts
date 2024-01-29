@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
     }
 
     let authenticated = request.cookies.get("token")?.value
-    const allowedRoutes = ['/',]
+    const allowedRoutes = ['/']
     const isRouteAllowed = allowedRoutes.includes(pathname) 
 
     if (!authenticated) {
@@ -26,8 +26,12 @@ export function middleware(request: NextRequest) {
     if (isRouteAllowed && authenticated) {
         return NextResponse.redirect(new URL('/dashboard', request.url))
     }
+    
 }
 
 export const config = {
-    matcher: ['/','/dashboard']
+    matcher: ['/','/dashboard', '/dashboard/user-management', '/dashboard/content-management']
 }
+
+  
+
