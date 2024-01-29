@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
+import { Toaster } from 'react-hot-toast'
 
 const helvetica = localFont({ 
   src: [
@@ -54,6 +55,7 @@ export default function RootLayout({
         <main className='min-w-screen min-h-screen'>
           {children}
         </main>
+        <Toaster />
       </body>
     </html>
   )
