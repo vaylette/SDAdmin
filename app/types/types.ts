@@ -67,4 +67,6 @@ export const levelOptions: SelectOption[] = [
   { name: 'Form Three' },
   { name: 'Form Four' }
 ]
+
+export type FormData<T> = T
   

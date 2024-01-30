@@ -28,7 +28,7 @@ export const usePostData = () => {
     const authStore = useAuthStore((state) => state) as AuthStore
     const { token } =  authStore
   
-    const postData = async (url: string, data) => {
+    const postData = async (url: string, data: FormData) => {
       try {
         const response = await axios.post(`${url}`, data, { headers: headers(token) })
         return response.data
