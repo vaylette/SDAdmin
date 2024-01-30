@@ -14,11 +14,10 @@ export const useRetrieveData = () => {
                 toast.error('No internet connection')
                 return
             }
-
             const response = await axios.get(`${url}`, { headers: headers(token) })
             return response.data
         } catch (error: any) {
-            console.log(`what is the error : ${error}`)
+            toast.error(error)
         }finally{
         }
     }
