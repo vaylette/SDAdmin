@@ -64,10 +64,10 @@ export default function ContentManagement() {
   const getData = async () => {
     try {
       const [topicsResult, modelsResult, experimentsResult, videosResult] = await Promise.all([
-        retrieveData(`${apiUrls.topics}`),
-        retrieveData(`${apiUrls.models}`),
-        retrieveData(`${apiUrls.experiments}`),
-        retrieveData(`${apiUrls.videos}`),
+        retrieveData(`${apiUrls.getTopics}`),
+        retrieveData(`${apiUrls.getModels}`),
+        retrieveData(`${apiUrls.getExperiments}`),
+        retrieveData(`${apiUrls.getVideos}`),
       ])
       setData(prev => ({
         ...prev,
