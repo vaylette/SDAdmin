@@ -20,32 +20,84 @@ interface CreateTopicProps {
   
 
 export default function CreateTopic({ subjects } : CreateTopicProps) {
-  const options = subjects?.map(subject => ({ name: subject.name}))
+  const subjectOptions = subjects?.map(subject => ({ name: subject.name}))
+
+  const curriculumOptions = [
+    { name: 'NECTA' },
+    { name: 'CAMBRIDGE' }
+  ]
+
+  const levelOptions = [
+    { name: 'Form One' },
+    { name: 'Form Two' },
+    { name: 'Form Three' },
+    { name: 'Form Four' },
+  ]
+
+  const [formData, setFormData] = useState({
+    name: '',
+    curriculum: null as string | null,
+    description: '',
+    subject: null as string | null,
+    level: null as string | null,
+  });
+
+  const handleChange = (fieldName: string, value: any) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  console.log(formData)
+
   return (
     <>
         <form className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>
-          <div className='flex flex-col gap-2'>
-            <label className=''>Name</label>
-            <input type='text' className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0' />
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label className=''>Curriculum</label>
-            <select className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
-              <option selected disabled>Select curriculum</option>
-              <option>NECTA</option>
-              <option>CAMBRIDGE</option>
-            </select>
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label className=''>Description</label>
-            <textarea rows={4} className='w-full bg-black-500 rounded-[4px] h-auto text-black-400 p-2 focus:outline-none focus:ring-0'  />
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label className=''>Subjects</label>
-            <SelectBox options={options} />
-          </div>
-          <button className='w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl'>Save Changes</button>
-        </form>
+            <div className='flex flex-col gap-2'>
+                <label>Name</label>
+                <input
+                    type='text'
+                    value={formData.name}
+                    onChange={(e) => handleChange('name', e.target.value)}
+                    className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
+                />
+            </div>
+            <div className='flex flex-col gap-2'>
+                <label>Curriculum</label>
+                <SelectBox
+                    options={curriculumOptions}
+                    selected={formData.curriculum !== null ? { name: formData.curriculum } : null}
+                    onChange={(value) => handleChange('curriculum', value ? value.name : '')}
+                />
+            </div>
+            <div className='flex flex-col gap-2'>
+                <label>Description</label>
+                <textarea
+                    rows={4}
+                    value={formData.description}
+                    onChange={(e) => handleChange('description', e.target.value)}
+                    className='w-full bg-black-500 rounded-[4px] h-auto text-black-400 p-2 focus:outline-none focus:ring-0'
+                />
+            </div>
+            <div className='flex flex-col gap-2'>
+                <label>Subjects</label>
+                <SelectBox
+                    options={subjectOptions}
+                    selected={formData.subject !== null ? { name: formData.subject } : null}
+                    onChange={(value) => handleChange('selectedSubjects', value.name)}
+                />
+            </div>
+            <div className='flex flex-col gap-2'>
+                <label>Level</label>
+                <SelectBox
+                    options={levelOptions}
+                    selected={formData.level !== null ? { name: formData.level } : null}
+                    onChange={(value) => handleChange('level', value.name)}
+                />
+            </div>
+            <button className='w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl'>Save Changes</button>
+      </form>
     </>
   )
 }
