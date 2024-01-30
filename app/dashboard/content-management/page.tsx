@@ -62,11 +62,16 @@ export default function ContentManagement() {
     try {
       const [topicsResult, modelsResult, experimentsResult, videosResult] = await Promise.all([
         retrieveData(`${apiUrls.topics}`),
-        
+        retrieveData(`${apiUrls.models}`),
+        retrieveData(`${apiUrls.experiments}`),
+        retrieveData(`${apiUrls.videos}`),
       ])
       setData(prev => ({
         ...prev,
-        topics: topicsResult
+        topics: topicsResult,
+        models: modelsResult,
+        experiments: experimentsResult,
+        videos: videosResult
       }))
     } catch (error: any) {
       toast.error(error)
