@@ -9,5 +9,7 @@ export const apiUrls = {
     getModels: `${baseUrl}/models/all`,
     getExperiments: `${baseUrl}/experiments/all`,
     getVideos: `${baseUrl}/videos/all`,
+    getSubjects: `${baseUrl}/subjects`,
+
 
 }
