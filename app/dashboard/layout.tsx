@@ -2,7 +2,7 @@ import Aside from "../_components/aside"
 import Header from "../_components/header"
 
 export default function DashboardLayout({
-    children,
+    children
   }: {
     children: React.ReactNode
   }) {

@@ -7,6 +7,7 @@ import { useRetrieveData } from "@/app/constants/hooks"
 import toast from "react-hot-toast"
 import { apiUrls } from "@/app/constants/apiUrls"
 import { Topic, Model, Experiment, Video } from "@/app/types/types"
+import Modal from "@/app/_components/modal"
 
 interface ContentTab {
   topics: boolean
@@ -14,6 +15,11 @@ interface ContentTab {
   experiments: boolean
   videos: boolean
   [key: string]: boolean
+}
+
+interface Modal {
+  create: boolean,
+  edit: boolean
 }
 
 export default function ContentManagement() {
@@ -31,6 +37,15 @@ export default function ContentManagement() {
     videos: []
   })
 
+  const [modal, setModal] = useState<Modal>({
+    create: false,
+    edit: false
+  })
+
+  const handleModal = (modalType: string): void => {
+    setModal((prev) => ({ ...prev, [modalType]: true }))
+  }
+
   const retrieveData = useRetrieveData()
 
   const [tableData, setTableData] = useState([])
@@ -39,7 +54,7 @@ export default function ContentManagement() {
 
   useEffect(() => {
     getData()
-  }, [])
+  })
 
   const getData = async () => {
     try {
@@ -293,8 +308,6 @@ export default function ContentManagement() {
       [activeTab]: true,
     }))
   }
-  
-console.log(tab)
 
 return (
   <>
@@ -343,7 +356,7 @@ return (
           </button>
         </div>
         {tab.topics && (
-          <button className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
+          <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
         )}
       </div>
       <div className='mt-5'>
@@ -353,6 +366,12 @@ return (
         {tab.videos && <DataTable columns={videoColumns} data={videos} />} 
       </div>
     </div>
+    {modal.create && (
+      <Modal>
+        <p>jj</p>
+      </Modal>
+    )}
+
   </>
   )
 }
