@@ -1,7 +1,7 @@
 'use client'
 
 
-export default function Modal({ children, onClose }: { children: React.ReactNode, onClose: () => void }) {
+export default function Modal({ children, onClose, title }: { children: React.ReactNode, onClose: () => void, title: string }) {
   return (
     <>
         <div className={`absolute min-h-screen inset-0 bg-black-100 bg-blend-multiply z-50 justify-end`}>
@@ -16,9 +16,9 @@ export default function Modal({ children, onClose }: { children: React.ReactNode
               </button>
             </div>
             <div className='flex flex-col gap-10'>
-                <h6 className='text-black-100 text-3xl font-bold'></h6>
+                <h6 className='text-black-100 text-3xl font-bold'>{title}</h6>
                 <div className='w-full h-[1px] bg-black-200'></div>
-                
+                {children}
             </div>
           </div>
         </div>

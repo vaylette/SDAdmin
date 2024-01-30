@@ -371,7 +371,7 @@ return (
       </div>
     </div>
     {modal.create && (
-      <Modal onClose={handleModalClose}>
+      <Modal onClose={handleModalClose} title="Add Topic">
         <p>jj</p>
       </Modal>
     )}
