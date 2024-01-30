@@ -14,6 +14,7 @@ export const apiUrls = {
         getExperiments: `${baseUrl}/experiments/all`,
         getVideos: `${baseUrl}/videos/all`,
         getSubjects: `${baseUrl}/subjects`,
+        getLevels: `${baseUrl}/levels`,
 
         //Post Endpoints
         postTopics: `${baseUrl}/topics`,

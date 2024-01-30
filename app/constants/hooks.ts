@@ -34,7 +34,7 @@ export const usePostData = () => {
         return response.data
       } catch (error: any) {
         console.error("Error fetching data: ", error)
-        toast.error(error)
+        // toast.error(error)
       }
     }
     return postData

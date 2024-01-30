@@ -36,7 +36,8 @@ export default function ContentManagement() {
     models: [],
     experiments: [],
     videos: [],
-    subjects: []
+    subjects: [],
+    levels: []
   })
 
   const [modal, setModal] = useState<Modal>({
@@ -50,6 +51,7 @@ export default function ContentManagement() {
 
   const handleModalClose = (): void => {
     setModal({ create: false, edit: false })
+    getData()
   }
 
   const retrieveData = useRetrieveData()
@@ -60,16 +62,17 @@ export default function ContentManagement() {
 
   useEffect(() => {
     getData()
-  })
+  }, [])
 
   const getData = async () => {
     try {
-      const [topicsResult, modelsResult, experimentsResult, videosResult, subjectsResult] = await Promise.all([
+      const [topicsResult, modelsResult, experimentsResult, videosResult, subjectsResult, levelsResult] = await Promise.all([
         retrieveData(`${apiUrls.getTopics}`),
         retrieveData(`${apiUrls.getModels}`),
         retrieveData(`${apiUrls.getExperiments}`),
         retrieveData(`${apiUrls.getVideos}`),
         retrieveData(`${apiUrls.getSubjects}`),
+        retrieveData(`${apiUrls.getLevels}`),
       ])
       setData(prev => ({
         ...prev,
@@ -77,7 +80,8 @@ export default function ContentManagement() {
         models: modelsResult,
         experiments: experimentsResult,
         videos: videosResult,
-        subjects: subjectsResult
+        subjects: subjectsResult,
+        levels: levelsResult
       }))
     } catch (error: any) {
       toast.error(error)
@@ -376,7 +380,7 @@ return (
     </div>
     {modal.create && (
       <Modal onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'}>
-        {tab.topics && <CreateTopic subjects={data?.subjects} />}
+        {tab.topics && <CreateTopic subjects={data?.subjects} levels={data?.levels} onRefresh={handleModalClose} />}
       </Modal>
     )}
 

@@ -1,14 +1,14 @@
-import React, { Fragment } from 'react';
-import { Listbox, Transition } from '@headlessui/react';
+import React, { Fragment } from 'react'
+import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/16/solid'
 
-interface SelectBoxProps<T> {
-  options: { name: string }[];
+interface SelectBoxProps<T extends { name: string; id?: string | null }> {
+  options: T[];
   selected: T | null;
   onChange: (selected: T) => void;
 }
 
-const SelectBox = <T extends { name: string }>({ options, selected, onChange }: SelectBoxProps<T>) => {
+const SelectBox = <T extends { name: string; id?: string | null }>({ options, selected, onChange }: SelectBoxProps<T>) => {
   return (
     <>
       <div className="w-full">

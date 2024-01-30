@@ -1,9 +1,24 @@
 'use client'
+
 import  { useState, FormEvent } from 'react'
 import SelectBox from '@/app/_components/form/SelectBox'
-import { curriculumOptions, levelOptions } from '@/app/types/types'
+import { curriculumOptions } from '@/app/types/types'
+import { usePostData } from '@/app/constants/hooks'
+import toast from 'react-hot-toast'
+import { apiUrls } from '@/app/constants/apiUrls'
+import { useRouter } from 'next/navigation'
 
 export interface Subject {
+    _id: string;
+    isActive: boolean;
+    isDeleted: boolean;
+    name: string;
+    __v: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface Level {
     _id: string;
     isActive: boolean;
     isDeleted: boolean;
@@ -15,19 +30,29 @@ export interface Subject {
   
 interface CreateTopicProps {
   subjects: Subject[];
+  levels: Level[];
+  onRefresh: () => void;
 }
   
 
-export default function CreateTopic({ subjects } : CreateTopicProps) {
-  const subjectOptions = subjects?.map(subject => ({ name: subject.name}))
+export default function CreateTopic({ subjects, levels, onRefresh } : CreateTopicProps) {
+  const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id}))
+
+  const levelOpts = levels?.map(level => ({ name: level.name, id: level._id}))  
 
   const [formData, setFormData] = useState({
     name: '',
-    curriculum: null as string | null,
+    syllabus: null as string | null,
     description: '',
     subject: null as string | null,
     level: null as string | null,
   })
+
+  const [loading, setLoading] = useState(false)
+
+  const postData = usePostData()
+
+  const router = useRouter()
 
   const handleChange = (fieldName: string, value: any) => {
     setFormData((prevData) => ({
@@ -38,13 +63,38 @@ export default function CreateTopic({ subjects } : CreateTopicProps) {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-  }
 
-  console.log(formData)
+    const { name, syllabus, description, subject, level } = formData
+
+    if (name === '' || syllabus === null || description === '' || subject === null || level === null) {
+      toast.error('Please fill all the required fields!')
+      return
+    }
+
+    setLoading(true)
+
+    const dataForm = new FormData()
+    dataForm.append('name', name)
+    dataForm.append('syllabus', syllabus || '')
+    dataForm.append('description', description)
+    dataForm.append('subject', subject || '')
+    dataForm.append('level', level || '') 
+
+    try {
+        const response = await postData(`${apiUrls.postTopics}`, dataForm)
+        if(response){
+            onRefresh()
+        }
+    } catch (error: any) {
+        toast.error(error)
+    } finally {
+        setLoading(false)
+    }
+  }
 
   return (
     <>
-        <form className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]'>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]' encType='multipart/form-data'>
             <div className='flex flex-col gap-2'>
                 <label>Name</label>
                 <input
@@ -57,9 +107,10 @@ export default function CreateTopic({ subjects } : CreateTopicProps) {
             <div className='flex flex-col gap-2'>
                 <label>Curriculum</label>
                 <SelectBox
+                    //@ts-ignore
                     options={curriculumOptions}
-                    selected={formData.curriculum !== null ? { name: formData.curriculum } : null}
-                    onChange={(value) => handleChange('curriculum', value ? value.name : '')}
+                    selected={formData.syllabus !== null ? { name: formData.syllabus, id: formData.syllabus } : null}
+                    onChange={(value) => handleChange('syllabus', value ? value.name : '')}
                 />
             </div>
             <div className='flex flex-col gap-2'>
@@ -75,19 +126,28 @@ export default function CreateTopic({ subjects } : CreateTopicProps) {
                 <label>Subject</label>
                 <SelectBox
                     options={subjectOptions}
-                    selected={formData.subject !== null ? { name: formData.subject } : null}
-                    onChange={(value) => handleChange('selectedSubjects', value.name)}
+                    selected={formData.subject !== null ? { name: formData.subject, id: formData.subject } : null}
+                    onChange={(value) => handleChange('subject', value ? value.id : '')}
                 />
             </div>
             <div className='flex flex-col gap-2'>
                 <label>Level</label>
                 <SelectBox
-                    options={levelOptions}
-                    selected={formData.level !== null ? { name: formData.level } : null}
-                    onChange={(value) => handleChange('level', value.name)}
+                    options={levelOpts}
+                    selected={formData.level !== null ? { name: formData.level, id: formData.level } : null}
+                    onChange={(value) => handleChange('level', value ? value.id : '')}
                 />
             </div>
-            <button className='w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl'>Save Changes</button>
+            <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
+                <span>Save Changes</span>
+                {loading && (
+                    <svg height="40" width="40" className="text-white-default">
+                        <circle className="dot" cx="10" cy="20" r="3" />
+                        <circle className="dot" cx="20" cy="20" r="3" />
+                        <circle className="dot" cx="30" cy="20" r="3" />
+                  </svg>
+                 )}
+            </button>
       </form>
     </>
   )

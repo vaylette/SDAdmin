@@ -54,19 +54,23 @@ export type Video = {
 
 export type SelectOption = {
     name: string;
+    id: string | number | null;
 }
   
 export const curriculumOptions: SelectOption[] = [
-  { name: 'NECTA' },
-  { name: 'CAMBRIDGE' }
-]
-  
-export const levelOptions: SelectOption[] = [
-  { name: 'Form One' },
-  { name: 'Form Two' },
-  { name: 'Form Three' },
-  { name: 'Form Four' }
+  { name: 'NECTA', id: '' },
+  { name: 'Cambridge', id: '' },
+  { name: 'Montessori', id: '' },
 ]
 
+
 export type FormData<T> = T
+
+export type TopicFormData = {
+    name: string;
+    curriculum: string | null;
+    description: string;
+    subject: string | null;
+    level: string | null;
+}
   
