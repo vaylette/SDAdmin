@@ -8,6 +8,7 @@ import toast from "react-hot-toast"
 import { apiUrls } from "@/app/constants/apiUrls"
 import { Topic, Model, Experiment, Video } from "@/app/types/types"
 import Modal from "@/app/_components/modal"
+import CreateTopic from "./(crud)/create-topic"
 
 interface ContentTab {
   topics: boolean
@@ -371,8 +372,8 @@ return (
       </div>
     </div>
     {modal.create && (
-      <Modal onClose={handleModalClose} title="Add Topic">
-        <p>jj</p>
+      <Modal onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'}>
+        {tab.topics && <CreateTopic />}
       </Modal>
     )}
 
