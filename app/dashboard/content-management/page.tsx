@@ -46,6 +46,10 @@ export default function ContentManagement() {
     setModal((prev) => ({ ...prev, [modalType]: true }))
   }
 
+  const handleModalClose = (): void => {
+    setModal({ create: false, edit: false })
+  }
+
   const retrieveData = useRetrieveData()
 
   const [tableData, setTableData] = useState([])
@@ -367,7 +371,7 @@ return (
       </div>
     </div>
     {modal.create && (
-      <Modal>
+      <Modal onClose={handleModalClose}>
         <p>jj</p>
       </Modal>
     )}
