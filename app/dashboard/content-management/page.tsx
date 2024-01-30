@@ -142,8 +142,6 @@ export default function ContentManagement() {
     }
   }
 
-  console.log(data)
-
   return (
     <>
       <div className='flex flex-col'>
@@ -153,7 +151,7 @@ export default function ContentManagement() {
               <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Topics</span>
             </div>
             <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.topics.length : '0'}</span>
             </div>
           </div>
           <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
@@ -161,7 +159,7 @@ export default function ContentManagement() {
               <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Models</span>
             </div>
             <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.models.length : '0'}</span>
             </div>
           </div>
           <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
@@ -169,7 +167,7 @@ export default function ContentManagement() {
               <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Experiments</span>
             </div>
             <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.experiments.length : '0'}</span>
             </div>
           </div>
           <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
@@ -177,7 +175,7 @@ export default function ContentManagement() {
               <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Videos</span>
             </div>
             <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.videos.length : '0'}</span>
             </div>
           </div>
         </div>
