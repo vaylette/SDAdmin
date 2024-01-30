@@ -1,7 +1,5 @@
 'use client'
-import { Fragment, useState } from 'react'
-import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/16/solid'
+import  { useState, FormEvent } from 'react'
 import SelectBox from '@/app/_components/form/SelectBox'
 import { curriculumOptions, levelOptions } from '@/app/types/types'
 
@@ -29,14 +27,18 @@ export default function CreateTopic({ subjects } : CreateTopicProps) {
     description: '',
     subject: null as string | null,
     level: null as string | null,
-  });
+  })
 
   const handleChange = (fieldName: string, value: any) => {
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: value,
-    }));
-  };
+    }))
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+  }
 
   console.log(formData)
 
