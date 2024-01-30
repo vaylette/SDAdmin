@@ -7,6 +7,7 @@ export interface Tab<T extends string>{
 export interface TabItem<T extends string | number> {
     name: string
     tab: T
+    columns: any[]
 }
   
 export interface TabProps<T extends string > {

@@ -27,19 +27,27 @@ export type Topic = {
 export type Model = {
     ref_no: string | number | null | undefined
     name: string,
-    subject: {} | any,
-    level: {} | any,
-    syllabus: string,
-    sections: string | number | any,
+    level: string,
+    subject: string,
+    topic: string,
     action: null
-  }
+}
   
- export type Experiment = {
+export type Experiment = {
     ref_no: string | number | null | undefined
     name: string,
-    subject: {} | any,
-    level: {} | any,
-    syllabus: string,
-    sections: string | number | any,
+    level: string,
+    subject: string,
+    topic: string,
     action: null
-  }
+}
+
+export type Video = {
+    ref_no: string | number | null | undefined
+    name: string,
+    level: string,
+    subject: string,
+    topic: string,
+    video_link: string,
+    action: null
+}

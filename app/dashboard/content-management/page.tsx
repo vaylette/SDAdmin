@@ -6,7 +6,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import { useRetrieveData } from "@/app/constants/hooks"
 import toast from "react-hot-toast"
 import { apiUrls } from "@/app/constants/apiUrls"
-import { Topic, Model, Experiment } from "@/app/types/types"
+import { Topic, Model, Experiment, Video } from "@/app/types/types"
 
 interface ContentTab {
   topics: boolean
@@ -33,30 +33,13 @@ export default function ContentManagement() {
 
   const retrieveData = useRetrieveData()
 
-  const tabList: TabItem<string>[] = [
-    { name: 'Topics', tab: 'topics' },
-    { name: 'Models', tab: 'models' },
-    { name: 'Experiments', tab: 'experiments' },
-    { name: 'Videos', tab: 'videos' },
-  ]
+  const [tableData, setTableData] = useState([])
 
-  const handleActiveTab = (activeTab: keyof ContentTab): void => {
-    setTab((prev) => ({
-      topics: false,
-      models: false,
-      experiments: false,
-      videos: false,
-      [activeTab]: true,
-    }))
-  }
-
-  const [tableData, setTableData] = useState<Topic[]>([])
-
-  const columnHelper = createColumnHelper<Topic>()
+  const columnHelper = createColumnHelper()
 
   useEffect(() => {
     getData()
-  })
+  }, [])
 
   const getData = async () => {
     try {
@@ -79,7 +62,6 @@ export default function ContentManagement() {
   }
 
   const topics: Topic[] = data?.topics?.map((item) => {
-    
     const itemAsTopic = item as Topic;
     return {
       ref_no: '',
@@ -92,7 +74,44 @@ export default function ContentManagement() {
     }
   })
 
-  const columns = [
+  const models: Model[] = data?.models?.map((item) => {
+    const itemAsModel = item as Model;
+    return {
+      ref_no: '',
+      name: itemAsModel.name,
+      level: itemAsModel.level, 
+      subject: itemAsModel.subject,
+      topic: itemAsModel.topic,
+      action: null
+    }
+  })
+
+  const experiments: Experiment[] = data?.experiments?.map((item) => {
+    const itemAsExperiment = item as Experiment;
+    return {
+      ref_no: '',
+      name: itemAsExperiment.name,
+      level: itemAsExperiment.level, 
+      subject: itemAsExperiment.subject,
+      topic: itemAsExperiment.topic,
+      action: null
+    }
+  })
+
+  const videos: Video[] = data?.videos?.map((item) => {
+    const itemAsVideo = item as Video;
+    return {
+      ref_no: '',
+      name: itemAsVideo.name,
+      level: itemAsVideo.level, 
+      subject: itemAsVideo.subject,
+      topic: itemAsVideo.topic,
+      video_link: itemAsVideo.video_link,
+      action: null
+    }
+  })
+
+  const topicsColumns = [
     columnHelper.accessor('ref_no', {
       header: () => 'REF NO',
       cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
@@ -136,7 +155,146 @@ export default function ContentManagement() {
     }),
   ]
   
-console.log(data?.topics)
+  const modelsColumns = [
+    columnHelper.accessor('ref_no', {
+      header: () => 'REF NO',
+      cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
+      size: 5,
+    }),
+    columnHelper.accessor('name', {
+      header: () => 'Model Name',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('subject', {
+      header: () => 'Subject',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('level', {
+      header: () => 'Level',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('topic', {
+      header: () => 'Topic',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('action', {
+      header: () => '',
+      cell: (info) => (
+        <>
+          <div className='flex flex-row gap-6 font-medium'>
+            <button className='text-orange-default'>Edit</button>
+            <button className='text-red-default'>Restrict</button>
+          </div>
+        </>
+      )
+    }),
+  ]
+
+  const experimentsColumns = [
+    columnHelper.accessor('ref_no', {
+      header: () => 'REF NO',
+      cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
+      size: 5,
+    }),
+    columnHelper.accessor('name', {
+      header: () => 'Experiment Name',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('subject', {
+      header: () => 'Subject',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('level', {
+      header: () => 'Level',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('topic', {
+      header: () => 'Topic',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('action', {
+      header: () => '',
+      cell: (info) => (
+        <>
+          <div className='flex flex-row gap-6 font-medium'>
+            <button className='text-orange-default'>Edit</button>
+            <button className='text-red-default'>Restrict</button>
+          </div>
+        </>
+      )
+    }),
+  ]
+
+  const videoColumns = [
+    columnHelper.accessor('ref_no', {
+      header: () => 'REF NO',
+      cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
+      size: 5,
+    }),
+    columnHelper.accessor('name', {
+      header: () => 'Video Name',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('subject', {
+      header: () => 'Subject',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('level', {
+      header: () => 'Level',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('topic', {
+      header: () => 'Topic',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('video_link', {
+      header: () => 'Video Link',
+      cell: info => info.getValue(),
+      size: 30,
+    }),
+    columnHelper.accessor('action', {
+      header: () => '',
+      cell: (info) => (
+        <>
+          <div className='flex flex-row gap-6 font-medium'>
+            <button className='text-orange-default'>Edit</button>
+            <button className='text-red-default'>Restrict</button>
+          </div>
+        </>
+      )
+    }),
+  ]
+
+  const tabList: TabItem<string>[] = [
+    { name: 'Topics', tab: 'topics', columns: topicsColumns },
+    { name: 'Models', tab: 'models', columns: modelsColumns },
+    { name: 'Experiments', tab: 'experiments', columns: experimentsColumns },
+    { name: 'Videos', tab: 'videos', columns: videoColumns },
+  ]
+
+  const handleActiveTab = (activeTab: keyof ContentTab): void => {
+    setTab((prev) => ({
+      topics: false,
+      models: false,
+      experiments: false,
+      videos: false,
+      [activeTab]: true,
+    }))
+  }
+  
+console.log(tab)
 
 return (
   <>
@@ -189,7 +347,10 @@ return (
         )}
       </div>
       <div className='mt-5'>
-          <DataTable columns={columns} data={topics} />
+        {tab.topics && <DataTable columns={topicsColumns} data={topics} />} 
+        {tab.models && <DataTable columns={modelsColumns} data={models} />} 
+        {tab.experiments && <DataTable columns={experimentsColumns} data={experiments} />} 
+        {tab.videos && <DataTable columns={videoColumns} data={videos} />} 
       </div>
     </div>
   </>
