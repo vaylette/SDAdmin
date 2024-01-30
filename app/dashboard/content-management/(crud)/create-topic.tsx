@@ -2,7 +2,8 @@
 import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/16/solid'
-import SelectBox from '@/app/_components/form/SelectBox';
+import SelectBox from '@/app/_components/form/SelectBox'
+import { curriculumOptions, levelOptions } from '@/app/types/types'
 
 export interface Subject {
     _id: string;
@@ -21,18 +22,6 @@ interface CreateTopicProps {
 
 export default function CreateTopic({ subjects } : CreateTopicProps) {
   const subjectOptions = subjects?.map(subject => ({ name: subject.name}))
-
-  const curriculumOptions = [
-    { name: 'NECTA' },
-    { name: 'CAMBRIDGE' }
-  ]
-
-  const levelOptions = [
-    { name: 'Form One' },
-    { name: 'Form Two' },
-    { name: 'Form Three' },
-    { name: 'Form Four' },
-  ]
 
   const [formData, setFormData] = useState({
     name: '',
@@ -81,7 +70,7 @@ export default function CreateTopic({ subjects } : CreateTopicProps) {
                 />
             </div>
             <div className='flex flex-col gap-2'>
-                <label>Subjects</label>
+                <label>Subject</label>
                 <SelectBox
                     options={subjectOptions}
                     selected={formData.subject !== null ? { name: formData.subject } : null}

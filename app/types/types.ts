@@ -51,3 +51,20 @@ export type Video = {
     video_link: string,
     action: null
 }
+
+export type SelectOption = {
+    name: string;
+}
+  
+export const curriculumOptions: SelectOption[] = [
+  { name: 'NECTA' },
+  { name: 'CAMBRIDGE' }
+]
+  
+export const levelOptions: SelectOption[] = [
+  { name: 'Form One' },
+  { name: 'Form Two' },
+  { name: 'Form Three' },
+  { name: 'Form Four' }
+]
+  
