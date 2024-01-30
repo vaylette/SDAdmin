@@ -1,5 +1,6 @@
 
-export default function CreateTopic() {
+export default function CreateTopic({ subjects } : { subjects: {} }) {
+    console.log(subjects)
   return (
     <>
         <form className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>

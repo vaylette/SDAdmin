@@ -35,7 +35,8 @@ export default function ContentManagement() {
     topics: [],
     models: [],
     experiments: [],
-    videos: []
+    videos: [],
+    subjects: []
   })
 
   const [modal, setModal] = useState<Modal>({
@@ -63,18 +64,20 @@ export default function ContentManagement() {
 
   const getData = async () => {
     try {
-      const [topicsResult, modelsResult, experimentsResult, videosResult] = await Promise.all([
+      const [topicsResult, modelsResult, experimentsResult, videosResult, subjectsResult] = await Promise.all([
         retrieveData(`${apiUrls.getTopics}`),
         retrieveData(`${apiUrls.getModels}`),
         retrieveData(`${apiUrls.getExperiments}`),
         retrieveData(`${apiUrls.getVideos}`),
+        retrieveData(`${apiUrls.getSubjects}`),
       ])
       setData(prev => ({
         ...prev,
         topics: topicsResult,
         models: modelsResult,
         experiments: experimentsResult,
-        videos: videosResult
+        videos: videosResult,
+        subjects: subjectsResult
       }))
     } catch (error: any) {
       toast.error(error)
@@ -373,7 +376,7 @@ return (
     </div>
     {modal.create && (
       <Modal onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'}>
-        {tab.topics && <CreateTopic />}
+        {tab.topics && <CreateTopic subjects={data?.subjects} />}
       </Modal>
     )}
 
