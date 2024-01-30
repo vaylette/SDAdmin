@@ -13,6 +13,7 @@ export function middleware(request: NextRequest) {
     }
 
     let authenticated = request.cookies.get("token")?.value
+    let token 
     const allowedRoutes = ['/']
     const isRouteAllowed = allowedRoutes.includes(pathname) 
 

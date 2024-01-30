@@ -1,9 +1,11 @@
 'use client'
-import { useState } from "react"
-import OverviewCard from "@/app/_components/overviewCard"
+import { useState, useEffect } from "react"
 import { TabComponent, TabItem } from "@/app/_components/tab"
 import DataTable from "@/app/_components/datatable"
 import { createColumnHelper } from "@tanstack/react-table"
+import { useRetrieveData } from "@/app/constants/hooks"
+import toast from "react-hot-toast"
+import { apiUrls } from "@/app/constants/apiUrls"
 
 interface ContentTab {
   topics: boolean
@@ -17,7 +19,7 @@ type Topic = {
   ref_no: string | number | null | undefined
   topic_name: string,
   subject: string,
-  level: string,
+  level: string | number,
   curriculum: string,
   sections: string | number,
   questions: string | number,
@@ -33,28 +35,14 @@ export default function ContentManagement() {
     videos:false,
   })
 
-  const overviewData = [
-    {
-      title: 'Total Topics',
-      quantity: 173,
-      growth: null
-    },
-    {
-      title: 'Total Models',
-      quantity: 89,
-      growth: null
-    },
-    {
-      title: 'Experiments',
-      quantity: 46,
-      growth: null
-    },
-    {
-      title: 'Total Videos',
-      quantity: 102,
-      growth: null
-    },
-  ]
+  const [data, setData] = useState({
+    topics: [],
+    models: [],
+    experiments: [],
+    videos: []
+  })
+
+  const retrieveData = useRetrieveData()
 
   const tabList: TabItem<string>[] = [
     { name: 'Topics', tab: 'topics' },
@@ -74,105 +62,7 @@ export default function ContentManagement() {
   }
 
   const topics: Topic[] = [
-    {
-      ref_no: '',
-      topic_name: 'Carlos Mtibwa',
-      subject: 'carlos@gmail.com',
-      level: '255765381198',
-      curriculum: 'Admin',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Samwel Yanga',
-      subject: 'samwel@gmail.com',
-      level: '255765381198',
-      curriculum: 'Teacher',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Zulfa Ihefu',
-      subject: 'zulfa@gmail.com',
-      level: '255765381198',
-      curriculum: 'Admin',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Fetty Simba',
-      subject: 'fetty@gmail.com',
-      level: '255765381198',
-      curriculum: 'Teacher',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Sajidu Mlandege',
-      subject: 'sajidu@gmail.com',
-      level: '255765381198',
-      curriculum: 'Admin, Teacher',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Dany Mashujaa',
-      subject: 'dany@gmail.com',
-      level: '255765381198',
-      curriculum: 'Admin, Teacher',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Jean Yanga',
-      subject: 'jean@gmail.com',
-      level: '255765381198',
-      curriculum: 'Teacher',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Abdul Arsenal',
-      subject: 'abdul@gmail.com',
-      level: '255765381198',
-      curriculum: 'Admin',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
-    {
-      ref_no: '',
-      topic_name: 'Waissa Mwaisa',
-      subject: 'waissa@gmail.com',
-      level: '255765381198',
-      curriculum: 'Admin, Teacher',
-      sections: 'Level 1',
-      questions: 184,
-      uploaded: 'SmartDarasa',
-      action: null
-    },
+    
   ]
 
   const columnHelper = createColumnHelper<Topic>()
@@ -181,22 +71,22 @@ export default function ContentManagement() {
     columnHelper.accessor('ref_no', {
       header: () => 'REF NO',
       cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
-      size: 20,
+      size: 5,
     }),
     columnHelper.accessor('topic_name', {
       header: () => 'Topic Name',
       cell: info => info.getValue(),
-      size: 30,
+      size: 10,
     }),
     columnHelper.accessor('subject', {
       header: () => 'Subject',
       cell: info => info.getValue(),
-      size: 30,
+      size: 10,
     }),
     columnHelper.accessor('level', {
       header: () => 'Level',
       cell: info => info.getValue(),
-      size: 30,
+      size: 10,
     }),
     columnHelper.accessor('curriculum', {
       header: () => 'Curriculum',
@@ -211,7 +101,7 @@ export default function ContentManagement() {
     columnHelper.accessor('questions', {
       header: () => 'Questions',
       cell: info => info.getValue(),
-      size: 30,
+      size: 10,
     }),
     columnHelper.accessor('uploaded', {
       header: () => 'Uploader',
@@ -230,15 +120,66 @@ export default function ContentManagement() {
     }),
   ]
 
-  const [data, setData] = useState(() => [...topics])
+  const [tableData, setTableData] = useState(() => [...topics])
+
+  useEffect(() => {
+    getData()
+  })
+
+  const getData = async () => {
+    try {
+      const [topicsResult] = await Promise.all([
+        retrieveData(`${apiUrls.topics}`)
+      ])
+      setData(prev => ({
+        ...prev,
+        topics: topicsResult
+      }))
+    } catch (error: any) {
+      toast.error(error)
+    } finally{
+
+    }
+  }
+
+  console.log(data)
 
   return (
     <>
       <div className='flex flex-col'>
         <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
-          {overviewData.map((item, index) => (
-            <OverviewCard key={index} title={item.title} quantity={item.quantity} growth={item.growth} />
-          ))}
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[76px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Topics</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+            </div>
+          </div>
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[66px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Models</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+            </div>
+          </div>
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[76px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Experiments</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+            </div>
+          </div>
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[76px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Videos</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'></span>
+            </div>
+          </div>
         </div>
         <div className='mt-9 w-full flex flex-row justify-between items-center'>
           <div className="flex flex-row items-center gap-9">
@@ -254,7 +195,7 @@ export default function ContentManagement() {
           )}
         </div>
         <div className='mt-5'>
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={columns} data={tableData} />
         </div>
       </div>
     </>
