@@ -42,7 +42,7 @@ export default function CreateTopic({ subjects } : CreateTopicProps) {
 
   return (
     <>
-        <form className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>
+        <form className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]'>
             <div className='flex flex-col gap-2'>
                 <label>Name</label>
                 <input
@@ -63,7 +63,7 @@ export default function CreateTopic({ subjects } : CreateTopicProps) {
             <div className='flex flex-col gap-2'>
                 <label>Description</label>
                 <textarea
-                    rows={4}
+                    rows={3}
                     value={formData.description}
                     onChange={(e) => handleChange('description', e.target.value)}
                     className='w-full bg-black-500 rounded-[4px] h-auto text-black-400 p-2 focus:outline-none focus:ring-0'

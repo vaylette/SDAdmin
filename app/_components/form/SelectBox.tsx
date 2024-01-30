@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/16/solid';
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/16/solid'
 
 interface SelectBoxProps<T> {
   options: { name: string }[];
@@ -17,7 +17,7 @@ const SelectBox = <T extends { name: string }>({ options, selected, onChange }: 
             <Listbox.Button className="relative w-full cursor-default rounded-[4px] bg-black-500 h-[60px] text-start py-2 pl-3 pr-10 text-black-400 shadow-md focus:outline-none focus:ring-0">
               <span className="block truncate">{selected?.name}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon className="h-5 w-5 text-black-400" aria-hidden="true" />
+                <ChevronDownIcon className="h-5 w-5 text-black-400" aria-hidden="true" />
               </span>
             </Listbox.Button>
             <Transition
