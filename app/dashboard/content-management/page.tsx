@@ -6,6 +6,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import { useRetrieveData } from "@/app/constants/hooks"
 import toast from "react-hot-toast"
 import { apiUrls } from "@/app/constants/apiUrls"
+import { Topic, Model, Experiment } from "@/app/types/types"
 
 interface ContentTab {
   topics: boolean
@@ -13,16 +14,6 @@ interface ContentTab {
   experiments: boolean
   videos: boolean
   [key: string]: boolean
-}
-
-type Topic = {
-  ref_no: string | number | null | undefined
-  name: string,
-  subject: {} | any,
-  level: {} | any,
-  syllabus: string,
-  sections: string | number | any,
-  action: null
 }
 
 export default function ContentManagement() {

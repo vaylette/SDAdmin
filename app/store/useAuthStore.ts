@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { SmartUser } from '../types/User'
+import { SmartUser } from '../types/types'
 
 export type AuthStore = {
   authenticated: boolean;
