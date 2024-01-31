@@ -1,13 +1,19 @@
 'use client'
+
 import DataTable from '@/app/_components/datatable'
+import { apiUrls } from '@/app/constants/apiUrls'
+import { useRetrieveData } from '@/app/constants/hooks'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import toast from 'react-hot-toast'
 
 interface Tab {
-  admins: boolean,
-  students: boolean,
-  parents: boolean,
+  admins: boolean
+  students: boolean
+  parents: boolean
   teachers: boolean
+  unVerified: false
+  [key: string]: boolean
 }
 
 type User = {
@@ -26,12 +32,19 @@ interface Modal {
 }
 
 export default function UserManagement() {
+
+  const [data, setData] = useState({
+    users: [],
+  })
+
+  const retrieveData = useRetrieveData()
   
   const [tab, setTab] = useState<Tab>({
     admins:true,
     students:false,
     parents:false,
     teachers:false,
+    unVerified: false,
   })
 
   const [modal, setModal] = useState<Modal>({
@@ -55,6 +68,10 @@ export default function UserManagement() {
     {
       name: 'Teachers',
       tab: 'teachers'
+    },
+    {
+      name: 'Un Verified',
+      tab: 'unVerified'
     },
   ]
 
@@ -148,11 +165,40 @@ export default function UserManagement() {
       students: false,
       parents: false,
       teachers: false,
+      unVerified: false,
       [activeTab]: true,
     }))
   }
 
+  const handleModal = (modalType: string): void => {
+    setModal((prev) => ({ ...prev, [modalType]: true }))
+  }
+
+  const handleModalClose = (): void => {
+    setModal({ create: false, edit: false })
+    getData()
+  }
+
   const columnHelper = createColumnHelper<User>()
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  const getData = async () => {
+    try {
+      const [usersResult] = await Promise.all([
+        retrieveData(`${apiUrls.getUsers}`),
+      ])
+      
+      setData(prev => ({
+        ...prev,
+        users: usersResult,
+      }))
+    } catch (error: any) {
+      toast.error(error)
+    } finally{}
+  }
 
   const columns = [
     columnHelper.accessor('s_no', {
@@ -193,15 +239,7 @@ export default function UserManagement() {
     }),
   ]
 
-  const [data, setData] = useState(() => [...users])
-
-  const handleModal = (modalType: string): void => {
-    setModal((prev) => ({ ...prev, [modalType]: true }))
-  }
-
-  const handleModalClose = (): void => {
-    setModal({ create: false, edit: false })
-  }
+  console.log(data)
 
   return (
     <>
@@ -218,7 +256,7 @@ export default function UserManagement() {
             <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
           )}
         </div>
-        <DataTable columns={columns} data={data} />
+        {/* <DataTable columns={columns} data={data} /> */}
       </div>
       <div className={`${modal.create || modal.edit ? 'absolute min-h-screen inset-0 bg-black-100 bg-blend-multiply z-50 justify-end' : 'hidden'}`}>
         <div className='w-full h-full flex justify-end'>

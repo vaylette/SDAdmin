@@ -24,6 +24,23 @@ export type Topic = {
     action: null
 }
 
+export type User = {
+    ref_no: string | number | null | undefined
+    name: string,
+    email: string,
+    gender: string | null,
+    address: string | null,
+    dob: string | null,
+    phoneNumber: string | number | null,
+    profilePic: string | null,
+    level: string | null,
+    terms: boolean | null,
+    status: string | number,
+    school: string | null,
+    type: string | null,
+    action: null
+}
+
 export type Model = {
     ref_no: string | number | null | undefined
     name: string,
