@@ -17,7 +17,7 @@ export const useRetrieveData = () => {
             const response = await axios.get(`${url}`, { headers: headers(token) })
             return response.data
         } catch (error: any) {
-            toast.error(error)
+          toast.error(error.response.data.message)
         }finally{
         }
     }
@@ -33,8 +33,7 @@ export const usePostData = () => {
         const response = await axios.post(`${url}`, data, { headers: headers(token) })
         return response.data
       } catch (error: any) {
-        console.error("Error fetching data: ", error)
-        // toast.error(error)
+        toast.error(error.response.data.message)
       }
     }
     return postData
