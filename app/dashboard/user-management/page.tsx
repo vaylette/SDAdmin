@@ -230,8 +230,6 @@ export default function UserManagement() {
     }))
   }
 
-  console.log(data)
-
   return (
     <>
       <div className='flex flex-col gap-5'>
