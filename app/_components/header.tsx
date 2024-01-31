@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import useAuthStore, { AuthStore } from "../store/useAuthStore"
 import Logout from "../actions/logout"

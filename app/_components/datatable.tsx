@@ -57,12 +57,12 @@ export default function DataTable({ columns, data}: DataTableProps) {
               <div className='flex flex-row items-center gap-[10px]'>
               <span>
                 Showing&nbsp;    
-                {table.getState().pagination?.pageIndex !== undefined && table.options.state.pagination?.pageSize !== undefined &&
+                {table.getState().pagination.pageIndex !== undefined && table.options.state.pagination?.pageSize !== undefined &&
                   (table.getState().pagination.pageIndex * table.options.state.pagination.pageSize + 1)
                 } to&nbsp;
                 {table.getState().pagination?.pageIndex !== undefined && table.options.state.pagination?.pageSize !== undefined &&
-                  Math.min((table.getState().pagination.pageIndex + 1) * table.options.state.pagination.pageSize as number, tableData.length)
-                } of {tableData.length} entries
+                  Math.min((table.getState().pagination.pageIndex + 1) * table.options.state.pagination.pageSize as number, tableData?.length)
+                } of {tableData?.length} entries
                 </span>
 
                 <div className='flex flex-row gap-[10px] items-center'>
