@@ -61,7 +61,7 @@ const SelectBox = <T extends { name: string; id?: string | null }>({ options, se
         </Listbox>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default SelectBox;
+export default SelectBox

@@ -92,6 +92,8 @@ export default function CreateTopic({ subjects, levels, onRefresh } : CreateTopi
     }
   }
 
+  console.log(formData)
+
   return (
     <>
         <form onSubmit={handleSubmit} className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]' encType='multipart/form-data'>
@@ -126,16 +128,16 @@ export default function CreateTopic({ subjects, levels, onRefresh } : CreateTopi
                 <label>Subject</label>
                 <SelectBox
                     options={subjectOptions}
-                    selected={formData.subject !== null ? { name: formData.subject, id: formData.subject} : null}
-                    onChange={(value) => handleChange('subject', value?.name)}
+                    selected={formData.subject !== null ? { name: subjectOptions.find(opt => opt.id === formData.subject)?.name || '', id: formData.subject } : null}
+                    onChange={(value) => handleChange('subject', value?.id)}
                 />
             </div>
             <div className='flex flex-col gap-2'>
                 <label>Level</label>
                 <SelectBox
                     options={levelOpts}
-                    selected={formData.level !== null ? { name: formData.level, id: formData.level} : null}
-                    onChange={(value) => handleChange('level', value?.name)}
+                    selected={formData.level !== null ? { name: levelOpts.find(opt => opt.id === formData.level)?.name || '', id: formData.level } : null}
+                    onChange={(value) => handleChange('level', value?.id)}
                 />
             </div>
             <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
