@@ -7,7 +7,7 @@ const Logout = () => {
   
     const logout = () => {
       authStore.logout()
-      router.push("/")
+      router.refresh()
     }
   
     return logout
