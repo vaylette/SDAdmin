@@ -56,8 +56,6 @@ export default function ContentManagement() {
 
   const retrieveData = useRetrieveData()
 
-  const [tableData, setTableData] = useState([])
-
   const columnHelper = createColumnHelper()
 
   useEffect(() => {

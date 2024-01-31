@@ -23,13 +23,6 @@ interface Modal {
 }
 
 export default function UserManagement() {
-
-  const [data, setData] = useState({
-    users: [],
-  })
-
-  const retrieveData = useRetrieveData()
-  
   const [tab, setTab] = useState<Tab>({
     admins:true,
     students:false,
@@ -37,6 +30,12 @@ export default function UserManagement() {
     teachers:false,
     unVerified: false,
   })
+
+  const [data, setData] = useState({
+    users: [],
+  })
+
+  const retrieveData = useRetrieveData()
 
   const [modal, setModal] = useState<Modal>({
     create: false,
@@ -93,7 +92,87 @@ export default function UserManagement() {
     };
   });
 
-  const adminsColumns = [
+  const students: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Student')?.map((item) => {
+    const itemsAsStudent = item as User;
+    return {
+      ref_no: '', 
+      name: itemsAsStudent.name,
+      email: itemsAsStudent.email,
+      gender: itemsAsStudent.gender,
+      address: itemsAsStudent.address,
+      dob: itemsAsStudent.dob,
+      phoneNumber: itemsAsStudent.phoneNumber,
+      profilePic: itemsAsStudent.profilePic,
+      level: itemsAsStudent.level,
+      terms: itemsAsStudent.terms,
+      status: itemsAsStudent.status,
+      school: itemsAsStudent.school,
+      type: itemsAsStudent.type,
+      action: null
+    };
+  });
+
+  const teachers: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Teacher')?.map((item) => {
+    const itemsAsTeacher = item as User;
+    return {
+      ref_no: '', 
+      name: itemsAsTeacher.name,
+      email: itemsAsTeacher.email,
+      gender: itemsAsTeacher.gender,
+      address: itemsAsTeacher.address,
+      dob: itemsAsTeacher.dob,
+      phoneNumber: itemsAsTeacher.phoneNumber,
+      profilePic: itemsAsTeacher.profilePic,
+      level: itemsAsTeacher.level,
+      terms: itemsAsTeacher.terms,
+      status: itemsAsTeacher.status,
+      school: itemsAsTeacher.school,
+      type: itemsAsTeacher.type,
+      action: null
+    };
+  });
+
+  const parents: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Parent')?.map((item) => {
+    const itemsAsParent = item as User;
+    return {
+      ref_no: '', 
+      name: itemsAsParent.name,
+      email: itemsAsParent.email,
+      gender: itemsAsParent.gender,
+      address: itemsAsParent.address,
+      dob: itemsAsParent.dob,
+      phoneNumber: itemsAsParent.phoneNumber,
+      profilePic: itemsAsParent.profilePic,
+      level: itemsAsParent.level,
+      terms: itemsAsParent.terms,
+      status: itemsAsParent.status,
+      school: itemsAsParent.school,
+      type: itemsAsParent.type,
+      action: null
+    };
+  });
+
+  const unverified_users: User[] | undefined = (data?.users as User[])?.filter(user => user.type === '')?.map((item) => {
+    const itemsAsUnVerified = item as User;
+    return {
+      ref_no: '', 
+      name: itemsAsUnVerified.name,
+      email: itemsAsUnVerified.email,
+      gender: itemsAsUnVerified.gender,
+      address: itemsAsUnVerified.address,
+      dob: itemsAsUnVerified.dob,
+      phoneNumber: itemsAsUnVerified.phoneNumber,
+      profilePic: itemsAsUnVerified.profilePic,
+      level: itemsAsUnVerified.level,
+      terms: itemsAsUnVerified.terms,
+      status: itemsAsUnVerified.status,
+      school: itemsAsUnVerified.school,
+      type: itemsAsUnVerified.type,
+      action: null
+    };
+  });
+
+  const usersColumns = [
     columnHelper.accessor('ref_no', {
       header: () => 'REF NO',
       cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
@@ -132,9 +211,8 @@ export default function UserManagement() {
     }),
   ]
 
-
   const tabList = [
-    { name: 'Admins', tab: 'admins', columns: adminsColumns },
+    { name: 'Admins', tab: 'admins'},
     { name: 'Students', tab: 'students' },
     { name: 'Parents', tab: 'parents' },
     { name: 'Teachers', tab: 'teachers' },
@@ -152,6 +230,8 @@ export default function UserManagement() {
     }))
   }
 
+  console.log(data)
+
   return (
     <>
       <div className='flex flex-col gap-5'>
@@ -167,7 +247,11 @@ export default function UserManagement() {
             <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
           )}
         </div>
-        {tab.admins && <DataTable columns={adminsColumns} data={admins} />}
+        {tab.admins && <DataTable columns={usersColumns} data={admins ?? admins} />}
+        {tab.students && <DataTable columns={usersColumns} data={students ?? students} />}
+        {tab.teachers && <DataTable columns={usersColumns} data={teachers ?? teachers} />}
+        {tab.parents && <DataTable columns={usersColumns} data={parents ?? parents} />}
+        {tab.unVerified && <DataTable columns={usersColumns} data={unverified_users ?? unverified_users} />}
       </div>
       <div className={`${modal.create || modal.edit ? 'absolute min-h-screen inset-0 bg-black-100 bg-blend-multiply z-50 justify-end' : 'hidden'}`}>
         <div className='w-full h-full flex justify-end'>
