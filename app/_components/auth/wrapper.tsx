@@ -48,6 +48,7 @@ export default function AuthWrapper() {
                 setUser(response.user)
                 setToken(response.access_token)
                 document.cookie = `token=${response.access_token};secure;`
+                toast.success('Successfully authenticated!')
                 router.push('/dashboard')
             }
         } catch (error) {
