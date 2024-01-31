@@ -92,8 +92,6 @@ export default function CreateTopic({ subjects, levels, onRefresh } : CreateTopi
     }
   }
 
-  console.log(formData)
-
   return (
     <>
         <form onSubmit={handleSubmit} className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]' encType='multipart/form-data'>

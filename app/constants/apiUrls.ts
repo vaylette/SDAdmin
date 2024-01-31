@@ -6,6 +6,12 @@ export const apiUrls = {
 
     //--------> End Authentication  ------->//
 
+    //--------> User Management ------->//
+        // Get Endpoints
+        getUsers: `${baseUrl}/users`,
+
+    //-------->End User Management ------->//
+
 
     //--------> Content Management ------->//
         // Get Endpoints
