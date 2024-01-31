@@ -73,15 +73,15 @@ export default function CreateTopic({ subjects, levels, onRefresh } : CreateTopi
 
     setLoading(true)
 
-    const dataForm = new FormData()
-    dataForm.append('name', name)
-    dataForm.append('syllabus', syllabus || '')
-    dataForm.append('description', description)
-    dataForm.append('subject', subject || '')
-    dataForm.append('level', level || '') 
+    const send = new FormData()
+    send.append('name', name)
+    send.append('syllabus', syllabus || '')
+    send.append('description', description)
+    send.append('subject', subject || '')
+    send.append('level', level || '') 
 
     try {
-        const response = await postData(`${apiUrls.postTopics}`, dataForm)
+        const response = await postData(`${apiUrls.postTopics}`, send)
         if(response){
             onRefresh()
         }
@@ -110,7 +110,7 @@ export default function CreateTopic({ subjects, levels, onRefresh } : CreateTopi
                     //@ts-ignore
                     options={curriculumOptions}
                     selected={formData.syllabus !== null ? { name: formData.syllabus, id: formData.syllabus } : null}
-                    onChange={(value) => handleChange('syllabus', value ? value.name : '')}
+                    onChange={(value) => handleChange('syllabus', value?.name)}
                 />
             </div>
             <div className='flex flex-col gap-2'>
@@ -126,16 +126,16 @@ export default function CreateTopic({ subjects, levels, onRefresh } : CreateTopi
                 <label>Subject</label>
                 <SelectBox
                     options={subjectOptions}
-                    selected={formData.subject !== null ? { name: formData.subject, id: formData.subject } : null}
-                    onChange={(value) => handleChange('subject', value ? value.id : '')}
+                    selected={formData.subject !== null ? { name: formData.subject, id: formData.subject} : null}
+                    onChange={(value) => handleChange('subject', value?.name)}
                 />
             </div>
             <div className='flex flex-col gap-2'>
                 <label>Level</label>
                 <SelectBox
                     options={levelOpts}
-                    selected={formData.level !== null ? { name: formData.level, id: formData.level } : null}
-                    onChange={(value) => handleChange('level', value ? value.id : '')}
+                    selected={formData.level !== null ? { name: formData.level, id: formData.level} : null}
+                    onChange={(value) => handleChange('level', value?.name)}
                 />
             </div>
             <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
