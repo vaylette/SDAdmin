@@ -3,6 +3,7 @@
 import DataTable from '@/app/_components/datatable'
 import { apiUrls } from '@/app/constants/apiUrls'
 import { useRetrieveData } from '@/app/constants/hooks'
+import { User } from '@/app/types/types'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useState, useEffect } from "react"
 import toast from 'react-hot-toast'
@@ -14,16 +15,6 @@ interface Tab {
   teachers: boolean
   unVerified: false
   [key: string]: boolean
-}
-
-type User = {
-  s_no: string | number | null | undefined
-  name: string,
-  email: string,
-  phone: string,
-  role: string,
-  permission: string,
-  action: null
 }
 
 interface Modal {
@@ -52,124 +43,6 @@ export default function UserManagement() {
     edit: false
   })
 
-  const tabList = [
-    {
-      name: 'Admins',
-      tab: 'admins'
-    },
-    {
-      name: 'Students',
-      tab: 'students'
-    },
-    {
-      name: 'Parents',
-      tab: 'parents'
-    },
-    {
-      name: 'Teachers',
-      tab: 'teachers'
-    },
-    {
-      name: 'Un Verified',
-      tab: 'unVerified'
-    },
-  ]
-
-  const users: User[] = [
-    {
-      s_no: '',
-      name: 'Carlos Mtibwa',
-      email: 'carlos@gmail.com',
-      phone: '255765381198',
-      role: 'Admin',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Samwel Yanga',
-      email: 'samwel@gmail.com',
-      phone: '255765381198',
-      role: 'Teacher',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Zulfa Ihefu',
-      email: 'zulfa@gmail.com',
-      phone: '255765381198',
-      role: 'Admin',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Fetty Simba',
-      email: 'fetty@gmail.com',
-      phone: '255765381198',
-      role: 'Teacher',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Sajidu Mlandege',
-      email: 'sajidu@gmail.com',
-      phone: '255765381198',
-      role: 'Admin, Teacher',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Dany Mashujaa',
-      email: 'dany@gmail.com',
-      phone: '255765381198',
-      role: 'Admin, Teacher',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Jean Yanga',
-      email: 'jean@gmail.com',
-      phone: '255765381198',
-      role: 'Teacher',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Abdul Arsenal',
-      email: 'abdul@gmail.com',
-      phone: '255765381198',
-      role: 'Admin',
-      permission: 'Level 1',
-      action: null
-    },
-    {
-      s_no: '',
-      name: 'Waissa Mwaisa',
-      email: 'waissa@gmail.com',
-      phone: '255765381198',
-      role: 'Admin, Teacher',
-      permission: 'Level 1',
-      action: null
-    },
-  ]
-
-  const handleActiveTab = (activeTab: keyof Tab): void => {
-    setTab((prev) => ({
-      admins: false,
-      students: false,
-      parents: false,
-      teachers: false,
-      unVerified: false,
-      [activeTab]: true,
-    }))
-  }
-
   const handleModal = (modalType: string): void => {
     setModal((prev) => ({ ...prev, [modalType]: true }))
   }
@@ -179,7 +52,7 @@ export default function UserManagement() {
     getData()
   }
 
-  const columnHelper = createColumnHelper<User>()
+  const columnHelper = createColumnHelper()
 
   useEffect(() => {
     getData()
@@ -200,38 +73,58 @@ export default function UserManagement() {
     } finally{}
   }
 
-  const columns = [
-    columnHelper.accessor('s_no', {
-      header: () => 'S/No',
+  const admins: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Administrator')?.map((item) => {
+    const itemsAsAdmin = item as User;
+    return {
+      ref_no: '', 
+      name: itemsAsAdmin.name,
+      email: itemsAsAdmin.email,
+      gender: itemsAsAdmin.gender,
+      address: itemsAsAdmin.address,
+      dob: itemsAsAdmin.dob,
+      phoneNumber: itemsAsAdmin.phoneNumber,
+      profilePic: itemsAsAdmin.profilePic,
+      level: itemsAsAdmin.level,
+      terms: itemsAsAdmin.terms,
+      status: itemsAsAdmin.status,
+      school: itemsAsAdmin.school,
+      type: itemsAsAdmin.type,
+      action: null
+    };
+  });
+
+  const adminsColumns = [
+    columnHelper.accessor('ref_no', {
+      header: () => 'REF NO',
       cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
-      size: 75,
+      size: 5,
     }),
     columnHelper.accessor('name', {
       header: () => 'Name',
-      cell: info => info.getValue()
+      cell: info => info.getValue(),
+      size: 10,
     }),
     columnHelper.accessor('email', {
       header: () => 'Email',
-      cell: info => info.getValue()
+      cell: info => info.getValue(),
+      size: 10,
     }),
-    columnHelper.accessor('phone', {
+    columnHelper.accessor('phoneNumber', {
       header: () => 'Phone',
-      cell: info => info.getValue()
+      cell: info => info.getValue(),
+      size: 10,
     }),
-    columnHelper.accessor('role', {
-      header: () => 'Role',
-      cell: info => info.getValue()
-    }),
-    columnHelper.accessor('permission', {
-      header: () => 'Permission',
-      cell: info => info.getValue()
+    columnHelper.accessor('type', {
+      header: () => 'Type',
+      cell: info => info.getValue(),
+      size: 30,
     }),
     columnHelper.accessor('action', {
       header: () => '',
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            <button onClick={() => handleModal('edit')} className='text-orange-default'>Edit</button>
+            <button className='text-orange-default'>Edit</button>
             <button className='text-red-default'>Restrict</button>
           </div>
         </>
@@ -239,7 +132,25 @@ export default function UserManagement() {
     }),
   ]
 
-  console.log(data)
+
+  const tabList = [
+    { name: 'Admins', tab: 'admins', columns: adminsColumns },
+    { name: 'Students', tab: 'students' },
+    { name: 'Parents', tab: 'parents' },
+    { name: 'Teachers', tab: 'teachers' },
+    { name: 'Un Verified', tab: 'unVerified' },
+  ]
+
+  const handleActiveTab = (activeTab: keyof Tab): void => {
+    setTab((prev) => ({
+      admins: false,
+      students: false,
+      parents: false,
+      teachers: false,
+      unVerified: false,
+      [activeTab]: true,
+    }))
+  }
 
   return (
     <>
@@ -256,7 +167,7 @@ export default function UserManagement() {
             <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
           )}
         </div>
-        {/* <DataTable columns={columns} data={data} /> */}
+        {tab.admins && <DataTable columns={adminsColumns} data={admins} />}
       </div>
       <div className={`${modal.create || modal.edit ? 'absolute min-h-screen inset-0 bg-black-100 bg-blend-multiply z-50 justify-end' : 'hidden'}`}>
         <div className='w-full h-full flex justify-end'>
