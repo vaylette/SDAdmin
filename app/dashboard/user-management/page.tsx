@@ -9,6 +9,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useState, useEffect } from "react"
 import toast from 'react-hot-toast'
 import AddAdminForm from '../../_components/user-management/add_admin_form'
+import InviteStudentForm from '@/app/_components/user-management/invite_student_form'
 
 interface Tab {
   admins: boolean
@@ -21,6 +22,7 @@ interface Tab {
 
 interface Modal {
   create: boolean,
+  invite: boolean,
   edit: boolean
 }
 
@@ -41,6 +43,7 @@ export default function UserManagement() {
 
   const [modal, setModal] = useState<Modal>({
     create: false,
+    invite: false,
     edit: false
   })
 
@@ -49,7 +52,7 @@ export default function UserManagement() {
   }
 
   const handleModalClose = (): void => {
-    setModal({ create: false, edit: false })
+    setModal({ create: false, invite: false, edit: false })
     getData()
   }
 
@@ -246,6 +249,9 @@ export default function UserManagement() {
           {tab.admins && (
             <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
           )}
+          {tab.students && (
+            <button onClick={() => handleModal('invite')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Invite Student +</button>
+          )}
         </div>
         {tab.admins && <DataTable columns={usersColumns} data={admins ?? admins} />}
         {tab.students && <DataTable columns={usersColumns} data={students ?? students} />}
@@ -253,8 +259,13 @@ export default function UserManagement() {
         {tab.parents && <DataTable columns={usersColumns} data={parents ?? parents} />}
         {tab.unVerified && <DataTable columns={usersColumns} data={unverified_users ?? unverified_users} />}
       </div>
-      <CustomModal isOpen={modal.create} onClose={handleModalClose} title={modal.create ? 'Add Admin' : 'Edit Profile'}>
-        <AddAdminForm />
+      <CustomModal isOpen={modal.create || modal.invite} onClose={handleModalClose} title={modal.create ? 'Add Admin' : 'Invite Student'} subtitle = {modal.invite ? "Please add the student’s information and we will send invite email" : ""}>
+        {modal.create && (<>
+          <AddAdminForm />
+        </>)}
+        {modal.invite && (<>
+          <InviteStudentForm />
+        </>)}
       </CustomModal>
     </>
   )
