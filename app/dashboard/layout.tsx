@@ -1,5 +1,5 @@
 import Aside from "../_components/aside"
-import Header from "../_components/header"
+import Header from "../_components/header/header"
 
 export default function DashboardLayout({
     children
