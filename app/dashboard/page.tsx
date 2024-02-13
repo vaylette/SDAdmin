@@ -1,4 +1,4 @@
-import OverviewCard from "../_components/overviewCard"
+import OverviewCard from "../_components/overview/overviewCard"
 
 export default function Dashboard() {
   const data = [
