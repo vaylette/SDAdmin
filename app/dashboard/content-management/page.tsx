@@ -9,6 +9,7 @@ import { apiUrls } from "@/app/constants/apiUrls"
 import { Topic, Model, Experiment, Video } from "@/app/types/types"
 import Modal from "@/app/_components/modal"
 import CreateTopic from "./(crud)/create-topic"
+import CustomModal from "@/app/_components/aside-modal/aside-modal"
 
 interface ContentTab {
   topics: boolean
@@ -25,10 +26,10 @@ interface Modal {
 
 export default function ContentManagement() {
   const [tab, setTab] = useState<ContentTab>({
-    topics:true,
-    models:false,
-    experiments:false,
-    videos:false,
+    topics: true,
+    models: false,
+    experiments: false,
+    videos: false,
   })
 
   const [data, setData] = useState({
@@ -83,7 +84,7 @@ export default function ContentManagement() {
       }))
     } catch (error: any) {
       toast.error(error)
-    } finally{}
+    } finally { }
   }
 
   const topics: Topic[] = data?.topics?.map((item) => {
@@ -91,8 +92,8 @@ export default function ContentManagement() {
     return {
       ref_no: '',
       name: itemAsTopic.name,
-      subject: itemAsTopic.subject.name, 
-      level: itemAsTopic.level.name, 
+      subject: itemAsTopic.subject.name,
+      level: itemAsTopic.level.name,
       syllabus: itemAsTopic.syllabus,
       sections: itemAsTopic.sections.length,
       action: null
@@ -104,7 +105,7 @@ export default function ContentManagement() {
     return {
       ref_no: '',
       name: itemAsModel.name,
-      level: itemAsModel.level, 
+      level: itemAsModel.level,
       subject: itemAsModel.subject,
       topic: itemAsModel.topic,
       action: null
@@ -116,7 +117,7 @@ export default function ContentManagement() {
     return {
       ref_no: '',
       name: itemAsExperiment.name,
-      level: itemAsExperiment.level, 
+      level: itemAsExperiment.level,
       subject: itemAsExperiment.subject,
       topic: itemAsExperiment.topic,
       action: null
@@ -128,7 +129,7 @@ export default function ContentManagement() {
     return {
       ref_no: '',
       name: itemAsVideo.name,
-      level: itemAsVideo.level, 
+      level: itemAsVideo.level,
       subject: itemAsVideo.subject,
       topic: itemAsVideo.topic,
       video_link: itemAsVideo.video_link,
@@ -179,7 +180,7 @@ export default function ContentManagement() {
       )
     }),
   ]
-  
+
   const modelsColumns = [
     columnHelper.accessor('ref_no', {
       header: () => 'REF NO',
@@ -319,69 +320,69 @@ export default function ContentManagement() {
     }))
   }
 
-return (
-  <>
-    <div className='flex flex-col'>
-      <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
-        <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-          <div className='flex flex-col px-[76px] gap-2'>
-            <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Topics</span>
+  return (
+    <>
+      <div className='flex flex-col'>
+        <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[76px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Topics</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.topics.length : '0'}</span>
+            </div>
           </div>
-          <div className='absolute bottom-2'>
-            <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.topics.length : '0'}</span>
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[66px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Models</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.models.length : '0'}</span>
+            </div>
+          </div>
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[76px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Experiments</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.experiments.length : '0'}</span>
+            </div>
+          </div>
+          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+            <div className='flex flex-col px-[76px] gap-2'>
+              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Videos</span>
+            </div>
+            <div className='absolute bottom-2'>
+              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.videos.length : '0'}</span>
+            </div>
           </div>
         </div>
-        <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-          <div className='flex flex-col px-[66px] gap-2'>
-            <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Models</span>
+        <div className='mt-9 w-full flex flex-row justify-between items-center'>
+          <div className="flex flex-row items-center gap-9">
+            <TabComponent tab={tab} tabList={tabList} handleActiveTab={handleActiveTab} />
+            <button>
+              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+                <path d="M15 15L22 22M9.16667 17.3333C4.65634 17.3333 1 13.677 1 9.16667C1 4.65634 4.65634 1 9.16667 1C13.677 1 17.3333 4.65634 17.3333 9.16667C17.3333 13.677 13.677 17.3333 9.16667 17.3333Z" stroke="#FF9D0D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
-          <div className='absolute bottom-2'>
-            <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.models.length : '0'}</span>
-          </div>
+          {tab.topics && (
+            <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
+          )}
         </div>
-        <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-          <div className='flex flex-col px-[76px] gap-2'>
-            <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Experiments</span>
-          </div>
-          <div className='absolute bottom-2'>
-            <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.experiments.length : '0'}</span>
-          </div>
-        </div>
-        <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-          <div className='flex flex-col px-[76px] gap-2'>
-            <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Videos</span>
-          </div>
-          <div className='absolute bottom-2'>
-            <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.videos.length : '0'}</span>
-          </div>
+        <div className='mt-5'>
+          {tab.topics && <DataTable columns={topicsColumns} data={topics} />}
+          {tab.models && <DataTable columns={modelsColumns} data={models} />}
+          {tab.experiments && <DataTable columns={experimentsColumns} data={experiments} />}
+          {tab.videos && <DataTable columns={videoColumns} data={videos} />}
         </div>
       </div>
-      <div className='mt-9 w-full flex flex-row justify-between items-center'>
-        <div className="flex flex-row items-center gap-9">
-          <TabComponent tab={tab} tabList={tabList} handleActiveTab={handleActiveTab} />
-          <button>
-            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
-              <path d="M15 15L22 22M9.16667 17.3333C4.65634 17.3333 1 13.677 1 9.16667C1 4.65634 4.65634 1 9.16667 1C13.677 1 17.3333 4.65634 17.3333 9.16667C17.3333 13.677 13.677 17.3333 9.16667 17.3333Z" stroke="#FF9D0D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        {tab.topics && (
-          <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
-        )}
-      </div>
-      <div className='mt-5'>
-        {tab.topics && <DataTable columns={topicsColumns} data={topics} />} 
-        {tab.models && <DataTable columns={modelsColumns} data={models} />} 
-        {tab.experiments && <DataTable columns={experimentsColumns} data={experiments} />} 
-        {tab.videos && <DataTable columns={videoColumns} data={videos} />} 
-      </div>
-    </div>
-    {modal.create && (
-      <Modal onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'}>
-        {tab.topics && <CreateTopic subjects={data?.subjects} levels={data?.levels} onRefresh={handleModalClose} />}
-      </Modal>
-    )}
+      {modal.create && (
+        <CustomModal isOpen={modal.create} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>
+          {tab.topics && <CreateTopic subjects={data?.subjects} levels={data?.levels} onRefresh={handleModalClose} />}
+        </CustomModal>
+      )}
 
-  </>
+    </>
   )
 }
