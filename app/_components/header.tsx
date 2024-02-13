@@ -38,9 +38,26 @@ export default function Header() {
         }
     }, [pathname])
 
+    const headerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+                setDrop({
+                    notifications: false,
+                    profile: false
+                })
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [])
+
   return (
     <>
-      <header className="w-full h-[150px] bg-header flex flex-row justify-between items-center px-8">
+      <header ref={headerRef} className="w-full h-[150px] bg-header flex flex-row justify-between items-center px-8">
         <h6 className="font-bold text-orange-default text-[40px]">{title}</h6>
         <ul className="flex flex-row gap-4 items-center">
             <li>
