@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { TabComponent, TabItem } from "@/app/_components/tab"
 import DataTable from "@/app/_components/datatable"
 import { createColumnHelper } from "@tanstack/react-table"
@@ -38,7 +38,8 @@ export default function ContentManagement() {
     experiments: [],
     videos: [],
     subjects: [],
-    levels: []
+    levels: [],
+    syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "0" }, { name: "Montessori", _id: "2" }]
   })
 
   const [modal, setModal] = useState<Modal>({
@@ -91,6 +92,7 @@ export default function ContentManagement() {
     const itemAsTopic = item as Topic;
     return {
       ref_no: '',
+      _id: itemAsTopic._id,
       name: itemAsTopic.name,
       subject: itemAsTopic.subject.name,
       level: itemAsTopic.level.name,
@@ -137,6 +139,13 @@ export default function ContentManagement() {
     }
   })
 
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown menu
+
+  // Toggle dropdown function
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   const topicsColumns = [
     columnHelper.accessor('ref_no', {
       header: () => 'REF NO',
@@ -163,18 +172,50 @@ export default function ContentManagement() {
       cell: info => info.getValue(),
       size: 30,
     }),
-    columnHelper.accessor('sections', {
-      header: () => 'Sections',
-      cell: info => info.getValue(),
-      size: 30,
-    }),
+    // columnHelper.accessor('sections', {
+    //   header: () => 'Sections',
+    //   cell: info => info.getValue(),
+    //   size: 30,
+    // }),
+    // columnHelper.accessor('questions', {
+    //   header: () => 'Questions',
+    //   cell: info => info.getValue(),
+    //   size: 30,
+    // }),
+    // columnHelper.accessor('uploader', {
+    //   header: () => 'Uploader',
+    //   cell: info => info.getValue(),
+    //   size: 30,
+    // }),
     columnHelper.accessor('action', {
       header: () => '',
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            <button className='text-orange-default'>Edit</button>
-            <button className='text-red-default'>Restrict</button>
+            <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
+              <span>Sections</span>
+            </a>
+            <div className="border-l h-6" style={{ borderColor: "#FFA500" }}></div>
+            <a href="#" className='text-orange-default flex items-center gap-2'>
+              <span>Questions</span>
+            </a>
+            <div className="relative inline-block text-left">
+              <div onClick={toggleDropdown} className="flex items-center gap-2 cursor-pointer">
+                <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 16" fill="none">
+                  <path d="M1 14C1 14.5523 1.44772 15 2 15C2.55228 15 3 14.5523 3 14C3 13.4477 2.55228 13 2 13C1.44772 13 1 13.4477 1 14Z" fill="#7A7A7A" />
+                  <path d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8C3 7.44772 2.55228 7 2 7C1.44772 7 1 7.44772 1 8Z" fill="#7A7A7A" />
+                  <path d="M1 2C1 2.55228 1.44772 3 2 3C2.55228 3 3 2.55228 3 2C3 1.44772 2.55228 1 2 1C1.44772 1 1 1.44772 1 2Z" fill="#7A7A7A" />
+                  <path d="M1 14C1 14.5523 1.44772 15 2 15C2.55228 15 3 14.5523 3 14C3 13.4477 2.55228 13 2 13C1.44772 13 1 13.4477 1 14Z" stroke="#7A7A7A" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8C3 7.44772 2.55228 7 2 7C1.44772 7 1 7.44772 1 8Z" stroke="#7A7A7A" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M1 2C1 2.55228 1.44772 3 2 3C2.55228 3 3 2.55228 3 2C3 1.44772 2.55228 1 2 1C1.44772 1 1 1.44772 1 2Z" stroke="#7A7A7A" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              {dropdownOpen && (
+                <div className={`${dropdownOpen ? 'absolute inset-0 bg-black-100 bg-blend-multiply z-50' : 'hidden'}`}>
+                  <CustomDropDown dismiss={toggleDropdown} />
+                </div>
+              )}
+            </div>
           </div>
         </>
       )
@@ -322,40 +363,13 @@ export default function ContentManagement() {
 
   return (
     <>
-      <div className='flex flex-col'>
+      <div className='flex flex-col gap-5'>
         <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
-          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-            <div className='flex flex-col px-[76px] gap-2'>
-              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Topics</span>
-            </div>
-            <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.topics.length : '0'}</span>
-            </div>
-          </div>
-          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-            <div className='flex flex-col px-[66px] gap-2'>
-              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Models</span>
-            </div>
-            <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.models.length : '0'}</span>
-            </div>
-          </div>
-          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-            <div className='flex flex-col px-[76px] gap-2'>
-              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Experiments</span>
-            </div>
-            <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.experiments.length : '0'}</span>
-            </div>
-          </div>
-          <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-            <div className='flex flex-col px-[76px] gap-2'>
-              <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>Total Videos</span>
-            </div>
-            <div className='absolute bottom-2'>
-              <span className='text-orange-default text-[50px] font-bold text-center'>{data ? data.videos.length : '0'}</span>
-            </div>
-          </div>
+          <OverviewCard title="Total Topics" count={data ? data.topics.length : '0'} />
+          <OverviewCard title="Total Models" count={data ? data.models.length : '0'} />
+          <OverviewCard title="Experiments" count={data ? data.experiments.length : '0'} />
+          <OverviewCard title="Total Videos" count={data ? data.videos.length : '0'} />
+
         </div>
         <div className='mt-9 w-full flex flex-row justify-between items-center'>
           <div className="flex flex-row items-center gap-9">
@@ -371,18 +385,76 @@ export default function ContentManagement() {
           )}
         </div>
         <div className='mt-5'>
-          {tab.topics && <DataTable columns={topicsColumns} data={topics} />}
+          {tab.topics && (
+            <DataTable columns={topicsColumns} data={topics} />
+          )}
           {tab.models && <DataTable columns={modelsColumns} data={models} />}
           {tab.experiments && <DataTable columns={experimentsColumns} data={experiments} />}
           {tab.videos && <DataTable columns={videoColumns} data={videos} />}
         </div>
+
       </div>
+
       {modal.create && (
         <CustomModal isOpen={modal.create} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>
-          {tab.topics && <CreateTopic subjects={data?.subjects} levels={data?.levels} onRefresh={handleModalClose} />}
+          {tab.topics && <CreateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} onRefresh={handleModalClose} />}
         </CustomModal>
       )}
 
     </>
   )
+}
+
+
+export const OverviewCard = ({ title, count }) => {
+  return (
+    <div className='h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
+      <div className='flex flex-col px-[76px] gap-2'>
+        <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>{title}</span>
+      </div>
+      <div className='absolute bottom-2'>
+        <span className='text-orange-default text-[50px] font-bold text-center'>{count}</span>
+      </div>
+    </div>
+  );
+}
+
+
+interface Props {
+  dismiss: () => void;
+}
+
+export const CustomDropDown: React.FC<Props> = ({ dismiss }) => {
+  const userProfileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userProfileRef.current && !userProfileRef.current.contains(event.target as Node)) {
+        dismiss();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dismiss]);
+  return (<>
+    <div ref={userProfileRef} className="absolute">
+      <div className="h-auto rounded-lg bg-white-default shadow-drop relative">
+        <div className="absolute -top-[6px] right-8 w-[13.24px] h-[13.24px] bg-white-default" style={{ transform: 'rotate(135deg)' }}></div>
+        <div className='flex flex-col'>
+          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <button className="text-orange-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
+              Edit
+            </button>
+            <button className="text-red-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>)
 }

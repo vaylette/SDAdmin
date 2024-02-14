@@ -31,13 +31,21 @@ export default function Header() {
     const pathname: string = usePathname()
 
     useEffect(() => {
-        switch (pathname) {
-            case '/dashboard': return setTitle('Overview'); break;
-            case '/dashboard/user-management': return setTitle('User Management'); break;
-            case '/dashboard/content-management': return setTitle('Content Management'); break;
-            default: setTitle('Overview')
+        switch (true) {
+            case pathname === '/dashboard':
+                setTitle('Overview');
+                break;
+            case pathname === '/dashboard/user-management':
+                setTitle('User Management');
+                break;
+            case pathname.startsWith('/dashboard/content-management'):
+                setTitle('Content Management');
+                break;
+            default:
+                setTitle('Overview');
         }
-    }, [pathname])
+    }, [pathname]);
+
 
     return (
         <>

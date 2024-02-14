@@ -29,24 +29,32 @@ export interface Level {
     updatedAt: string;
 }
 
+export interface Syllabus {
+    _id: string;
+    name: string;
+}
+
 interface CreateTopicProps {
     subjects: Subject[];
     levels: Level[];
+    syllabus: Syllabus[];
     onRefresh: () => void;
 }
 
 
-export default function CreateTopic({ subjects, levels, onRefresh }: CreateTopicProps) {
+export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: CreateTopicProps) {
     const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
 
     const levelOpts = levels?.map(level => ({ name: level.name, id: level._id }))
 
+    const syllabusOpts = syllabus?.map(syllabus => ({ name: syllabus.name, id: syllabus._id }))
+
     const [formData, setFormData] = useState({
         name: '',
-        syllabus: null as string | null,
-        description: '',
         subject: null as string | null,
+        thumbnail: '',
         level: null as string | null,
+        syllabus: null as string | null,
     })
 
     const [loading, setLoading] = useState(false)
@@ -65,9 +73,9 @@ export default function CreateTopic({ subjects, levels, onRefresh }: CreateTopic
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        const { name, syllabus, description, subject, level } = formData
+        const { name, subject, thumbnail, level, syllabus } = formData
 
-        if (name === '' || syllabus === null || description === '' || subject === null || level === null) {
+        if (name === '' || subject === null || thumbnail === '' || level === null || syllabus === null) {
             toast.error('Please fill all the required fields!')
             return
         }
@@ -76,10 +84,10 @@ export default function CreateTopic({ subjects, levels, onRefresh }: CreateTopic
 
         const send = new FormData()
         send.append('name', name)
-        send.append('syllabus', syllabus || '')
-        send.append('description', description)
-        send.append('subject', subject || '')
+        send.append('subject', subject)
+        send.append('thumbnail', thumbnail)
         send.append('level', level || '')
+        send.append('syllabus', syllabus)
 
         try {
             const response = await postData(`${apiUrls.postTopics}`, send)
@@ -127,11 +135,11 @@ export default function CreateTopic({ subjects, levels, onRefresh }: CreateTopic
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <label>Curriculum</label>
+                    <label>Syllabus</label>
                     <SelectBox
-                        options={levelOpts}
-                        selected={formData.level !== null ? { name: levelOpts.find(opt => opt.id === formData.level)?.name || '', id: formData.level } : null}
-                        onChange={(value) => handleChange('level', value?.id)}
+                        options={syllabusOpts}
+                        selected={formData.syllabus !== null ? { name: syllabusOpts.find(opt => opt.id === formData.syllabus)?.name || '', id: formData.syllabus } : null}
+                        onChange={(value) => handleChange('syllabus', value?.id)}
                     />
                 </div>
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>

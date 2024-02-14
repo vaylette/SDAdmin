@@ -15,7 +15,8 @@ export type SmartUser = {
 }
 
 export type Topic = {
-    ref_no: string | number | null | undefined
+    ref_no: string | number | null | undefined,
+    _id: string,
     name: string,
     subject: {} | any,
     level: {} | any,
