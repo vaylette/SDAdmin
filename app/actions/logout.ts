@@ -6,8 +6,9 @@ const Logout = () => {
     const router = useRouter()
   
     const logout = () => {
+      localStorage.removeItem("token");
       authStore.logout()
-      router.refresh()
+      router.push("/")
     }
   
     return logout
