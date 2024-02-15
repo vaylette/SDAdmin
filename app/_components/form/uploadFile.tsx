@@ -6,7 +6,7 @@ interface fileUploadProps {
     text?: string
 }
 
-const FileUpload = ({ label, text = "" }: fileUploadProps) => {
+const FileUpload = ({ label, text = "Upload file" }: fileUploadProps) => {
     const [fileName, setFileName] = useState('');
 
     const handleFileChange = (e: any) => {
