@@ -1,10 +1,15 @@
 
 import React, { useState } from 'react';
 
-const FileUpload = ({ label }) => {
+interface fileUploadProps {
+    label: string,
+    text?: string
+}
+
+const FileUpload = ({ label, text = "" }: fileUploadProps) => {
     const [fileName, setFileName] = useState('');
 
-    const handleFileChange = (e) => {
+    const handleFileChange = (e: any) => {
         const file = e.target.files[0];
         if (file) {
             setFileName(file.name);
@@ -25,7 +30,7 @@ const FileUpload = ({ label }) => {
                 <div className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0 flex items-center justify-between'>
                     <span>{fileName || 'Select file'}</span>
                     <button className='flex items-center justify-center bg-[#FF9D0D] text-[#ffffff] text-sm rounded-[30px] w-[90px] p-2 h-10'>
-                        Upload
+                        {text ?? "Upload"}
                     </button>
                 </div>
             </div>

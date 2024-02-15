@@ -10,6 +10,10 @@ import { Topic, Model, Experiment, Video } from "@/app/types/types"
 import Modal from "@/app/_components/modal"
 import CreateTopic from "./(crud)/create-topic"
 import CustomModal from "@/app/_components/aside-modal/aside-modal"
+import CreateModel from "./(crud)/create-model"
+import CreateVideo from "./(crud)/create-video"
+import CreateExperiment from "./(crud)/create-experiment"
+import CreateDiyExperiment from "./(crud)/create-diy-experiment"
 
 interface ContentTab {
   topics: boolean
@@ -20,7 +24,11 @@ interface ContentTab {
 }
 
 interface Modal {
-  create: boolean,
+  topics: boolean,
+  models: boolean,
+  videos: boolean,
+  experiments: boolean,
+  diy:boolean,
   edit: boolean
 }
 
@@ -43,7 +51,11 @@ export default function ContentManagement() {
   })
 
   const [modal, setModal] = useState<Modal>({
-    create: false,
+    topics: false,
+    models: false,
+    experiments: false,
+    diy: false,
+    videos: false,
     edit: false
   })
 
@@ -52,7 +64,7 @@ export default function ContentManagement() {
   }
 
   const handleModalClose = (): void => {
-    setModal({ create: false, edit: false })
+    setModal({ topics: false, models: false, experiments: false, diy: false, videos: false, edit: false })
     getData()
   }
 
@@ -365,10 +377,10 @@ export default function ContentManagement() {
     <>
       <div className='flex flex-col gap-5'>
         <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
-          <OverviewCard title="Total Topics" count={data ? data.topics.length : '0'} />
-          <OverviewCard title="Total Models" count={data ? data.models.length : '0'} />
-          <OverviewCard title="Experiments" count={data ? data.experiments.length : '0'} />
-          <OverviewCard title="Total Videos" count={data ? data.videos.length : '0'} />
+          <OverviewCard title="Total Topics" count={data ? data.topics.length : 0} />
+          <OverviewCard title="Total Models" count={data ? data.models.length : 0} />
+          <OverviewCard title="Experiments" count={data ? data.experiments.length : 0} />
+          <OverviewCard title="Total Videos" count={data ? data.videos.length : 0} />
 
         </div>
         <div className='mt-9 w-full flex flex-row justify-between items-center'>
@@ -381,7 +393,19 @@ export default function ContentManagement() {
             </button>
           </div>
           {tab.topics && (
-            <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
+            <button onClick={() => handleModal('topics')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
+          )}
+          {tab.models && (
+            <button onClick={() => handleModal('models')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Model +</button>
+          )}
+          {tab.experiments && (
+            <button onClick={() => handleModal('experiments')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Experiments +</button>
+          )}
+          {tab.experiments && (
+            <button onClick={() => handleModal('diy')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>DIY Experiments +</button>
+          )}
+          {tab.videos && (
+            <button onClick={() => handleModal('videos')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Videos +</button>
           )}
         </div>
         <div className='mt-5'>
@@ -395,9 +419,32 @@ export default function ContentManagement() {
 
       </div>
 
-      {modal.create && (
-        <CustomModal isOpen={modal.create} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>
-          {tab.topics && <CreateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} onRefresh={handleModalClose} />}
+      {modal.topics && (
+        <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>
+          <CreateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} onRefresh={handleModalClose} />
+        </CustomModal>
+      )}
+
+      {modal.models && (
+        <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Add Model"} subtitle={"Please add the model’s information"}>
+          <CreateModel subjects={data?.subjects} onRefresh={handleModalClose} />
+        </CustomModal>
+      )}
+
+      {modal.experiments && (
+        <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
+          <CreateExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
+        </CustomModal>
+      )}
+      {modal.diy && (
+        <CustomModal isOpen={modal.diy} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
+          <CreateDiyExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
+        </CustomModal>
+      )}
+
+      {modal.videos && (
+        <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Add Video"} subtitle={"Please add the video’s information"}>
+          <CreateVideo subjects={data?.subjects} onRefresh={handleModalClose} />
         </CustomModal>
       )}
 
@@ -405,15 +452,20 @@ export default function ContentManagement() {
   )
 }
 
+interface Card {
+  title: string,
+  count: Number
+}
 
-export const OverviewCard = ({ title, count }) => {
+
+export const OverviewCard = ({ title, count }: Card) => {
   return (
     <div className='h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
       <div className='flex flex-col px-[76px] gap-2'>
         <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>{title}</span>
       </div>
       <div className='absolute bottom-2'>
-        <span className='text-orange-default text-[50px] font-bold text-center'>{count}</span>
+        <span className='text-orange-default text-[50px] font-bold text-center'>{count.toString()}</span>
       </div>
     </div>
   );

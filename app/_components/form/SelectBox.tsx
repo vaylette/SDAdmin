@@ -13,7 +13,7 @@ const SelectBox = <T extends { name: string; id?: string | null }>({ options, se
     <>
       <div className="w-full">
         <Listbox value={selected} onChange={onChange}>
-          <div className="relative mt-1">
+          <div className="relative">
             <Listbox.Button className="relative w-full cursor-default rounded-[4px] bg-black-500 h-[60px] text-start py-2 pl-3 pr-10 text-black-400 shadow-md focus:outline-none focus:ring-0">
               <span className="block truncate">{selected ? selected.name : '' as any}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

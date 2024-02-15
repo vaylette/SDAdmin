@@ -2,7 +2,7 @@
 export default function OverviewCard({ title, quantity, growth }: { title: string | null, quantity: string | number | null, growth: number | null }) {
   return (
     <>
-        <div className='w-[263px] h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14 sm:px-4'>
+        <div className='h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
             <div className='flex flex-col px-[76px] gap-2'>
               <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>{title}</span>
             </div>

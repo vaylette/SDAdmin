@@ -8,8 +8,8 @@ import { User } from '@/app/types/types'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useState, useEffect } from "react"
 import toast from 'react-hot-toast'
-import AddAdminForm from '../../_components/user-management/add_admin_form'
-import InviteStudentForm from '@/app/_components/user-management/invite_student_form'
+import CreateAdmin from './(crud)/create-admin'
+import InviteStudent from './(crud)/invite-student'
 
 interface Tab {
   admins: boolean
@@ -261,10 +261,10 @@ export default function UserManagement() {
       </div>
       <CustomModal isOpen={modal.create || modal.invite} onClose={handleModalClose} title={modal.create ? 'Add Admin' : 'Invite Student'} subtitle = {modal.invite ? "Please add the student’s information and we will send invite email" : ""}>
         {modal.create && (<>
-          <AddAdminForm />
+          <CreateAdmin />
         </>)}
         {modal.invite && (<>
-          <InviteStudentForm />
+          <InviteStudent />
         </>)}
       </CustomModal>
     </>
