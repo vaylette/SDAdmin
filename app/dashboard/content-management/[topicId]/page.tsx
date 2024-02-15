@@ -28,7 +28,7 @@ const TopicPage = ({ params }: { params: Params }) => {
   })
 
   const [addQuestion, setAddQuestion] = useState({
-    show: true,
+    show: false,
   })
 
   useEffect(() => {
