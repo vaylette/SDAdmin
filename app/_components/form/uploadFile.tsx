@@ -3,18 +3,21 @@ import React, { useState } from 'react';
 
 interface fileUploadProps {
     label: string,
-    text?: string
+    text?: string,
+    onFileSelected?: (file: File | null) => void;
 }
 
-const FileUpload = ({ label, text = "Upload file" }: fileUploadProps) => {
+const FileUpload = ({ label, text = "Upload file", onFileSelected }: fileUploadProps) => {
     const [fileName, setFileName] = useState('');
 
     const handleFileChange = (e: any) => {
         const file = e.target.files[0];
         if (file) {
             setFileName(file.name);
+            onFileSelected?.(file)
         } else {
             setFileName('');
+            onFileSelected?.(null);
         }
     };
 

@@ -75,6 +75,8 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
 
         const { name, subject, thumbnail, level, syllabus } = formData
 
+        console.log(formData);
+
         if (name === '' || subject === null || thumbnail === '' || level === null || syllabus === null) {
             toast.error('Please fill all the required fields!')
             return
@@ -85,12 +87,12 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
         const send = new FormData()
         send.append('name', name)
         send.append('subject', subject)
-        send.append('thumbnail', thumbnail)
+        send.append('coverImageUrl', thumbnail)
         send.append('level', level || '')
-        send.append('syllabus', syllabus)
+        send.append('syllabus', syllabusOpts.find(obj => obj.id === syllabus)?.name ?? "NECTA")
 
         try {
-            const response = await postData(`${apiUrls.postTopics}`, send)
+            const response = await postData(`${apiUrls.postTopics}`,send,true)
             if (response) {
                 onRefresh()
             }
@@ -123,7 +125,9 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Add thumbnail"} />
+                    <FileUpload label={"Add thumbnail"} onFileSelected={(file)=>{
+                        handleChange('thumbnail', file);
+                    }} />
                 </div>
                 <div className='flex flex-col gap-2'>
                     <label>Level</label>
@@ -139,7 +143,7 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
                     <SelectBox
                         options={syllabusOpts}
                         selected={formData.syllabus !== null ? { name: syllabusOpts.find(opt => opt.id === formData.syllabus)?.name || '', id: formData.syllabus } : null}
-                        onChange={(value) => handleChange('syllabus', value?.id)}
+                        onChange={(value) => handleChange('syllabus', value)}
                     />
                 </div>
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>

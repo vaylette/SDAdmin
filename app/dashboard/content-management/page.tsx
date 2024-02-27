@@ -28,7 +28,7 @@ interface Modal {
   models: boolean,
   videos: boolean,
   experiments: boolean,
-  diy:boolean,
+  diy: boolean,
   edit: boolean
 }
 
@@ -184,33 +184,18 @@ export default function ContentManagement() {
       cell: info => info.getValue(),
       size: 30,
     }),
-    // columnHelper.accessor('sections', {
-    //   header: () => 'Sections',
-    //   cell: info => info.getValue(),
-    //   size: 30,
-    // }),
-    // columnHelper.accessor('questions', {
-    //   header: () => 'Questions',
-    //   cell: info => info.getValue(),
-    //   size: 30,
-    // }),
-    // columnHelper.accessor('uploader', {
-    //   header: () => 'Uploader',
-    //   cell: info => info.getValue(),
-    //   size: 30,
-    // }),
     columnHelper.accessor('action', {
       header: () => '',
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
+            {/* <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
               <span>Sections</span>
             </a>
             <div className="border-l h-6" style={{ borderColor: "#FFA500" }}></div>
             <a href="#" className='text-orange-default flex items-center gap-2'>
               <span>Questions</span>
-            </a>
+            </a> */}
             <div className="relative inline-block text-left">
               <div onClick={toggleDropdown} className="flex items-center gap-2 cursor-pointer">
                 <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 16" fill="none">
@@ -377,10 +362,11 @@ export default function ContentManagement() {
     <>
       <div className='flex flex-col gap-5'>
         <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
-          <OverviewCard title="Total Topics" count={data ? data.topics.length : 0} />
-          <OverviewCard title="Total Models" count={data ? data.models.length : 0} />
-          <OverviewCard title="Experiments" count={data ? data.experiments.length : 0} />
-          <OverviewCard title="Total Videos" count={data ? data.videos.length : 0} />
+          <OverviewCard title="Total Topics" count={data?.topics?.length ?? 0} />
+          <OverviewCard title="Total Models" count={data?.models?.length ?? 0} />
+          <OverviewCard title="Experiments" count={data?.experiments?.length ?? 0} />
+          <OverviewCard title="Total Videos" count={data?.videos?.length ?? 0} />
+
 
         </div>
         <div className='mt-9 w-full flex flex-row justify-between items-center'>
@@ -412,9 +398,10 @@ export default function ContentManagement() {
           {tab.topics && (
             <DataTable columns={topicsColumns} data={topics} />
           )}
-          {tab.models && <DataTable columns={modelsColumns} data={models} />}
-          {tab.experiments && <DataTable columns={experimentsColumns} data={experiments} />}
-          {tab.videos && <DataTable columns={videoColumns} data={videos} />}
+          {tab.models && (
+            <DataTable columns={modelsColumns} data={models} />)}
+          {tab.experiments && (<DataTable columns={experimentsColumns} data={experiments} />)}
+          {tab.videos && (<DataTable columns={videoColumns} data={videos} />)}
         </div>
 
       </div>
@@ -465,7 +452,7 @@ export const OverviewCard = ({ title, count }: Card) => {
         <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>{title}</span>
       </div>
       <div className='absolute bottom-2'>
-        <span className='text-orange-default text-[50px] font-bold text-center'>{count.toString()}</span>
+        <span className='text-orange-default text-[50px] font-bold text-center'>{count?.toString()}</span>
       </div>
     </div>
   );

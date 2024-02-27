@@ -1,6 +1,10 @@
 import SelectBox from "@/app/_components/form/SelectBox";
 import FileUpload from "@/app/_components/form/uploadFile";
-import { useState } from "react";
+import { apiUrls } from "@/app/constants/apiUrls";
+import { usePostData } from "@/app/constants/hooks";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 export interface Subject {
     _id: string;
@@ -19,17 +23,22 @@ interface CreateModelProps {
 
 export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
     const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-    const fileTypeOptions = [{ name: "GLTF", id: "1" }]
+    const fileTypeOptions = [{ name: "glb", id: "1" }]
 
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
-        modelName: '',
+        name: '',
         subject: null as string | null,
         fileType: null as string | null,
         description: null as string | null,
-        attachment: null as string | null,
+        modelFileUrl: null as string | null,
+        ARExperienceFileUrl: null as string | null,
     })
+
+    const postData = usePostData()
+
+    const router = useRouter()
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
@@ -37,15 +46,35 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
             [fieldName]: value,
         }))
     }
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        if (formData.name === '' || formData.subject === null || formData.fileType === '' || formData.description === null || formData.modelFileUrl === null || formData.ARExperienceFileUrl === null) {
+            toast.error('Please fill all the required fields!')
+            return
+        }
+
+        setLoading(true)
+        try {
+            const response = await postData(`${apiUrls.postModels}`,formData,true)
+            if (response) {
+                onRefresh()
+            }
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <>
             <form onSubmit={() => { }} className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]' encType='multipart/form-data'>
                 <div className='flex flex-col gap-2'>
-                    <label>Topic Name</label>
+                    <label>Model Name</label>
                     <input
                         type='text'
-                        value={formData.modelName}
-                        onChange={(e) => handleChange('modelName', e.target.value)}
+                        value={formData.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
                         className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
                     />
                 </div>
@@ -71,7 +100,7 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
                     <SelectBox
                         options={fileTypeOptions}
                         selected={formData.fileType !== null ? { name: fileTypeOptions.find(opt => opt.id === formData.fileType)?.name || '', id: formData.fileType } : null}
-                        onChange={(value) => handleChange('fileType', value?.id)}
+                        onChange={(value) => handleChange('fileType', value)}
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
@@ -85,13 +114,17 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Upload file"} />
+                    <FileUpload label={"Model File"} onFileSelected={(file) => {
+                        handleChange('modelFileUrl', file)
+                    }} />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"AR Experience file"} />
+                    <FileUpload label={"AR Experience file"} onFileSelected={(file) => {
+                        handleChange('ARExperienceFileUrl', file)
+                    }} />
                 </div>
 
-                <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
+                <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading} onClick={handleSubmit}>
                     <span>Add Model</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
