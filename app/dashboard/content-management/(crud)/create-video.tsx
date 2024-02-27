@@ -1,6 +1,10 @@
 import SelectBox from "@/app/_components/form/SelectBox";
 import FileUpload from "@/app/_components/form/uploadFile";
-import { useState } from "react";
+import { apiUrls } from "@/app/constants/apiUrls";
+import { usePostData } from "@/app/constants/hooks";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 export interface Subject {
     _id: string;
@@ -24,18 +28,44 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
-        videoName: '',
+        name: '',
         subject: null as string | null,
-        fileType: null as string | null,
+        videoType: null as string | null,
         description: null as string | null,
-        attachment: null as string | null,
+        videoFileUrl: null as string | null,
     })
+
+    const postData = usePostData()
+
+    const router = useRouter()
+
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value,
         }))
+    }
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+
+        if (formData.name === '' || formData.subject === null || formData.videoType === '' || formData.description === null || formData.videoFileUrl === null) {
+            toast.error('Please fill all the required fields!')
+            return
+        }
+        formData.videoType = videoTypeOptions.find(opt => opt.id === formData.videoType)?.name ?? null
+        setLoading(true)
+        try {
+            const response = await postData(`${apiUrls.postExperiments}`, formData, true)
+            if (response) {
+                onRefresh()
+            }
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setLoading(false)
+        }
     }
     return (
         <>
@@ -44,8 +74,8 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
                     <label>Video Name</label>
                     <input
                         type='text'
-                        value={formData.videoName}
-                        onChange={(e) => handleChange('modelName', e.target.value)}
+                        value={formData.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
                         className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
                     />
                 </div>
@@ -70,8 +100,8 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
 
                     <SelectBox
                         options={videoTypeOptions}
-                        selected={formData.fileType !== null ? { name: videoTypeOptions.find(opt => opt.id === formData.fileType)?.name || '', id: formData.fileType } : null}
-                        onChange={(value) => handleChange('fileType', value?.id)}
+                        selected={formData.videoFileUrl !== null ? { name: videoTypeOptions.find(opt => opt.id === formData.videoType)?.name || '', id: formData.videoType } : null}
+                        onChange={(value) => handleChange('videoType', value?.id)}
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
@@ -85,9 +115,11 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Upload Video"} />
+                    <FileUpload label={"Upload Video"} onFileSelected={(file) => {
+                        handleChange('videoFileUrl', file);
+                    }} />
                 </div>
-                <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
+                <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
                     <span>Add Video</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
