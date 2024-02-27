@@ -22,6 +22,7 @@ export type Topic = {
     level: {} | any,
     syllabus: string,
     sections: string | number | any,
+    coverImageUrl?: string,
     action: null
 }
 

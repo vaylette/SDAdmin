@@ -23,7 +23,7 @@ export default function DataTable({ columns, data }: DataTableProps) {
   })
   return (
     <>
-      <div className='flex flex-col gap-10 text-[12px]'>
+      <div className='flex flex-col gap-10'>
         <table className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default'>
           <thead className='uppercase font-medium whitespace-nowrap'>
             {table.getHeaderGroups().map(headerGroup => (

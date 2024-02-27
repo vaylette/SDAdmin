@@ -14,6 +14,20 @@ import CreateModel from "./(crud)/create-model"
 import CreateVideo from "./(crud)/create-video"
 import CreateExperiment from "./(crud)/create-experiment"
 import CreateDiyExperiment from "./(crud)/create-diy-experiment"
+import Dropdown, {
+  DropdownToggle,
+  DropdownMenu,
+  DropdownMenuWrapper,
+  MenuItem,
+  DropdownButton
+} from "@trendmicro/react-dropdown";
+
+import { FiMoreVertical } from "react-icons/fi";
+import UpdateTopic from "./(crud)/update-topic"
+import UpdateModel from "./(crud)/update-model"
+import UpdateDiyExperiment from "./(crud)/update-diy-experiment"
+import UpdateExperiment from "./(crud)/update-experiment"
+import UpdateVideo from "./(crud)/update-video"
 
 interface ContentTab {
   topics: boolean
@@ -47,7 +61,12 @@ export default function ContentManagement() {
     videos: [],
     subjects: [],
     levels: [],
-    syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "0" }, { name: "Montessori", _id: "2" }]
+    syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "0" }, { name: "Montessori", _id: "2" }],
+    UpdateTopic: {},
+    UpdateModel: {},
+    UpdateExperiment:{},
+    UpdateDiyExperiment: {},
+    UpdateVideo: {}
   })
 
   const [modal, setModal] = useState<Modal>({
@@ -110,6 +129,7 @@ export default function ContentManagement() {
       level: itemAsTopic.level.name,
       syllabus: itemAsTopic.syllabus,
       sections: itemAsTopic.sections.length,
+      coverImageUrl: itemAsTopic.coverImageUrl,
       action: null
     }
   })
@@ -151,12 +171,25 @@ export default function ContentManagement() {
     }
   })
 
-  const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown menu
+  const [dropdownStates, setDropdownStates] = useState({});
 
-  // Toggle dropdown function
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+  const toggleDropdownForRow = (rowId: any) => {
+    setDropdownStates(prevStates => {
+      const updatedStates:any = {};
+
+      // Close any open dropdowns
+      Object.keys(prevStates).forEach(id => {
+        updatedStates[id] = false;
+      });
+
+      // Toggle the state of the clicked dropdown
+      updatedStates[rowId] = !prevStates[rowId];
+
+      return updatedStates;
+    });
   };
+
+
 
   const topicsColumns = [
     columnHelper.accessor('ref_no', {
@@ -184,34 +217,35 @@ export default function ContentManagement() {
       cell: info => info.getValue(),
       size: 30,
     }),
+
     columnHelper.accessor('action', {
       header: () => '',
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            {/* <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
-              <span>Sections</span>
-            </a>
-            <div className="border-l h-6" style={{ borderColor: "#FFA500" }}></div>
-            <a href="#" className='text-orange-default flex items-center gap-2'>
-              <span>Questions</span>
-            </a> */}
-            <div className="relative inline-block text-left">
-              <div onClick={toggleDropdown} className="flex items-center gap-2 cursor-pointer">
-                <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 16" fill="none">
-                  <path d="M1 14C1 14.5523 1.44772 15 2 15C2.55228 15 3 14.5523 3 14C3 13.4477 2.55228 13 2 13C1.44772 13 1 13.4477 1 14Z" fill="#7A7A7A" />
-                  <path d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8C3 7.44772 2.55228 7 2 7C1.44772 7 1 7.44772 1 8Z" fill="#7A7A7A" />
-                  <path d="M1 2C1 2.55228 1.44772 3 2 3C2.55228 3 3 2.55228 3 2C3 1.44772 2.55228 1 2 1C1.44772 1 1 1.44772 1 2Z" fill="#7A7A7A" />
-                  <path d="M1 14C1 14.5523 1.44772 15 2 15C2.55228 15 3 14.5523 3 14C3 13.4477 2.55228 13 2 13C1.44772 13 1 13.4477 1 14Z" stroke="#7A7A7A" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8C3 7.44772 2.55228 7 2 7C1.44772 7 1 7.44772 1 8Z" stroke="#7A7A7A" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M1 2C1 2.55228 1.44772 3 2 3C2.55228 3 3 2.55228 3 2C3 1.44772 2.55228 1 2 1C1.44772 1 1 1.44772 1 2Z" stroke="#7A7A7A" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+            <div className="inline-block">
+              <div className="cursor__pointer">
+                <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
+                  <Dropdown.Toggle btnStyle="link" noCaret onClick={() => toggleDropdownForRow(info.row.id)}>
+                    <FiMoreVertical />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {dropdownStates[info.row.id] && (
+                      <CustomDropDown
+                        dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
+                        onEdit={() => {
+                          modal.edit = true
+                          handleModal('topics')
+                          data.UpdateTopic = info.row.original;
+                        }}
+                        onDelete={() => {
+                          console.log("delete click", info.row.id)
+                        }}
+                      />
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
-              {dropdownOpen && (
-                <div className={`${dropdownOpen ? 'absolute inset-0 bg-black-100 bg-blend-multiply z-50' : 'hidden'}`}>
-                  <CustomDropDown dismiss={toggleDropdown} />
-                </div>
-              )}
             </div>
           </div>
         </>
@@ -250,8 +284,30 @@ export default function ContentManagement() {
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            <button className='text-orange-default'>Edit</button>
-            <button className='text-red-default'>Restrict</button>
+            <div className="inline-block">
+              <div className="cursor__pointer">
+                <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
+                  <Dropdown.Toggle btnStyle="link" noCaret onClick={() => toggleDropdownForRow(info.row.id)}>
+                    <FiMoreVertical />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {dropdownStates[info.row.id] && (
+                      <CustomDropDown
+                        dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
+                        onEdit={() => {
+                          modal.edit = true
+                          handleModal('models')
+                          data.UpdateModel = info.row.original;
+                        }}
+                        onDelete={() => {
+                          console.log("delete click", info.row.id)
+                        }}
+                      />
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
           </div>
         </>
       )
@@ -288,13 +344,36 @@ export default function ContentManagement() {
       header: () => '',
       cell: (info) => (
         <>
-          <div className='flex flex-row gap-6 font-medium'>
-            <button className='text-orange-default'>Edit</button>
-            <button className='text-red-default'>Restrict</button>
+        <div className='flex flex-row gap-6 font-medium'>
+            <div className="inline-block">
+              <div className="cursor__pointer">
+                <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
+                  <Dropdown.Toggle btnStyle="link" noCaret onClick={() => toggleDropdownForRow(info.row.id)}>
+                    <FiMoreVertical />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {dropdownStates[info.row.id] && (
+                      <CustomDropDown
+                        dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
+                        onEdit={() => {
+                          modal.edit = true
+                          handleModal('experiments')
+                          data.UpdateExperiment = info.row.original;
+                        }}
+                        onDelete={() => {
+                          console.log("delete click", info.row.id)
+                        }}
+                      />
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
           </div>
         </>
       )
     }),
+
   ]
 
   const videoColumns = [
@@ -332,9 +411,31 @@ export default function ContentManagement() {
       header: () => '',
       cell: (info) => (
         <>
-          <div className='flex flex-row gap-6 font-medium'>
-            <button className='text-orange-default'>Edit</button>
-            <button className='text-red-default'>Restrict</button>
+        <div className='flex flex-row gap-6 font-medium'>
+            <div className="inline-block">
+              <div className="cursor__pointer">
+                <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
+                  <Dropdown.Toggle btnStyle="link" noCaret onClick={() => toggleDropdownForRow(info.row.id)}>
+                    <FiMoreVertical />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {dropdownStates[info.row.id] && (
+                      <CustomDropDown
+                        dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
+                        onEdit={() => {
+                          modal.edit = true
+                          handleModal('videos')
+                          data.UpdateVideo = info.row.original;
+                        }}
+                        onDelete={() => {
+                          console.log("delete click", info.row.id)
+                        }}
+                      />
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
           </div>
         </>
       )
@@ -379,7 +480,9 @@ export default function ContentManagement() {
             </button>
           </div>
           {tab.topics && (
-            <button onClick={() => handleModal('topics')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
+            <button onClick={() =>
+              handleModal('topics')
+            } className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
           )}
           {tab.models && (
             <button onClick={() => handleModal('models')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Model +</button>
@@ -404,36 +507,77 @@ export default function ContentManagement() {
           {tab.videos && (<DataTable columns={videoColumns} data={videos} />)}
         </div>
 
-      </div>
+      </div >
 
-      {modal.topics && (
-        <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>
-          <CreateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} onRefresh={handleModalClose} />
-        </CustomModal>
-      )}
+      {
+        modal.topics && (modal.edit ? (
+          <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Edit Topic' : 'Edit'} subtitle={""}>
+            <UpdateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} data={data.UpdateTopic} onRefresh={handleModalClose} />
+          </CustomModal>
+        ) : (
+          <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>
+            <CreateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} onRefresh={handleModalClose} />
+          </CustomModal>
+        ))
+      }
 
-      {modal.models && (
-        <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Add Model"} subtitle={"Please add the model’s information"}>
-          <CreateModel subjects={data?.subjects} onRefresh={handleModalClose} />
-        </CustomModal>
-      )}
 
-      {modal.experiments && (
-        <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
-          <CreateExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
-        </CustomModal>
-      )}
-      {modal.diy && (
-        <CustomModal isOpen={modal.diy} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
-          <CreateDiyExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
-        </CustomModal>
-      )}
+      {
+        modal.models && (
+          modal.edit ? (
+            <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Edit Model"} subtitle={"Please edit the model’s information"}>
+              <UpdateModel subjects={data?.subjects} data={data.UpdateModel} onRefresh={handleModalClose} />
+            </CustomModal>
+          ) : (
+            <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Add Model"} subtitle={"Please add the model’s information"}>
+              <CreateModel subjects={data?.subjects} onRefresh={handleModalClose} />
+            </CustomModal>
+          )
+        )
+      }
 
-      {modal.videos && (
-        <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Add Video"} subtitle={"Please add the video’s information"}>
-          <CreateVideo subjects={data?.subjects} onRefresh={handleModalClose} />
-        </CustomModal>
-      )}
+      {
+        modal.experiments && (
+          modal.edit ? (
+            <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Edit Experiment"} subtitle={"Please edit the experiment’s information"}>
+              <UpdateExperiment subjects={data?.subjects} data={data.UpdateExperiment} onRefresh={handleModalClose} />
+            </CustomModal>
+          ) : (
+            <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
+              <CreateExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
+            </CustomModal>
+          )
+        )
+      }
+
+      {
+        modal.diy && (
+          modal.edit ? (
+            <CustomModal isOpen={modal.diy} onClose={handleModalClose} title={"Edit DIY Experiment"} subtitle={"Please edit the DIY experiment’s information"}>
+              <UpdateDiyExperiment subjects={data?.subjects} data={data.UpdateDiyExperiment} onRefresh={handleModalClose} />
+            </CustomModal>
+          ) : (
+            <CustomModal isOpen={modal.diy} onClose={handleModalClose} title={"Add DIY Experiment"} subtitle={"Please add information"}>
+              <CreateDiyExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
+            </CustomModal>
+          )
+        )
+      }
+
+      {
+        modal.videos && (
+          modal.edit ? (
+            <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Edit Video"} subtitle={"Please edit the video’s information"}>
+              <UpdateVideo subjects={data?.subjects} data={data.UpdateVideo} onRefresh={handleModalClose} />
+            </CustomModal>
+          ) : (
+            <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Add Video"} subtitle={"Please add the video’s information"}>
+              <CreateVideo subjects={data?.subjects} onRefresh={handleModalClose} />
+            </CustomModal>
+          )
+        )
+      }
+
 
     </>
   )
@@ -461,9 +605,11 @@ export const OverviewCard = ({ title, count }: Card) => {
 
 interface Props {
   dismiss: () => void;
+  onEdit?: () => void; // Callback for edit action
+  onDelete?: () => void; // Callback for delete action
 }
 
-export const CustomDropDown: React.FC<Props> = ({ dismiss }) => {
+export const CustomDropDown: React.FC<Props> = ({ dismiss, onEdit, onDelete }) => {
   const userProfileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -479,21 +625,26 @@ export const CustomDropDown: React.FC<Props> = ({ dismiss }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dismiss]);
-  return (<>
+
+  return (
     <div ref={userProfileRef} className="absolute">
       <div className="h-auto rounded-lg bg-white-default shadow-drop relative">
         <div className="absolute -top-[6px] right-8 w-[13.24px] h-[13.24px] bg-white-default" style={{ transform: 'rotate(135deg)' }}></div>
         <div className='flex flex-col'>
           <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <button className="text-orange-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
-              Edit
-            </button>
-            <button className="text-red-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
-              Delete
-            </button>
+            {onEdit && (
+              <button onClick={onEdit} className="text-orange-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
+                Edit
+              </button>
+            )}
+            {/* {onDelete && (
+              <button onClick={onDelete} className="text-red-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
+                Delete
+              </button>
+            )} */}
           </div>
         </div>
       </div>
     </div>
-  </>)
-}
+  );
+};

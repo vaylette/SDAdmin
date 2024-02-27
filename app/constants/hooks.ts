@@ -58,6 +58,27 @@ export const usePostData = () => {
   return postData;
 };
 
+export const usePatchData = () => {
+  const authStore = useAuthStore((state) => state) as AuthStore;
+  const { token } = authStore;
+
+  const putData = async (url:string , data:any, isMultipart:boolean = false) => {
+    try {
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+      const response = await axios.patch(url, data, { headers });
+      toast.success(response.data);
+      return response.data;
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'An error occurred');
+    }
+  };
+
+  return putData;
+};
+
 const headers = (token: string | null) => {
   const header = {
     Authorization: `Bearer ${token}`,
