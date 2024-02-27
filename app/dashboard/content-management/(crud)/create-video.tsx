@@ -50,14 +50,15 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        if (formData.name === '' || formData.subject === null || formData.videoType === '' || formData.description === null || formData.videoFileUrl === null) {
+        if (formData.name === '' || formData.subject === null || formData.videoType === null || formData.description === null || formData.videoFileUrl === null) {
             toast.error('Please fill all the required fields!')
             return
         }
         formData.videoType = videoTypeOptions.find(opt => opt.id === formData.videoType)?.name ?? null
+        console.log(formData);
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.postExperiments}`, formData, true)
+            const response = await postData(`${apiUrls.postVideos}`, formData, true)
             if (response) {
                 onRefresh()
             }
@@ -100,9 +101,10 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
 
                     <SelectBox
                         options={videoTypeOptions}
-                        selected={formData.videoFileUrl !== null ? { name: videoTypeOptions.find(opt => opt.id === formData.videoType)?.name || '', id: formData.videoType } : null}
+                        selected={formData.videoType !== null ? { name: videoTypeOptions.find(opt => opt.id === formData.videoType)?.name || '', id: formData.videoType } : null}
                         onChange={(value) => handleChange('videoType', value?.id)}
                     />
+
                 </div>
                 <div className='flex flex-col gap-2'>
                     <label htmlFor="description">Description</label>

@@ -16,9 +16,9 @@ export const apiUrls = {
     //--------> Content Management ------->//
         // Get Endpoints
         getTopics: `${baseUrl}/topics`,
-        getModels: `${baseUrl}/models/all`,
-        getExperiments: `${baseUrl}/experiments/all`,
-        getVideos: `${baseUrl}/videos/all`,
+        getModels: `${baseUrl}/models`,
+        getExperiments: `${baseUrl}/experiments`,
+        getVideos: `${baseUrl}/videos`,
         getSubjects: `${baseUrl}/subjects`,
         getLevels: `${baseUrl}/levels`,
 
