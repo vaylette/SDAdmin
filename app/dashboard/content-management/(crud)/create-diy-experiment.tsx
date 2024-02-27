@@ -1,6 +1,10 @@
 import SelectBox from "@/app/_components/form/SelectBox";
 import FileUpload from "@/app/_components/form/uploadFile";
-import { useState } from "react";
+import { apiUrls } from "@/app/constants/apiUrls";
+import { usePostData } from "@/app/constants/hooks";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 export interface Subject {
     _id: string;
@@ -19,18 +23,22 @@ interface CreateExperimentProps {
 
 export default function CreateDiyExperiment({ subjects, onRefresh }: CreateExperimentProps) {
     const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-    const categoryOptions = [{ name: "D.I.Y (Do it yourself)", id: "0" }]
+    const categoryOptions = [{ name: "DIY", id: "0" }]
 
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
-        experimentName: '',
+        name: '',
         subject: null as string | null,
         category: null as string | null,
         description: null as string | null,
         materials: null as string | null,
-        attachment: null as string | null,
+        stepsFileUrl: null as string | null,
     })
+
+    const postData = usePostData()
+
+    const router = useRouter()
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
@@ -38,15 +46,35 @@ export default function CreateDiyExperiment({ subjects, onRefresh }: CreateExper
             [fieldName]: value,
         }))
     }
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.materials === null || formData.stepsFileUrl === null) {
+            toast.error('Please fill all the required fields!')
+            return
+        }
+        formData.category = categoryOptions.find(opt => opt.id === formData.category)?.name ?? null
+        setLoading(true)
+        try {
+            const response = await postData(`${apiUrls.postExperiments}`, formData, true)
+            if (response) {
+                onRefresh()
+            }
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <>
             <form onSubmit={() => { }} className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]' encType='multipart/form-data'>
                 <div className='flex flex-col gap-2'>
-                    <label>Video Name</label>
+                    <label>Experiment Name</label>
                     <input
                         type='text'
-                        value={formData.experimentName}
-                        onChange={(e) => handleChange('modelName', e.target.value)}
+                        value={formData.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
                         className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
                     />
                 </div>
@@ -95,9 +123,11 @@ export default function CreateDiyExperiment({ subjects, onRefresh }: CreateExper
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Steps file"} />
+                    <FileUpload label={"Steps file"} onFileSelected={(file) => {
+                        handleChange('stepsFileUrl', file)
+                    }} />
                 </div>
-                <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
+                <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
                     <span>Add DIY Experiment</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
