@@ -30,6 +30,9 @@ export const apiUrls = {
         postSubjects: `${baseUrl}/subjects`,
         //Put Endpoints
         patchTopics: `${baseUrl}/topics`,
+        patchModels: `${baseUrl}/models`,
+        patchExperiments: `${baseUrl}/experiments`,
+        patchVideos: `${baseUrl}/videos`
 
     //-------->End Content Management ------->//
 

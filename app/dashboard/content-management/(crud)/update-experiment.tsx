@@ -1,7 +1,7 @@
 import SelectBox from "@/app/_components/form/SelectBox";
 import FileUpload from "@/app/_components/form/uploadFile";
 import { apiUrls } from "@/app/constants/apiUrls";
-import { usePostData } from "@/app/constants/hooks";
+import { usePatchData, usePostData } from "@/app/constants/hooks";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
@@ -37,7 +37,7 @@ export default function UpdateExperiment({ subjects, data, onRefresh }: CreateVi
         ARExperienceFileUrl: null as string | null,
     })
 
-    const postData = usePostData()
+    const postData = usePatchData()
 
     const router = useRouter()
 

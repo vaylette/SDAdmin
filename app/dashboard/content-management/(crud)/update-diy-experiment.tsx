@@ -1,7 +1,7 @@
 import SelectBox from "@/app/_components/form/SelectBox";
 import FileUpload from "@/app/_components/form/uploadFile";
 import { apiUrls } from "@/app/constants/apiUrls";
-import { usePostData } from "@/app/constants/hooks";
+import { usePatchData, usePostData } from "@/app/constants/hooks";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
@@ -37,7 +37,7 @@ export default function UpdateDiyExperiment({ subjects,data, onRefresh }: Create
         stepsFileUrl: null as string | null,
     })
 
-    const postData = usePostData()
+    const postData = usePatchData()
 
     const router = useRouter()
 
@@ -57,7 +57,7 @@ export default function UpdateDiyExperiment({ subjects,data, onRefresh }: Create
         formData.category = categoryOptions.find(opt => opt.id === formData.category)?.name ?? null
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.postExperiments}`, formData, true)
+            const response = await postData(`${apiUrls.patchExperiments}`, formData, true)
             if (response) {
                 onRefresh()
             }

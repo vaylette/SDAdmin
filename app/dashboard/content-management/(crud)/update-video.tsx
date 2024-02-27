@@ -1,7 +1,7 @@
 import SelectBox from "@/app/_components/form/SelectBox";
 import FileUpload from "@/app/_components/form/uploadFile";
 import { apiUrls } from "@/app/constants/apiUrls";
-import { usePostData } from "@/app/constants/hooks";
+import { usePatchData, usePostData } from "@/app/constants/hooks";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
@@ -36,7 +36,7 @@ export default function UpdateVideo({ subjects, data, onRefresh }: CreateVideoPr
         videoFileUrl: null as string | null,
     })
 
-    const postData = usePostData()
+    const postData = usePatchData()
 
     const router = useRouter()
 
@@ -59,7 +59,7 @@ export default function UpdateVideo({ subjects, data, onRefresh }: CreateVideoPr
         console.log(formData);
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.postVideos}`, formData, true)
+            const response = await postData(`${apiUrls.patchVideos}`, formData, true)
             if (response) {
                 onRefresh()
             }
