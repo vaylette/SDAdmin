@@ -17,7 +17,6 @@ export const useRetrieveData = () => {
       const response = await axios.get(`${url}`, { headers: headers(token) })
       return response.data
     } catch (error: any) {
-      console.log(error.response)
       toast.error(error.response.data.message)
     } finally {
     }
@@ -31,15 +30,13 @@ export const usePostData = () => {
   const { token } = authStore;
 
   const postData = async (url: string, data: any, isMultipart: boolean = false) => {
-    console.log(data);
     try {
       const headers = isMultipart ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
       const response = await axios.post(url, data, { headers });
-      console.log(headers);
-      toast.success(response.data);
+      toast.success(`${response.data}`);
       return response.data;
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'An error occurred');
+      toast.error(`${error}` || 'An error occurred');
     }
   };
 
@@ -78,10 +75,11 @@ export const useDeleteData = () => {
         'Content-Type': 'application/json'
       };
       const response = await axios.delete(url, {headers});
-      toast.success(response.data);
+      toast.success('Deleted successfully')
       return response.data;
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'An error occurred');
+      toast.error(error.response?.data?.message || 'An error occurred')
+      return error.response?.data?.message || 'An error occurred';
     }
   };
 

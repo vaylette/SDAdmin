@@ -48,8 +48,8 @@ export type User = {
 }
 
 export type Model = {
-    id: any;
     ref_no: string | number | null | undefined
+    _id: string;
     name: string,
     subject: string,
     fileType: string;
@@ -60,8 +60,8 @@ export type Model = {
 }
   
 export type Experiment = {
-    id: any;
     ref_no: string | number | null | undefined
+    _id: string;
     name: string,
     subject: string,
     description: string,

@@ -58,12 +58,11 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
         setLoading(true)
         try {
             const response = await postData(`${apiUrls.postModels}`,formData,true)
-            toast.success(response)
             if (response) {
                 onRefresh()
             }
         } catch (error: any) {
-            toast.error(error)
+            toast.error(`${error?.message}`)
         } finally {
             setLoading(false)
         }

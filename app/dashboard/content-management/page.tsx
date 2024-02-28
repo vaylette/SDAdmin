@@ -114,7 +114,7 @@ export default function ContentManagement() {
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [data])
 
   const getData = async () => {
     try {
@@ -155,6 +155,32 @@ export default function ContentManagement() {
     }
   };
 
+  const handleModelDelete = async (data: any) => {
+    try {
+      await deleteData(`${apiUrls.deleteModels}/${data._id}`);
+      let modelResults = retrieveData(`${apiUrls.getModels}`);
+      setData(prevData => ({
+        ...prevData,
+        models: prevData.models.filter(model => model !== modelResults)
+      }));
+    } catch (error) {
+      toast.error('An error occurred while deleting the model');
+    }
+  };
+
+  const handleExperimentDelete = async (data: any) => {
+    try {
+      await deleteData(`${apiUrls.deleteExperiments}/${data._id}`);
+      let experimentResults = retrieveData(`${apiUrls.getExperiments}`);
+      setData(prevData => ({
+        ...prevData,
+        experiments: prevData.models.filter(experiment => experiment !== experimentResults)
+      }));
+    } catch (error) {
+      toast.error('An error occurred while deleting the experiment');
+    }
+  };
+
 
   const topics: Topic[] = data?.topics?.map((item) => {
     const itemAsTopic = item as Topic;
@@ -178,7 +204,7 @@ export default function ContentManagement() {
     const itemAsModel = item as Model;
     return {
       ref_no: '',
-      _id: itemAsModel.id,
+      _id: itemAsModel._id,
       name: itemAsModel.name,
       subject: itemAsModel.subject?.name,
       fileType: itemAsModel.fileType,
@@ -193,7 +219,7 @@ export default function ContentManagement() {
     const itemAsExperiment = item as Experiment;
     return {
       ref_no: '',
-      _id: itemAsExperiment.id,
+      _id: itemAsExperiment._id,
       name: itemAsExperiment.name,
       subject: itemAsExperiment.subject?.name,
       description: itemAsExperiment.description,

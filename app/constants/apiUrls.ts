@@ -41,6 +41,8 @@ export const apiUrls = {
         deleteTopic: `${baseUrl}/topics`,
         deleteChapter: `${baseUrl}/chapters`,
         deleteQuestion: `${baseUrl}/questions`,
+        deleteModels: `${baseUrl}/models`,
+        deleteExperiments: `${baseUrl}/experiments`,
 
     //-------->End Content Management ------->//
 

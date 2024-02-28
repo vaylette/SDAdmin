@@ -96,6 +96,12 @@ const TopicPage = ({ params }: { params: Params }) => {
       {!addSection.show && addQuestion.show &&
         <CreateQuestions onBack={() => {
           setAddQuestion({ show: false })
+        }} initialData={{
+          topic: data?.topics?.name,
+          topicId: data?.topics._id,
+          syllabus: data?.topics.syllabus,
+          level: data?.level?.name,
+          subject: data?.subject?.name,
         }} />
       }
       {!addSection.show && !addQuestion.show &&
@@ -107,7 +113,7 @@ const TopicPage = ({ params }: { params: Params }) => {
               </svg>
 
               <div className="flex-auto text-3xl not-italic font-bold leading-8 text-neutral-800 text-opacity-80">
-                Add Chapter
+                {data?.topics?.name}
               </div>
               <div className='flex flex-row gap-[10px]'>
                 <button
