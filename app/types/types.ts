@@ -15,13 +15,17 @@ export type SmartUser = {
 }
 
 export type Topic = {
+   
     ref_no: string | number | null | undefined,
     _id: string,
     name: string,
     subject: {} | any,
     level: {} | any,
     syllabus: string,
+    descriptions: string,
     sections: string | number | any,
+    questions: string | number | any,
+    chapters: string | number | any,
     coverImageUrl?: string,
     action: null
 }
@@ -44,30 +48,38 @@ export type User = {
 }
 
 export type Model = {
+    id: any;
     ref_no: string | number | null | undefined
     name: string,
-    level: string,
     subject: string,
-    topic: string,
+    fileType: string;
+    description: string;
+    modelFileUrl: string;
+    ARExperienceFileUrl: string;
     action: null
 }
   
 export type Experiment = {
+    id: any;
     ref_no: string | number | null | undefined
     name: string,
-    level: string,
     subject: string,
-    topic: string,
+    description: string,
+    modelFileUrl: string,
+    ARExperienceFileUrl: string,
+    materials: string,
+    stepsFileUrl: string,
     action: null
 }
 
 export type Video = {
+    id: any;
     ref_no: string | number | null | undefined
     name: string,
-    level: string,
-    subject: string,
-    topic: string,
-    video_link: string,
+    subject: {},
+    videoType: string,
+    description: string,
+    videoFileUrl: string,
     action: null
 }
 

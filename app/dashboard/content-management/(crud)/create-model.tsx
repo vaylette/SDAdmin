@@ -32,8 +32,8 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
         subject: null as string | null,
         fileType: null as string | null,
         description: null as string | null,
-        modelFileUrl: null as string | null,
-        ARExperienceFileUrl: null as string | null,
+        modelFile: null as string | null,
+        ARExperienceFile: null as string | null,
     })
 
     const postData = usePostData()
@@ -49,14 +49,16 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (formData.name === '' || formData.subject === null || formData.fileType === '' || formData.description === null || formData.modelFileUrl === null || formData.ARExperienceFileUrl === null) {
-            toast.error('Please fill all the required fields!')
-            return
-        }
+        // if (formData.name === '' || formData.subject === null || formData.description === null || formData.modelFile === null || formData.ARExperienceFile === null) {
+        //     toast.error('Please fill all the required fields!')
+        //     return
+        // }
+        formData.fileType = "glb"
 
         setLoading(true)
         try {
             const response = await postData(`${apiUrls.postModels}`,formData,true)
+            toast.success(response)
             if (response) {
                 onRefresh()
             }
@@ -115,12 +117,12 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
 
                 <div className='flex flex-col gap-2'>
                     <FileUpload label={"Model File"} onFileSelected={(file) => {
-                        handleChange('modelFileUrl', file)
+                        handleChange('modelFile', file)
                     }} />
                 </div>
                 <div className='flex flex-col gap-2'>
                     <FileUpload label={"AR Experience file"} onFileSelected={(file) => {
-                        handleChange('ARExperienceFileUrl', file)
+                        handleChange('ARExperienceFile', file)
                     }} />
                 </div>
 

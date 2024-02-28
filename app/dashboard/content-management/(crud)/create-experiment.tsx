@@ -49,10 +49,10 @@ export default function CreateExperiment({ subjects, onRefresh }: CreateVideoPro
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.modelFileUrl === null || formData.ARExperienceFileUrl === null) {
-            toast.error('Please fill all the required fields!')
-            return
-        }
+        // if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.modelFileUrl === null || formData.ARExperienceFileUrl === null) {
+        //     toast.error('Please fill all the required fields!')
+        //     return
+        // }
         formData.category = categoryOptions.find(opt => opt.id === formData.category)?.name ?? null
         setLoading(true)
         try {

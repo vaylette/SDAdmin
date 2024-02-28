@@ -105,6 +105,7 @@ export default function ContentManagement() {
         retrieveData(`${apiUrls.getSubjects}`),
         retrieveData(`${apiUrls.getLevels}`),
       ])
+      
       setData(prev => ({
         ...prev,
         topics: topicsResult,
@@ -128,7 +129,10 @@ export default function ContentManagement() {
       subject: itemAsTopic.subject.name,
       level: itemAsTopic.level.name,
       syllabus: itemAsTopic.syllabus,
+      descriptions: itemAsTopic.descriptions,
       sections: itemAsTopic.sections.length,
+      questions: itemAsTopic.questions.length,
+      chapters: itemAsTopic.chapters.length,
       coverImageUrl: itemAsTopic.coverImageUrl,
       action: null
     }
@@ -138,10 +142,13 @@ export default function ContentManagement() {
     const itemAsModel = item as Model;
     return {
       ref_no: '',
+      _id: itemAsModel.id,
       name: itemAsModel.name,
-      level: itemAsModel.level,
-      subject: itemAsModel.subject,
-      topic: itemAsModel.topic,
+      subject: itemAsModel.subject.name,
+      fileType: itemAsModel.fileType,
+      description: itemAsModel.description,
+      modelFileUrl: itemAsModel.modelFileUrl,
+      ARExperienceFileUrl: itemAsModel.ARExperienceFileUrl,
       action: null
     }
   })
@@ -150,10 +157,14 @@ export default function ContentManagement() {
     const itemAsExperiment = item as Experiment;
     return {
       ref_no: '',
+      _id: itemAsExperiment.id,
       name: itemAsExperiment.name,
-      level: itemAsExperiment.level,
-      subject: itemAsExperiment.subject,
-      topic: itemAsExperiment.topic,
+      subject: itemAsExperiment.subject.name,
+      description: itemAsExperiment.description,
+      modelFileUrl: itemAsExperiment.modelFileUrl,
+      ARExperienceFileUrl: itemAsExperiment.ARExperienceFileUrl,
+      materials: itemAsExperiment.materials,
+      stepsFileUrl: itemAsExperiment.stepsFileUrl,
       action: null
     }
   })
@@ -162,11 +173,12 @@ export default function ContentManagement() {
     const itemAsVideo = item as Video;
     return {
       ref_no: '',
+      _id: itemAsVideo.id,
       name: itemAsVideo.name,
-      level: itemAsVideo.level,
-      subject: itemAsVideo.subject,
-      topic: itemAsVideo.topic,
-      video_link: itemAsVideo.video_link,
+      subject: itemAsVideo.subject.name,
+      videoType: itemAsVideo.videoType,
+      description: itemAsVideo.description,
+      videoFileUrl: itemAsVideo.videoFileUrl,
       action: null
     }
   })
@@ -217,12 +229,14 @@ export default function ContentManagement() {
       cell: info => info.getValue(),
       size: 30,
     }),
-
     columnHelper.accessor('action', {
       header: () => '',
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
+          <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
+              <span>More</span>
+            </a>
             <div className="inline-block">
               <div className="cursor__pointer">
                 <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
@@ -269,15 +283,10 @@ export default function ContentManagement() {
       cell: info => info.getValue(),
       size: 10,
     }),
-    columnHelper.accessor('level', {
-      header: () => 'Level',
+    columnHelper.accessor('description', {
+      header: () => 'Description',
       cell: info => info.getValue(),
       size: 10,
-    }),
-    columnHelper.accessor('topic', {
-      header: () => 'Topic',
-      cell: info => info.getValue(),
-      size: 30,
     }),
     columnHelper.accessor('action', {
       header: () => '',
@@ -330,15 +339,10 @@ export default function ContentManagement() {
       cell: info => info.getValue(),
       size: 10,
     }),
-    columnHelper.accessor('level', {
-      header: () => 'Level',
+    columnHelper.accessor('description', {
+      header: () => 'Description',
       cell: info => info.getValue(),
       size: 10,
-    }),
-    columnHelper.accessor('topic', {
-      header: () => 'Topic',
-      cell: info => info.getValue(),
-      size: 30,
     }),
     columnHelper.accessor('action', {
       header: () => '',
@@ -392,18 +396,13 @@ export default function ContentManagement() {
       cell: info => info.getValue(),
       size: 10,
     }),
-    columnHelper.accessor('level', {
-      header: () => 'Level',
-      cell: info => info.getValue(),
-      size: 10,
-    }),
-    columnHelper.accessor('topic', {
-      header: () => 'Topic',
+    columnHelper.accessor('description', {
+      header: () => 'Description',
       cell: info => info.getValue(),
       size: 30,
     }),
-    columnHelper.accessor('video_link', {
-      header: () => 'Video Link',
+    columnHelper.accessor('videoFileUrl', {
+      header: () => 'Url',
       cell: info => info.getValue(),
       size: 30,
     }),

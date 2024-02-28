@@ -32,7 +32,7 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
         subject: null as string | null,
         videoType: null as string | null,
         description: null as string | null,
-        videoFileUrl: null as string | null,
+        videoFile: null as string | null,
     })
 
     const postData = usePostData()
@@ -50,15 +50,15 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        if (formData.name === '' || formData.subject === null || formData.videoType === null || formData.description === null || formData.videoFileUrl === null) {
+        if (formData.name === '' || formData.subject === null || formData.videoType === null || formData.description === null || formData.videoFile === null) {
             toast.error('Please fill all the required fields!')
             return
         }
         formData.videoType = videoTypeOptions.find(opt => opt.id === formData.videoType)?.name ?? null
-        console.log(formData);
         setLoading(true)
         try {
             const response = await postData(`${apiUrls.postVideos}`, formData, true)
+            console.log(response);
             if (response) {
                 onRefresh()
             }
@@ -118,7 +118,7 @@ export default function CreateVideo({ subjects, onRefresh }: CreateVideoProps) {
 
                 <div className='flex flex-col gap-2'>
                     <FileUpload label={"Upload Video"} onFileSelected={(file) => {
-                        handleChange('videoFileUrl', file);
+                        handleChange('videoFile', file);
                     }} />
                 </div>
                 <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>

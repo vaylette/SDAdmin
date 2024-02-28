@@ -45,9 +45,11 @@ export const usePostData = () => {
   const { token } = authStore;
 
   const postData = async (url: string, data: any, isMultipart: boolean = false) => {
+    console.log(data);
     try {
       const headers = isMultipart ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
       const response = await axios.post(url, data, { headers });
+      console.log(headers);
       toast.success(response.data);
       return response.data;
     } catch (error: any) {
