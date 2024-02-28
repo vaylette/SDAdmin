@@ -25,20 +25,6 @@ export const useRetrieveData = () => {
   return retrieveData
 }
 
-// export const usePostData = () => {
-//   const authStore = useAuthStore((state) => state) as AuthStore
-//   const { token } = authStore
-
-//   const postData = async (url: string, data: FormData) => {
-//     try {
-//       const response = await axios.post(`${url}`, data, { headers: headers(token) })
-//       return response.data
-//     } catch (error: any) {
-//       toast.error(error.response.data.message)
-//     }
-//   }
-//   return postData
-// }
 
 export const usePostData = () => {
   const authStore = useAuthStore((state) => state) as AuthStore
@@ -79,6 +65,27 @@ export const usePatchData = () => {
   };
 
   return putData;
+};
+
+export const useDeleteData = () => {
+  const authStore = useAuthStore((state) => state) as AuthStore;
+  const { token } = authStore;
+
+  const deleteData = async (url:string) => {
+    try {
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+      const response = await axios.delete(url, {headers});
+      toast.success(response.data);
+      return response.data;
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'An error occurred');
+    }
+  };
+
+  return deleteData;
 };
 
 const headers = (token: string | null) => {

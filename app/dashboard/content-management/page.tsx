@@ -3,9 +3,9 @@ import { useState, useEffect, useRef } from "react"
 import { TabComponent, TabItem } from "@/app/_components/tab"
 import DataTable from "@/app/_components/datatable"
 import { createColumnHelper } from "@tanstack/react-table"
-import { useRetrieveData } from "@/app/constants/hooks"
+import { useDeleteData, useRetrieveData } from "@/app/constants/hooks"
 import toast from "react-hot-toast"
-import { apiUrls } from "@/app/constants/apiUrls"
+import { apiUrls, baseUrl } from "@/app/constants/apiUrls"
 import { Topic, Model, Experiment, Video } from "@/app/types/types"
 import Modal from "@/app/_components/modal"
 import CreateTopic from "./(crud)/create-topic"
@@ -64,7 +64,7 @@ export default function ContentManagement() {
     syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "0" }, { name: "Montessori", _id: "2" }],
     UpdateTopic: {},
     UpdateModel: {},
-    UpdateExperiment:{},
+    UpdateExperiment: {},
     UpdateDiyExperiment: {},
     UpdateVideo: {}
   })
@@ -87,7 +87,28 @@ export default function ContentManagement() {
     getData()
   }
 
+
+  const [dropdownStates, setDropdownStates] = useState({});
+
+  const toggleDropdownForRow = (rowId: any) => {
+    setDropdownStates(prevStates => {
+      const updatedStates: any = {};
+
+      // Close any open dropdowns
+      Object.keys(prevStates).forEach(id => {
+        updatedStates[id] = false;
+      });
+
+      // Toggle the state of the clicked dropdown
+      updatedStates[rowId] = !prevStates[rowId];
+
+      return updatedStates;
+    });
+  };
+
+
   const retrieveData = useRetrieveData()
+  const deleteData = useDeleteData()
 
   const columnHelper = createColumnHelper()
 
@@ -105,7 +126,7 @@ export default function ContentManagement() {
         retrieveData(`${apiUrls.getSubjects}`),
         retrieveData(`${apiUrls.getLevels}`),
       ])
-      
+
       setData(prev => ({
         ...prev,
         topics: topicsResult,
@@ -120,13 +141,28 @@ export default function ContentManagement() {
     } finally { }
   }
 
+  const handleTopicDelete = async (data: any) => {
+    try {
+      await deleteData(`${apiUrls.deleteTopic}/${data._id}`);
+      let topicResults = retrieveData(`${apiUrls.getTopics}`);
+      setData(prevData => ({
+        ...prevData,
+        topics: prevData.topics.filter(topic => topic !== topicResults)
+      }));
+      toast.success('Topic deleted successfully');
+    } catch (error) {
+      toast.error('An error occurred while deleting the topic');
+    }
+  };
+
+
   const topics: Topic[] = data?.topics?.map((item) => {
     const itemAsTopic = item as Topic;
     return {
       ref_no: '',
       _id: itemAsTopic._id,
       name: itemAsTopic.name,
-      subject: itemAsTopic.subject.name,
+      subject: itemAsTopic.subject?.name,
       level: itemAsTopic.level.name,
       syllabus: itemAsTopic.syllabus,
       descriptions: itemAsTopic.descriptions,
@@ -144,7 +180,7 @@ export default function ContentManagement() {
       ref_no: '',
       _id: itemAsModel.id,
       name: itemAsModel.name,
-      subject: itemAsModel.subject.name,
+      subject: itemAsModel.subject?.name,
       fileType: itemAsModel.fileType,
       description: itemAsModel.description,
       modelFileUrl: itemAsModel.modelFileUrl,
@@ -159,7 +195,7 @@ export default function ContentManagement() {
       ref_no: '',
       _id: itemAsExperiment.id,
       name: itemAsExperiment.name,
-      subject: itemAsExperiment.subject.name,
+      subject: itemAsExperiment.subject?.name,
       description: itemAsExperiment.description,
       modelFileUrl: itemAsExperiment.modelFileUrl,
       ARExperienceFileUrl: itemAsExperiment.ARExperienceFileUrl,
@@ -182,24 +218,6 @@ export default function ContentManagement() {
       action: null
     }
   })
-
-  const [dropdownStates, setDropdownStates] = useState({});
-
-  const toggleDropdownForRow = (rowId: any) => {
-    setDropdownStates(prevStates => {
-      const updatedStates:any = {};
-
-      // Close any open dropdowns
-      Object.keys(prevStates).forEach(id => {
-        updatedStates[id] = false;
-      });
-
-      // Toggle the state of the clicked dropdown
-      updatedStates[rowId] = !prevStates[rowId];
-
-      return updatedStates;
-    });
-  };
 
 
 
@@ -234,7 +252,7 @@ export default function ContentManagement() {
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-          <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
+            <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
               <span>More</span>
             </a>
             <div className="inline-block">
@@ -253,7 +271,8 @@ export default function ContentManagement() {
                           data.UpdateTopic = info.row.original;
                         }}
                         onDelete={() => {
-                          console.log("delete click", info.row.id)
+
+                          handleTopicDelete(info.row.original);
                         }}
                       />
                     )}
@@ -309,7 +328,7 @@ export default function ContentManagement() {
                           data.UpdateModel = info.row.original;
                         }}
                         onDelete={() => {
-                          console.log("delete click", info.row.id)
+                          handleModelDelete(info.row.original);
                         }}
                       />
                     )}
@@ -348,7 +367,7 @@ export default function ContentManagement() {
       header: () => '',
       cell: (info) => (
         <>
-        <div className='flex flex-row gap-6 font-medium'>
+          <div className='flex flex-row gap-6 font-medium'>
             <div className="inline-block">
               <div className="cursor__pointer">
                 <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
@@ -365,7 +384,7 @@ export default function ContentManagement() {
                           data.UpdateExperiment = info.row.original;
                         }}
                         onDelete={() => {
-                          console.log("delete click", info.row.id)
+                          handleExperimentDelete(info.row.original);
                         }}
                       />
                     )}
@@ -410,7 +429,7 @@ export default function ContentManagement() {
       header: () => '',
       cell: (info) => (
         <>
-        <div className='flex flex-row gap-6 font-medium'>
+          <div className='flex flex-row gap-6 font-medium'>
             <div className="inline-block">
               <div className="cursor__pointer">
                 <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
@@ -427,7 +446,7 @@ export default function ContentManagement() {
                           data.UpdateVideo = info.row.original;
                         }}
                         onDelete={() => {
-                          console.log("delete click", info.row.id)
+                          handleVideoDelete(info.row.original);
                         }}
                       />
                     )}
@@ -636,11 +655,11 @@ export const CustomDropDown: React.FC<Props> = ({ dismiss, onEdit, onDelete }) =
                 Edit
               </button>
             )}
-            {/* {onDelete && (
+            {onDelete && (
               <button onClick={onDelete} className="text-red-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
                 Delete
               </button>
-            )} */}
+            )}
           </div>
         </div>
       </div>

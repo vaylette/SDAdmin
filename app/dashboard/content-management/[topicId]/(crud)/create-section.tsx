@@ -2,30 +2,38 @@ import CustomEditor from "@/app/_components/custom_editor"
 import SelectBox from "@/app/_components/form/SelectBox"
 import FileUpload from "@/app/_components/form/uploadFile"
 import { Divider } from "@/app/_components/header/notifications"
-import { useState } from "react"
+import { apiUrls } from "@/app/constants/apiUrls"
+import { usePostData } from "@/app/constants/hooks"
+import { FormEvent, useState } from "react"
+import toast from "react-hot-toast"
 
 interface CreateSectionsProps {
+    initialData: any,
     onBack: () => void;
 }
 
-export default function CreateSections({ onBack }: CreateSectionsProps) {
+export default function CreateSections({ initialData, onBack }: CreateSectionsProps) {
+    console.log(initialData);
     const data = {
         topics: {
-            name: "Add Section",
-            syllabus: "NECTA",
+            name: initialData?.topic,
+            syllabus: initialData?.syllabus,
         },
         subject: {
-            name: "Biology"
+            name: initialData?.subject
         },
         level: {
-            name: "Form Four"
+            name: initialData?.level
         }
     }
     const sectionOrders = [{ name: "1", id: "0" }]
 
     const [formData, setFormData] = useState({
-        sectionName: '',
-        sectionOrder: ''
+        topic: initialData?.topicId,
+        name: '',
+        chapterNo: '',
+        content: '',
+        coverImageUrl: null as string | null,
     })
 
     const handleChange = (fieldName: string, value: any) => {
@@ -35,6 +43,29 @@ export default function CreateSections({ onBack }: CreateSectionsProps) {
         }))
     }
     const [loading, setLoading] = useState(false)
+
+    const postData = usePostData()
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+
+        if (formData.name === '' || formData.chapterNo === null || formData.content === null || formData.coverImageUrl === null) {
+            toast.error('Please fill all the required fields!')
+            return
+        }
+        setLoading(true)
+        try {
+            const response = await postData(`${apiUrls.postChapters}`, formData, true)
+            if (response) {
+                onBack()
+            }
+            toast.success(`${response}`)
+        } catch (error: any) {
+            toast.error(error?.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <>
@@ -53,7 +84,7 @@ export default function CreateSections({ onBack }: CreateSectionsProps) {
                     <div className="flex gap-5 justify-between self-start mt-8 ml-10 text-lg leading-[normal] text-neutral-800 text-opacity-60 max-md:flex-wrap max-md:ml-0 max-md:max-w-full">
                         <div className="grow not-italic whitespace-nowrap">
                             <span className="text-neutral-800">Topic:</span>{" "}
-                            <span className="font-medium text-orange-200">Food Nutrients</span>
+                            <span className="font-medium text-orange-200">{data?.topics.name}</span>
                         </div>
                         <div className="grow not-italic whitespace-nowrap">
                             <span className="text-neutral-800">Subject:</span>{" "}
@@ -71,11 +102,12 @@ export default function CreateSections({ onBack }: CreateSectionsProps) {
 
                     <div className="pl-9 mt-6">
                         <Divider />
-                        <form className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>
+                        <form onSubmit={() => { }} className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>
                             <div className='grid grid-cols-2 gap-4 w-full'>
                                 <div className='flex flex-col items-start gap-2'>
                                     <label className='text-right'>Section name:</label>
-                                    <input type='text' className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0' />
+                                    <input type='text' value={formData.name}
+                                        onChange={(e) => handleChange('name', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0' />
                                 </div>
                                 <div className='flex flex-col items-start gap-2'>
                                     <div className='flex flex-col gap-2 w-full'>
@@ -90,20 +122,24 @@ export default function CreateSections({ onBack }: CreateSectionsProps) {
 
                                         <SelectBox
                                             options={sectionOrders}
-                                            selected={formData.sectionOrder !== null ? { name: sectionOrders.find(opt => opt.id === formData.sectionOrder)?.name || '', id: formData.sectionOrder } : null}
-                                            onChange={(value) => handleChange('sectionOrder', value?.id)}
+                                            selected={{ name: sectionOrders.find(opt => opt.id === formData.chapterNo)?.name || '', id: formData.chapterNo }}
+                                            onChange={(value) => {
+                                                handleChange('chapterNo', value?.id)
+                                            }}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
                                 <label className='text-start'>Content</label>
-                                <CustomEditor />
+                                <CustomEditor initialData={formData.content} onChange={(data) => handleChange('content', data)} />
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
-                                <FileUpload label={"Upload file (*pdf)"} text={"Add file"} />
+                                <FileUpload label={"Upload file (*pdf)"} text={"Add file"} onFileSelected={(file) => {
+                                    handleChange('coverImageUrl', file)
+                                }} />
                             </div>
-                            <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
+                            <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
                                 <span>Add Section</span>
                                 {loading && (
                                     <svg height="40" width="40" className="text-white-default">

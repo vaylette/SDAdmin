@@ -25,18 +25,25 @@ const editorConfiguration = {
     height: "900px"
 };
 
-function CustomEditor(props) {
+interface EditorProps {
+    initialData: any,
+    onChange?: (data: any | null) => void
+}
+
+function CustomEditor({ initialData, onChange }: EditorProps) {
+    const handleEditorChange = (event: any, editor: any) => {
+        const data = editor.getData();
+        onChange?.(data);
+    };
+
     return (
         <CKEditor
             editor={Editor}
             config={editorConfiguration}
-            data={props.initialData}
-            onChange={(event, editor) => {
-                const data = editor.getData();
-                console.log({ event, editor, data });
-            }}
+            data={initialData}
+            onChange={handleEditorChange}
         />
-    )
+    );
 }
 
 export default CustomEditor;

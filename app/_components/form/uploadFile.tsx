@@ -12,6 +12,7 @@ const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: Fi
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
+        console.log(file);
         if (file) {
             setFileName(file.name);
             onFileSelected?.(file);

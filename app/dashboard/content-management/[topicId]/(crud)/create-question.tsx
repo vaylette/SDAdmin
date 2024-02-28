@@ -25,7 +25,9 @@ export default function CreateQuestions({ onBack }: CreateSectionsProps) {
 
     const [formData, setFormData] = useState({
         sectionName: '',
-        sectionOrder: ''
+        sectionOrder: '',
+        question: '',
+        answer: ''
     })
 
     const handleChange = (fieldName: string, value: any) => {
@@ -33,6 +35,7 @@ export default function CreateQuestions({ onBack }: CreateSectionsProps) {
             ...prevData,
             [fieldName]: value,
         }))
+        console.log(fieldName, value)
     }
     const [loading, setLoading] = useState(false)
 
@@ -90,11 +93,13 @@ export default function CreateQuestions({ onBack }: CreateSectionsProps) {
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
                                 <label className='text-start'>Question</label>
-                                <CustomEditor />
+                                <CustomEditor initialData={formData.question} onChange={(data) => { 
+                                    handleChange('question', data) 
+                                    }} />
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
                                 <label className='text-start'>Answer</label>
-                                <CustomEditor />
+                                <CustomEditor initialData={formData.answer} onChange={(data) => handleChange('answer', data)} />
                             </div>
 
                             <div className="flex flex-col gap-1 text-right w-full mt-10">
