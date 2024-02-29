@@ -2,7 +2,10 @@ import CustomEditor from "@/app/_components/custom_editor"
 import SelectBox from "@/app/_components/form/SelectBox"
 import FileUpload from "@/app/_components/form/uploadFile"
 import { Divider } from "@/app/_components/header/notifications"
-import { useState } from "react"
+import { apiUrls } from "@/app/constants/apiUrls"
+import { usePostData } from "@/app/constants/hooks"
+import { FormEvent, useState } from "react"
+import toast from "react-hot-toast"
 
 interface CreateSectionsProps {
     initialData: any,
@@ -22,14 +25,13 @@ export default function CreateQuestions({ initialData, onBack }: CreateSectionsP
             name: initialData?.level
         }
     }
-    const sectionOrders = [
+    const questionType = [
         { name: "Text", id: "text" },
-        // { name: "Multiple Choice", id: "multiple_choice" }
     ];
 
     const [formData, setFormData] = useState({
-        sectionName: '',
-        sectionOrder: '',
+        topic: initialData?.topicId,
+        questionType: '',
         question: '',
         answer: ''
     })
@@ -42,6 +44,29 @@ export default function CreateQuestions({ initialData, onBack }: CreateSectionsP
         console.log(fieldName, value)
     }
     const [loading, setLoading] = useState(false)
+
+    const postData = usePostData()
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+
+        if (formData.questionType === '' || formData.question === null || formData.answer === null) {
+            toast.error('Please fill all the required fields!')
+            return
+        }
+        setLoading(true)
+        try {
+            
+            const response = await postData(`${apiUrls.postQuestions}`, formData, false)
+            if (response) {
+                onBack()
+            }
+        } catch (error: any) {
+            toast.error(error?.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <>
@@ -88,9 +113,9 @@ export default function CreateQuestions({ initialData, onBack }: CreateSectionsP
                                         </div>
 
                                         <SelectBox
-                                            options={sectionOrders}
-                                            selected={formData.sectionOrder !== '' ? { name: sectionOrders.find(opt => opt.id === formData.sectionOrder)?.name || '', id: formData.sectionOrder } : null}
-                                            onChange={(value) => handleChange('sectionOrder', value?.id)}
+                                            options={questionType}
+                                            selected={formData.questionType !== '' ? { name: questionType.find(opt => opt.id === formData.questionType)?.name || '', id: formData.questionType } : null}
+                                            onChange={(value) => handleChange('questionType', value?.id)}
                                         />
                                     </div>
                                 </div>
@@ -113,7 +138,7 @@ export default function CreateQuestions({ initialData, onBack }: CreateSectionsP
 
                             </div> */}
 
-                            <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
+                            <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
                                 <span>Add Question</span>
                                 {loading && (
                                     <svg height="40" width="40" className="text-white-default">

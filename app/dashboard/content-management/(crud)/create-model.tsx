@@ -32,6 +32,7 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
         subject: null as string | null,
         fileType: null as string | null,
         description: null as string | null,
+        thumbnail: null as string | null,
         modelFile: null as string | null,
         ARExperienceFile: null as string | null,
     })
@@ -54,6 +55,8 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
         //     return
         // }
         formData.fileType = "glb"
+        formData.ARExperienceFile = formData.modelFile
+        formData.thumbnail = formData.ARExperienceFile
 
         setLoading(true)
         try {

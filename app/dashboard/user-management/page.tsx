@@ -177,6 +177,8 @@ export default function UserManagement() {
     };
   });
 
+  console.log(data.users);
+
   const usersColumns = [
     columnHelper.accessor('ref_no', {
       header: () => 'REF NO',

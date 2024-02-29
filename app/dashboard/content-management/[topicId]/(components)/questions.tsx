@@ -86,7 +86,7 @@ export const Questions = ({ onAddQuestionClick }: QuestionsProps) => {
             <div className="flex gap-5 justify-between text-lg">
                 <div className="not-italic text-neutral-800 text-opacity-60">{index + 1 < 10 ? `0${index + 1}.` : `${index + 1}.`}</div>
                 <div className="grow not-italic text-neutral-800 text-opacity-80">
-                    {question?.question}
+                <p dangerouslySetInnerHTML={{ __html: question?.question }} />
                 </div>
             </div>
             <div className="inline-block">
