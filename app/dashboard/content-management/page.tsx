@@ -28,10 +28,18 @@ import UpdateModel from "./(crud)/update-model"
 import UpdateDiyExperiment from "./(crud)/update-diy-experiment"
 import UpdateExperiment from "./(crud)/update-experiment"
 import UpdateVideo from "./(crud)/update-video"
+import { TopicsContent } from "./(data)/topics"
+import { ModelsContent } from "./(data)/models"
+import { ExperimentsContent } from "./(data)/experiments"
+import { VideosContent } from "./(data)/videos"
+import { CustomDropDown } from "./(components)/custom_dropdown"
+import { OverviewCard } from "./(components)/overview"
+import SimulationsContent from "./(data)/simulations"
 
 interface ContentTab {
   topics: boolean
   models: boolean
+  simulations: boolean
   experiments: boolean
   videos: boolean
   [key: string]: boolean
@@ -40,6 +48,7 @@ interface ContentTab {
 interface Modal {
   topics: boolean,
   models: boolean,
+  simulations: boolean,
   videos: boolean,
   experiments: boolean,
   diy: boolean,
@@ -50,6 +59,7 @@ export default function ContentManagement() {
   const [tab, setTab] = useState<ContentTab>({
     topics: true,
     models: false,
+    simulations: false,
     experiments: false,
     videos: false,
   })
@@ -69,9 +79,37 @@ export default function ContentManagement() {
     UpdateVideo: {}
   })
 
+  const getData = async () => {
+    try {
+      const [topicsResult, modelsResult, simulationResults, experimentsResult, videosResult, subjectsResult, levelsResult] = await Promise.all([
+        retrieveData(`${apiUrls.getTopics}`),
+        retrieveData(`${apiUrls.getModels}`),
+        retrieveData(`${apiUrls.getSimulations}`),
+        retrieveData(`${apiUrls.getExperiments}`),
+        retrieveData(`${apiUrls.getVideos}`),
+        retrieveData(`${apiUrls.getSubjects}`),
+        retrieveData(`${apiUrls.getLevels}`),
+      ])
+
+      setData(prev => ({
+        ...prev,
+        topics: topicsResult,
+        models: modelsResult,
+        simulations: simulationResults,
+        experiments: experimentsResult,
+        videos: videosResult,
+        subjects: subjectsResult,
+        levels: levelsResult
+      }))
+    } catch (error: any) {
+      toast.error(error)
+    } finally { }
+  }
+
   const [modal, setModal] = useState<Modal>({
     topics: false,
     models: false,
+    simulations: false,
     experiments: false,
     diy: false,
     videos: false,
@@ -81,12 +119,6 @@ export default function ContentManagement() {
   const handleModal = (modalType: string): void => {
     setModal((prev) => ({ ...prev, [modalType]: true }))
   }
-
-  const handleModalClose = (): void => {
-    setModal({ topics: false, models: false, experiments: false, diy: false, videos: false, edit: false })
-    getData()
-  }
-
 
   const [dropdownStates, setDropdownStates] = useState({});
 
@@ -115,137 +147,6 @@ export default function ContentManagement() {
   useEffect(() => {
     getData()
   }, [data])
-
-  const getData = async () => {
-    try {
-      const [topicsResult, modelsResult, experimentsResult, videosResult, subjectsResult, levelsResult] = await Promise.all([
-        retrieveData(`${apiUrls.getTopics}`),
-        retrieveData(`${apiUrls.getModels}`),
-        retrieveData(`${apiUrls.getExperiments}`),
-        retrieveData(`${apiUrls.getVideos}`),
-        retrieveData(`${apiUrls.getSubjects}`),
-        retrieveData(`${apiUrls.getLevels}`),
-      ])
-
-      setData(prev => ({
-        ...prev,
-        topics: topicsResult,
-        models: modelsResult,
-        experiments: experimentsResult,
-        videos: videosResult,
-        subjects: subjectsResult,
-        levels: levelsResult
-      }))
-    } catch (error: any) {
-      toast.error(error)
-    } finally { }
-  }
-
-  const handleTopicDelete = async (data: any) => {
-    try {
-      await deleteData(`${apiUrls.deleteTopic}/${data._id}`);
-      let topicResults = retrieveData(`${apiUrls.getTopics}`);
-      setData(prevData => ({
-        ...prevData,
-        topics: prevData.topics.filter(topic => topic !== topicResults)
-      }));
-      toast.success('Topic deleted successfully');
-    } catch (error) {
-      toast.error('An error occurred while deleting the topic');
-    }
-  };
-
-  const handleModelDelete = async (data: any) => {
-    try {
-      await deleteData(`${apiUrls.deleteModels}/${data._id}`);
-      let modelResults = retrieveData(`${apiUrls.getModels}`);
-      setData(prevData => ({
-        ...prevData,
-        models: prevData.models.filter(model => model !== modelResults)
-      }));
-    } catch (error) {
-      toast.error('An error occurred while deleting the model');
-    }
-  };
-
-  const handleExperimentDelete = async (data: any) => {
-    try {
-      await deleteData(`${apiUrls.deleteExperiments}/${data._id}`);
-      let experimentResults = retrieveData(`${apiUrls.getExperiments}`);
-      setData(prevData => ({
-        ...prevData,
-        experiments: prevData.models.filter(experiment => experiment !== experimentResults)
-      }));
-    } catch (error) {
-      toast.error('An error occurred while deleting the experiment');
-    }
-  };
-
-
-  const topics: Topic[] = data?.topics?.map((item) => {
-    const itemAsTopic = item as Topic;
-    return {
-      ref_no: '',
-      _id: itemAsTopic._id,
-      name: itemAsTopic.name,
-      subject: itemAsTopic.subject?.name,
-      level: itemAsTopic.level.name,
-      syllabus: itemAsTopic.syllabus,
-      descriptions: itemAsTopic.descriptions,
-      sections: itemAsTopic.sections.length,
-      questions: itemAsTopic.questions.length,
-      chapters: itemAsTopic.chapters.length,
-      coverImageUrl: itemAsTopic.coverImageUrl,
-      action: null
-    }
-  })
-
-  const models: Model[] = data?.models?.map((item) => {
-    const itemAsModel = item as Model;
-    return {
-      ref_no: '',
-      _id: itemAsModel._id,
-      name: itemAsModel.name,
-      subject: itemAsModel.subject?.name,
-      fileType: itemAsModel.fileType,
-      description: itemAsModel.description,
-      modelFileUrl: itemAsModel.modelFileUrl,
-      ARExperienceFileUrl: itemAsModel.ARExperienceFileUrl,
-      action: null
-    }
-  })
-
-  const experiments: Experiment[] = data?.experiments?.map((item) => {
-    const itemAsExperiment = item as Experiment;
-    return {
-      ref_no: '',
-      _id: itemAsExperiment._id,
-      name: itemAsExperiment.name,
-      subject: itemAsExperiment.subject?.name,
-      description: itemAsExperiment.description,
-      modelFileUrl: itemAsExperiment.modelFileUrl,
-      ARExperienceFileUrl: itemAsExperiment.ARExperienceFileUrl,
-      materials: itemAsExperiment.materials,
-      stepsFileUrl: itemAsExperiment.stepsFileUrl,
-      action: null
-    }
-  })
-
-  const videos: Video[] = data?.videos?.map((item) => {
-    const itemAsVideo = item as Video;
-    return {
-      ref_no: '',
-      _id: itemAsVideo.id,
-      name: itemAsVideo.name,
-      subject: itemAsVideo.subject.name,
-      videoType: itemAsVideo.videoType,
-      description: itemAsVideo.description,
-      videoFileUrl: itemAsVideo.videoFileUrl,
-      action: null
-    }
-  })
-
-
 
   const topicsColumns = [
     columnHelper.accessor('ref_no', {
@@ -355,6 +256,62 @@ export default function ContentManagement() {
                         }}
                         onDelete={() => {
                           handleModelDelete(info.row.original);
+                        }}
+                      />
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
+          </div>
+        </>
+      )
+    }),
+  ]
+
+  const simulationsColumns = [
+    columnHelper.accessor('ref_no', {
+      header: () => 'REF NO',
+      cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
+      size: 5,
+    }),
+    columnHelper.accessor('name', {
+      header: () => 'Name',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('subject', {
+      header: () => 'Subject',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('description', {
+      header: () => 'Description',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
+    columnHelper.accessor('action', {
+      header: () => '',
+      cell: (info) => (
+        <>
+          <div className='flex flex-row gap-6 font-medium'>
+            <div className="inline-block">
+              <div className="cursor__pointer">
+                <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
+                  <Dropdown.Toggle btnStyle="link" noCaret onClick={() => toggleDropdownForRow(info.row.id)}>
+                    <FiMoreVertical />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {dropdownStates[info.row.id] && (
+                      <CustomDropDown
+                        dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
+                        onEdit={() => {
+                          modal.edit = true
+                          handleModal('simulations')
+                          data.UpdateSimulations = info.row.original;
+                        }}
+                        onDelete={() => {
+                          handleSimulationsDelete(info.row.original);
                         }}
                       />
                     )}
@@ -489,6 +446,7 @@ export default function ContentManagement() {
   const tabList: TabItem<string>[] = [
     { name: 'Topics', tab: 'topics', columns: topicsColumns },
     { name: 'Models', tab: 'models', columns: modelsColumns },
+    { name: 'Simulations', tab: 'simulations', columns: simulationsColumns },
     { name: 'Experiments', tab: 'experiments', columns: experimentsColumns },
     { name: 'Videos', tab: 'videos', columns: videoColumns },
   ]
@@ -497,6 +455,7 @@ export default function ContentManagement() {
     setTab((prev) => ({
       topics: false,
       models: false,
+      simulations: false,
       experiments: false,
       videos: false,
       [activeTab]: true,
@@ -506,9 +465,10 @@ export default function ContentManagement() {
   return (
     <>
       <div className='flex flex-col gap-5'>
-        <div className='grid grid-cols-4 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
+        <div className='grid grid-cols-5 2xl:flex 2xl:flex-row 2xl:flex-wrap gap-5'>
           <OverviewCard title="Total Topics" count={data?.topics?.length ?? 0} />
           <OverviewCard title="Total Models" count={data?.models?.length ?? 0} />
+          <OverviewCard title="Total Simulations" count={data?.simulations?.length ?? 0} />
           <OverviewCard title="Experiments" count={data?.experiments?.length ?? 0} />
           <OverviewCard title="Total Videos" count={data?.videos?.length ?? 0} />
 
@@ -523,172 +483,22 @@ export default function ContentManagement() {
               </svg>
             </button>
           </div>
-          {tab.topics && (
-            <button onClick={() =>
-              handleModal('topics')
-            } className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Topic +</button>
-          )}
-          {tab.models && (
-            <button onClick={() => handleModal('models')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Model +</button>
-          )}
-          {tab.experiments && (
-            <button onClick={() => handleModal('experiments')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Experiments +</button>
-          )}
-          {tab.experiments && (
-            <button onClick={() => handleModal('diy')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>DIY Experiments +</button>
-          )}
-          {tab.videos && (
-            <button onClick={() => handleModal('videos')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Videos +</button>
-          )}
         </div>
-        <div className='mt-5'>
-          {tab.topics && (
-            <DataTable columns={topicsColumns} data={topics} />
-          )}
-          {tab.models && (
-            <DataTable columns={modelsColumns} data={models} />)}
-          {tab.experiments && (<DataTable columns={experimentsColumns} data={experiments} />)}
-          {tab.videos && (<DataTable columns={videoColumns} data={videos} />)}
-        </div>
+        {tab.topics && (
+          <TopicsContent tab={tab} />
+        )}
+        {tab.models && (
+          <ModelsContent tab={tab} />)}
+        {tab.simulations && (
+          <SimulationsContent tab={tab} />)}
+        {tab.experiments && (
+          <ExperimentsContent subjectsResult={data?.subjects} levelsResult={data?.levels} tab={tab} />
+        )}
+        {tab.videos && (
+          <VideosContent subjectsResult={data?.subjects} levelsResult={data?.levels} tab={tab} />
+        )}
 
       </div >
-
-      {
-        modal.topics && (modal.edit ? (
-          <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Edit Topic' : 'Edit'} subtitle={""}>
-            <UpdateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} data={data.UpdateTopic} onRefresh={handleModalClose} />
-          </CustomModal>
-        ) : (
-          <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>
-            <CreateTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} onRefresh={handleModalClose} />
-          </CustomModal>
-        ))
-      }
-
-
-      {
-        modal.models && (
-          modal.edit ? (
-            <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Edit Model"} subtitle={"Please edit the model’s information"}>
-              <UpdateModel subjects={data?.subjects} data={data.UpdateModel} onRefresh={handleModalClose} />
-            </CustomModal>
-          ) : (
-            <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Add Model"} subtitle={"Please add the model’s information"}>
-              <CreateModel subjects={data?.subjects} onRefresh={handleModalClose} />
-            </CustomModal>
-          )
-        )
-      }
-
-      {
-        modal.experiments && (
-          modal.edit ? (
-            <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Edit Experiment"} subtitle={"Please edit the experiment’s information"}>
-              <UpdateExperiment subjects={data?.subjects} data={data.UpdateExperiment} onRefresh={handleModalClose} />
-            </CustomModal>
-          ) : (
-            <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
-              <CreateExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
-            </CustomModal>
-          )
-        )
-      }
-
-      {
-        modal.diy && (
-          modal.edit ? (
-            <CustomModal isOpen={modal.diy} onClose={handleModalClose} title={"Edit DIY Experiment"} subtitle={"Please edit the DIY experiment’s information"}>
-              <UpdateDiyExperiment subjects={data?.subjects} data={data.UpdateDiyExperiment} onRefresh={handleModalClose} />
-            </CustomModal>
-          ) : (
-            <CustomModal isOpen={modal.diy} onClose={handleModalClose} title={"Add DIY Experiment"} subtitle={"Please add information"}>
-              <CreateDiyExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
-            </CustomModal>
-          )
-        )
-      }
-
-      {
-        modal.videos && (
-          modal.edit ? (
-            <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Edit Video"} subtitle={"Please edit the video’s information"}>
-              <UpdateVideo subjects={data?.subjects} data={data.UpdateVideo} onRefresh={handleModalClose} />
-            </CustomModal>
-          ) : (
-            <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Add Video"} subtitle={"Please add the video’s information"}>
-              <CreateVideo subjects={data?.subjects} onRefresh={handleModalClose} />
-            </CustomModal>
-          )
-        )
-      }
-
-
     </>
   )
 }
-
-interface Card {
-  title: string,
-  count: Number
-}
-
-
-export const OverviewCard = ({ title, count }: Card) => {
-  return (
-    <div className='h-[200px] bg-overview bg-white-default rounded-[10px] flex justify-center relative py-14'>
-      <div className='flex flex-col px-[76px] gap-2'>
-        <span className='text-black-100 text-[20px] font-medium leading-[25px] text-center'>{title}</span>
-      </div>
-      <div className='absolute bottom-2'>
-        <span className='text-orange-default text-[50px] font-bold text-center'>{count?.toString()}</span>
-      </div>
-    </div>
-  );
-}
-
-
-interface Props {
-  dismiss: () => void;
-  onEdit?: () => void; // Callback for edit action
-  onDelete?: () => void; // Callback for delete action
-}
-
-export const CustomDropDown: React.FC<Props> = ({ dismiss, onEdit, onDelete }) => {
-  const userProfileRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (userProfileRef.current && !userProfileRef.current.contains(event.target as Node)) {
-        dismiss();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [dismiss]);
-
-  return (
-    <div ref={userProfileRef} className="absolute">
-      <div className="h-auto rounded-lg bg-white-default shadow-drop relative">
-        <div className="absolute -top-[6px] right-8 w-[13.24px] h-[13.24px] bg-white-default" style={{ transform: 'rotate(135deg)' }}></div>
-        <div className='flex flex-col'>
-          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            {/* {onEdit && (
-              <button onClick={onEdit} className="text-orange-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
-                Edit
-              </button>
-            )} */}
-            {onDelete && (
-              <button onClick={onDelete} className="text-red-default block w-full text-left px-4 py-2 text-sm" role="menuitem">
-                Delete
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

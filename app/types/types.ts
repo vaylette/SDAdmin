@@ -26,7 +26,7 @@ export type Topic = {
     sections: string | number | any,
     questions: string | number | any,
     chapters: string | number | any,
-    coverImageUrl?: string,
+    thumbnail?: string,
     action: null
 }
 
@@ -58,6 +58,19 @@ export type Model = {
     ARExperienceFileUrl: string;
     action: null
 }
+
+export type Simulation = {
+    ref_no: string | number | null | undefined;
+    _id: string;
+    name: string;
+    subject: string;
+    fileType: string;
+    description: string;
+    simulationFileUrl: string;
+    thumbnail: string;
+    action: null;
+};
+
   
 export type Experiment = {
     ref_no: string | number | null | undefined

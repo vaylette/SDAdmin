@@ -53,6 +53,7 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
         name: '',
         subject: null as string | null,
         thumbnail: '',
+        descriptions: '',
         level: null as string | null,
         syllabus: null as string | null,
     })
@@ -73,11 +74,11 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        const { name, subject, thumbnail, level, syllabus } = formData
+        const { name, subject, thumbnail, descriptions, level, syllabus } = formData
 
         console.log(formData);
 
-        if (name === '' || subject === null || thumbnail === '' || level === null || syllabus === null) {
+        if (name === '' || subject === null || thumbnail === '' || descriptions === '' || level === null || syllabus === null) {
             toast.error('Please fill all the required fields!')
             return
         }
@@ -87,7 +88,8 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
         const send = new FormData()
         send.append('name', name)
         send.append('subject', subject)
-        send.append('coverImageUrl', thumbnail)
+        send.append('descriptions', descriptions)
+        send.append('thumbnail', thumbnail)
         send.append('level', level || '')
         send.append('syllabus', syllabusOpts.find(obj => obj.id === syllabus)?.name ?? "NECTA")
 
@@ -112,6 +114,16 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
                         type='text'
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
+                        className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
+                    />
+                </div>
+
+                <div className='flex flex-col gap-2'>
+                    <label>Descriptions</label>
+                    <input
+                        type='text'
+                        value={formData.descriptions}
+                        onChange={(e) => handleChange('descriptions', e.target.value)}
                         className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
                     />
                 </div>
@@ -143,7 +155,7 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
                     <SelectBox
                         options={syllabusOpts}
                         selected={formData.syllabus !== null ? { name: syllabusOpts.find(opt => opt.id === formData.syllabus)?.name || '', id: formData.syllabus } : null}
-                        onChange={(value) => handleChange('syllabus', value)}
+                        onChange={(value) => handleChange('syllabus', value?.id)}
                     />
                 </div>
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>

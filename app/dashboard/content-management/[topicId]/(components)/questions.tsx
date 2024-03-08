@@ -11,7 +11,7 @@ import { apiUrls } from "@/app/constants/apiUrls";
 import { useDeleteData, useRetrieveData } from "@/app/constants/hooks";
 import toast from "react-hot-toast";
 import { FiMoreVertical } from "react-icons/fi";
-import { CustomDropDown } from "../../page";
+import { CustomDropDown } from "../../(components)/custom_dropdown";
 
 
 interface QuestionsProps {
@@ -100,7 +100,7 @@ export const Questions = ({ onAddQuestionClick }: QuestionsProps) => {
                                 <CustomDropDown
                                     dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [question._id]: false }))}
                                     onEdit={() => {
-                                      toast.error("Cant edit")
+                                      toast.error("there is a problem fetching question details")
                                     }}
                                     onDelete={() => {
                                         handleQuestionDelete(question);

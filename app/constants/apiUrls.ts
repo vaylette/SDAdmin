@@ -1,4 +1,4 @@
-export const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT
+export const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT_LOCAL
 
 export const apiUrls = {
     //--------> Authentication  ------->//
@@ -23,6 +23,7 @@ export const apiUrls = {
         getLevels: `${baseUrl}/levels`,
         getChapters: `${baseUrl}/chapters`,
         getQuestions: `${baseUrl}/questions`,
+        getSimulations: `${baseUrl}/simulations`,
 
         //Post Endpoints
         postTopics: `${baseUrl}/topics`,
@@ -32,17 +33,21 @@ export const apiUrls = {
         postSubjects: `${baseUrl}/subjects`,
         postChapters: `${baseUrl}/chapters`,
         postQuestions: `${baseUrl}/questions`,
+        postSimulations: `${baseUrl}/simulations`,
         //Put Endpoints
         patchTopics: `${baseUrl}/topics`,
         patchModels: `${baseUrl}/models`,
         patchExperiments: `${baseUrl}/experiments`,
         patchVideos: `${baseUrl}/videos`,
+        patchSimulations: `${baseUrl}/simulations`,
         // Delete Endpoints
         deleteTopic: `${baseUrl}/topics`,
         deleteChapter: `${baseUrl}/chapters`,
         deleteQuestion: `${baseUrl}/questions`,
         deleteModels: `${baseUrl}/models`,
         deleteExperiments: `${baseUrl}/experiments`,
+        deleteVideos: `${baseUrl}/videos`,
+        deleteSimulations: `${baseUrl}/simulations`
 
     //-------->End Content Management ------->//
 
