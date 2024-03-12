@@ -22,7 +22,8 @@ import { CustomDropDown } from "../(components)/custom_dropdown"
 
 interface Modal {
     topics: boolean,
-    edit: boolean
+    edit: boolean,
+    id?: number,
 }
 
 export const TopicsContent = ({ tab }) => {
@@ -31,12 +32,13 @@ export const TopicsContent = ({ tab }) => {
         subjects: [],
         levels: [],
         syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "0" }, { name: "Montessori", _id: "2" }],
-        UpdateTopic: {},
+        UpdateTopic: {id: 0},
     })
 
     const [modal, setModal] = useState<Modal>({
         topics: false,
-        edit: false
+        edit: false,
+        id: 0
     })
 
     const handleModal = (modalType: string): void => {
@@ -71,7 +73,7 @@ export const TopicsContent = ({ tab }) => {
 
     useEffect(() => {
         getData()
-    }, [data])
+    }, [])
 
     const getData = async () => {
         try {
@@ -101,6 +103,7 @@ export const TopicsContent = ({ tab }) => {
                 topics: prevData.topics.filter(topic => topic !== topicResults)
             }));
             toast.success('Topic deleted successfully');
+            getData();
         } catch (error) {
             toast.error('An error occurred while deleting the topic');
         }
@@ -175,8 +178,8 @@ export const TopicsContent = ({ tab }) => {
                                                 dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                                                 onEdit={() => {
                                                     modal.edit = true
+                                                    modal.id = info.row.index;
                                                     handleModal('topics')
-                                                    data.UpdateTopic = info.row.original;
                                                 }}
                                                 onDelete={() => {
                                                     handleTopicDelete(info.row.original);
@@ -202,7 +205,7 @@ export const TopicsContent = ({ tab }) => {
             <DataTable columns={topicsColumns} data={topics} />
             {modal.topics && (modal.edit ? (
                 <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Edit Topic' : 'Edit'} subtitle={""}>
-                    <EditTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} initialData={data.topics} onRefresh={handleModalClose} />
+                    <EditTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} initialData={data.topics[modal.id ?? 0]} onRefresh={handleModalClose} />
                 </CustomModal>
             ) : (
                 <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>

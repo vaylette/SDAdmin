@@ -2,7 +2,7 @@
 import { useState, FormEvent } from 'react';
 import SelectBox from '@/app/_components/form/SelectBox';
 import { curriculumOptions } from '@/app/types/types';
-import { usePostData } from '@/app/constants/hooks';
+import { usePatchData, usePostData } from '@/app/constants/hooks';
 import toast from 'react-hot-toast';
 import { apiUrls } from '@/app/constants/apiUrls';
 import { useRouter } from 'next/navigation';
@@ -42,17 +42,16 @@ export default function EditTopic({
 
   const [formData, setFormData] = useState({
     name: initialData?.name,
-    subject: initialData?.subject,
+    subject: subjectOptions.find((opt) => opt.name === initialData?.subject?.name)?.id,
     thumbnail: initialData?.thumbnail,
     descriptions: initialData?.descriptions,
-    level: initialData?.level,
-    syllabus: initialData?.syllabus,
+    level: levelOpts.find((opt) => opt.name === initialData?.level?.name)?.id,
+    syllabus: syllabusOpts.find((opt) => opt.name === initialData?.syllabus)?.name,
   });
 
   const [loading, setLoading] = useState(false);
 
-  const postData = usePostData();
-  const router = useRouter();
+  const patchData = usePatchData();
 
   const handleChange = (fieldName: string, value: any) => {
     setFormData((prevData) => ({
@@ -61,8 +60,17 @@ export default function EditTopic({
     }));
   };
 
+  const hasChanged = () => {
+    return Object.keys(formData).some(key => formData[key] !== initialData[key]);
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!hasChanged()) {
+      toast.success('no changes to save')
+      return;
+    }
 
     const { name, subject, thumbnail, descriptions, level, syllabus } = formData;
 
@@ -78,21 +86,19 @@ export default function EditTopic({
       return;
     }
 
+
+    const send = new FormData()
+    send.append('name', name)
+    send.append('subject', formData?.subject ?? '')
+    send.append('descriptions', descriptions)
+    send.append('thumbnail', thumbnail)
+    send.append('level', level || '')
+    send.append('syllabus', syllabusOpts.find(obj => obj.id === syllabus)?.name ?? "NECTA")
+
+
     setLoading(true);
-
-    const send = new FormData();
-    send.append('name', name);
-    send.append('subject', subject);
-    send.append('descriptions', descriptions);
-    send.append('thumbnail', thumbnail);
-    send.append('level', level || '');
-    send.append(
-      'syllabus',
-      syllabusOpts.find((obj) => obj.id === syllabus)?.name ?? 'NECTA'
-    );
-
     try {
-      const response = await postData(`${apiUrls.editTopics}`, send, true);
+      const response = await patchData(`${apiUrls.patchTopics}/${initialData?._id}`, send, true);
       if (response) {
         onRefresh();
       }
@@ -102,6 +108,7 @@ export default function EditTopic({
       setLoading(false);
     }
   };
+
 
   return (
     <>
@@ -117,6 +124,31 @@ export default function EditTopic({
             value={formData.name}
             onChange={(e) => handleChange('name', e.target.value)}
             className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <label>Level</label>
+          <SelectBox
+            options={levelOpts}
+            selected={
+              formData.level !== null
+                ? { name: levelOpts.find((opt) => opt.id === formData.level)?.name || '', id: formData.level }
+                : null
+            }
+            onChange={(value) => handleChange('level', value?.id)}
+          />
+        </div>
+
+        <div className='flex flex-col gap-2'>
+          <label>Syllabus</label>
+          <SelectBox
+            options={syllabusOpts}
+            selected={
+              formData.syllabus !== null
+                ? { name: syllabusOpts.find((opt) => opt.name === formData.syllabus)?.name || '', id: formData.syllabus }
+                : null
+            }
+            onChange={(value) => handleChange('syllabus', value?.name)}
           />
         </div>
 
@@ -144,41 +176,17 @@ export default function EditTopic({
         </div>
         <div className='flex flex-col gap-2'>
           <FileUpload
+            fileUrl={`${formData.thumbnail}`}
             label={'Add thumbnail'}
             onFileSelected={(file) => {
               handleChange('thumbnail', file);
             }}
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <label>Level</label>
-          <SelectBox
-            options={levelOpts}
-            selected={
-              formData.level !== null
-                ? { name: levelOpts.find((opt) => opt.id === formData.level)?.name || '', id: formData.level }
-                : null
-            }
-            onChange={(value) => handleChange('level', value?.id)}
-          />
-        </div>
 
-        <div className='flex flex-col gap-2'>
-          <label>Syllabus</label>
-          <SelectBox
-            options={syllabusOpts}
-            selected={
-              formData.syllabus !== null
-                ? { name: syllabusOpts.find((opt) => opt.id === formData.syllabus)?.name || '', id: formData.syllabus }
-                : null
-            }
-            onChange={(value) => handleChange('syllabus', value?.id)}
-          />
-        </div>
         <button
-          className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${
-            loading ? 'flex flex-row gap-2 items-center' : ''
-          }`}
+          className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''
+            }`}
           disabled={loading}
         >
           <span>Save Changes</span>

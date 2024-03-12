@@ -146,7 +146,7 @@ export default function ContentManagement() {
 
   useEffect(() => {
     getData()
-  }, [data])
+  }, [])
 
   const topicsColumns = [
     columnHelper.accessor('ref_no', {

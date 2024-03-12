@@ -4,7 +4,7 @@ interface FileUploadProps {
     label: string;
     text?: string;
     onFileSelected?: (file: File | null) => void;
-    fileUrl?: string;
+    fileUrl?: string; // New optional parameter for file URL
 }
 
 const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: FileUploadProps) => {
