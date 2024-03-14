@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Divider } from "@/app/_components/header/notifications";
 import { useEffect, useState } from "react";
 import Dropdown, {

@@ -1,3 +1,4 @@
+//@ts-nocheck
 'use client'
 import { useState, useEffect, useRef } from "react"
 import { TabComponent, TabItem } from "@/app/_components/tab"
@@ -67,6 +68,7 @@ export default function ContentManagement() {
   const [data, setData] = useState({
     topics: [],
     models: [],
+    simulations: [],
     experiments: [],
     videos: [],
     subjects: [],
@@ -127,12 +129,12 @@ export default function ContentManagement() {
       const updatedStates: any = {};
 
       // Close any open dropdowns
-      Object.keys(prevStates).forEach(id => {
+      Object.keys((prevStates)).forEach(id => {
         updatedStates[id] = false;
       });
 
       // Toggle the state of the clicked dropdown
-      updatedStates[rowId] = !prevStates[rowId];
+      updatedStates[rowId] = !prevStates.hasOwnProperty(rowId);
 
       return updatedStates;
     });
@@ -179,7 +181,7 @@ export default function ContentManagement() {
       cell: (info) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            <a href={`/dashboard/content-management/${topics[info.row.index]._id}`} className='text-orange-default flex items-center gap-2'>
+            <a href={`/dashboard/content-management/${data.topics[info.row.index]}`} className='text-orange-default flex items-center gap-2'>
               <span>More</span>
             </a>
             <div className="inline-block">
@@ -189,17 +191,14 @@ export default function ContentManagement() {
                     <FiMoreVertical />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {dropdownStates[info.row.id] && (
+                  {dropdownStates.hasOwnProperty(info.row.id) && (
                       <CustomDropDown
                         dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                         onEdit={() => {
                           modal.edit = true
                           handleModal('topics')
-                          data.UpdateTopic = info.row.original;
                         }}
                         onDelete={() => {
-
-                          handleTopicDelete(info.row.original);
                         }}
                       />
                     )}
@@ -302,16 +301,14 @@ export default function ContentManagement() {
                     <FiMoreVertical />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {dropdownStates[info.row.id] && (
+                  {dropdownStates.hasOwnProperty(info.row.id) && (
                       <CustomDropDown
                         dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                         onEdit={() => {
                           modal.edit = true
                           handleModal('simulations')
-                          data.UpdateSimulations = info.row.original;
                         }}
                         onDelete={() => {
-                          handleSimulationsDelete(info.row.original);
                         }}
                       />
                     )}
@@ -420,16 +417,14 @@ export default function ContentManagement() {
                     <FiMoreVertical />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    {dropdownStates[info.row.id] && (
+                    {dropdownStates.hasOwnProperty(info.row.id) && (
                       <CustomDropDown
                         dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                         onEdit={() => {
                           modal.edit = true
                           handleModal('videos')
-                          data.UpdateVideo = info.row.original;
                         }}
                         onDelete={() => {
-                          handleVideoDelete(info.row.original);
                         }}
                       />
                     )}

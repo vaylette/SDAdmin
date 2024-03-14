@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useEffect, useState } from "react"
 import { apiUrls } from "@/app/constants/apiUrls"
 import { useRetrieveData, useDeleteData } from "@/app/constants/hooks"

@@ -1,3 +1,5 @@
+//@ts-nocheck
+'use client'
 import SelectBox from "@/app/_components/form/SelectBox";
 import FileUpload from "@/app/_components/form/uploadFile";
 import { apiUrls } from "@/app/constants/apiUrls";

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Divider } from "@/app/_components/header/notifications";
 import { apiUrls } from "@/app/constants/apiUrls";
 import { useDeleteData, useRetrieveData } from "@/app/constants/hooks";

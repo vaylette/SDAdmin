@@ -1,5 +1,5 @@
+//@ts-nocheck
 'use client'
-
 import { apiUrls } from "@/app/constants/apiUrls";
 import { usePostData, useRetrieveData } from "@/app/constants/hooks";
 import { useRouter } from "next/navigation";

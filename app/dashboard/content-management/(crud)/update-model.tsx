@@ -9,12 +9,12 @@ import { Subject, Level, Syllabus } from "./create-topic";
 
 interface UpdateModelProps {
     onRefresh: () => void;
-    initialData: {};
+    initialData: any;
 }
 
 export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps) {
 
-    const subjectOptions = initialData?.subjects?.map((subject) => ({
+    const subjectOptions = initialData?.subjects?.map((subject: any) => ({
         name: subject.name,
         id: subject._id,
     }));
@@ -26,7 +26,7 @@ export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps
 
     const [formData, setFormData] = useState({
         name: initialData?.data.name,
-        subject: subjectOptions.find((opt) => opt.name === initialData?.data.subject?.name)?.id,
+        subject: subjectOptions.find((opt:any) => opt.name === initialData?.data.subject?.name)?.id,
         fileType: fileTypeOptions.find((opt) => opt.name === initialData?.data.fileType)?.name,
         description: initialData?.data.description,
         thumbnail: initialData?.data.thumbnail,
@@ -82,7 +82,7 @@ export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps
                     <label>Subject</label>
                     <SelectBox
                         options={subjectOptions}
-                        selected={formData.subject !== null ? { name: subjectOptions.find(opt => opt.id === formData.subject)?.name || '', id: formData.subject } : null}
+                        selected={formData.subject !== null ? { name: subjectOptions.find((opt: any) => opt.id === formData.subject)?.name || '', id: formData.subject } : null}
                         onChange={(value) => handleChange('subject', value?.id)}
                     />
                 </div>

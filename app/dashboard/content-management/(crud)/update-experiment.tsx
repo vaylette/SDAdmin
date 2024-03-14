@@ -17,20 +17,20 @@ export interface Subject {
 }
 
 interface CreateVideoProps {
-    data: {},
+    data: any,
     onRefresh: () => void;
 }
 
 export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) {
-    const subjectOptions = data?.subjects?.map(subject => ({ name: subject.name, id: subject._id }))
+    const subjectOptions = data?.subjects?.map((subject: any) => ({ name: subject.name, id: subject._id }))
     const categoryOptions = [{ name: data?.data?.category, id: "0" }]
 
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
         name: data?.data?.name,
-        subject: subjectOptions.find((opt: { id: any; }) => opt.name === data?.data.subject?.name)?.id,
-        category: categoryOptions.find((opt: { id: any; }) => opt.name === data?.data.category)?.name,
+        subject: subjectOptions.find((opt: any) => opt.name === data?.data.subject?.name)?.id,
+        category: categoryOptions.find((opt: any) => opt.name === data?.data.category)?.name,
         description: data?.data?.description,
         modelFile: data?.data?.modelFileUrl,
         ARExperienceFile: data?.data?.ARExperienceFileUrl,
@@ -51,7 +51,7 @@ export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) 
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.modelFileUrl === null || formData.ARExperienceFileUrl === null) {
+        if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.modelFile === null || formData.ARExperienceFile === null) {
             toast.error('Please fill all the required fields!')
             return
         }
@@ -85,7 +85,7 @@ export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) 
                     <label>Subject</label>
                     <SelectBox
                         options={subjectOptions}
-                        selected={formData.subject !== null ? { name: subjectOptions.find(opt => opt.id === formData.subject)?.name || '', id: formData.subject } : null}
+                        selected={formData.subject !== null ? { name: subjectOptions.find((opt: any) => opt.id === formData.subject)?.name || '', id: formData.subject } : null}
                         onChange={(value) => handleChange('subject', value?.id)}
                     />
                 </div>

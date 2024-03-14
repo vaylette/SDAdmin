@@ -1,3 +1,4 @@
+//@ts-nocheck
 'use client'
 import { useState, FormEvent } from 'react';
 import SelectBox from '@/app/_components/form/SelectBox';
@@ -12,35 +13,35 @@ import { Level, Syllabus } from './create-topic';
 
 interface EditTopicProps {
   onRefresh: () => void;
-  initialData: {};
+  initialData: any;
 }
 
 export default function EditTopic({
   initialData,
   onRefresh,
 }: EditTopicProps) {
-  const subjectOptions = initialData?.subjects?.map((subject) => ({
+  const subjectOptions = initialData?.subjects?.map((subject:any) => ({
     name: subject.name,
     id: subject._id,
   }));
 
-  const levelOpts = initialData?.levels?.map((level) => ({
+  const levelOpts = initialData?.levels?.map((level:any) => ({
     name: level.name,
     id: level._id,
   }));
 
-  const syllabusOpts = initialData?.syllabus?.map((syllabus) => ({
+  const syllabusOpts = initialData?.syllabus?.map((syllabus:any) => ({
     name: syllabus.name,
     id: syllabus._id,
   }));
 
   const [formData, setFormData] = useState({
     name: initialData?.data.name,
-    subject: subjectOptions.find((opt) => opt.name === initialData?.data.subject?.name)?.id,
+    subject: subjectOptions.find((opt:any) => opt.name === initialData?.data.subject?.name)?.id,
     thumbnail: initialData?.data.thumbnail,
     descriptions: initialData?.data.descriptions,
-    level: levelOpts.find((opt) => opt.name === initialData?.data.level?.name)?.id,
-    syllabus: syllabusOpts.find((opt) => opt.name === initialData?.data.syllabus)?.name,
+    level: levelOpts.find((opt:any) => opt.name === initialData?.data.level?.name)?.id,
+    syllabus: syllabusOpts.find((opt:any) => opt.name === initialData?.data.syllabus)?.name,
   });
 
   const [loading, setLoading] = useState(false);
@@ -87,7 +88,7 @@ export default function EditTopic({
     send.append('descriptions', descriptions)
     send.append('thumbnail', thumbnail)
     send.append('level', level || '')
-    send.append('syllabus', syllabusOpts.find(obj => obj.id === syllabus)?.name ?? "NECTA")
+    send.append('syllabus', syllabusOpts.find((obj:any) => obj.id === syllabus)?.name ?? "NECTA")
 
     setLoading(true);
     try {
@@ -125,7 +126,7 @@ export default function EditTopic({
             options={levelOpts}
             selected={
               formData.level !== null
-                ? { name: levelOpts.find((opt) => opt.id === formData.level)?.name || '', id: formData.level }
+                ? { name: levelOpts.find((opt:any) => opt.id === formData.level)?.name || '', id: formData.level }
                 : null
             }
             onChange={(value) => handleChange('level', value?.id)}

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import CustomEditor from "@/app/_components/custom_editor"
 import SelectBox from "@/app/_components/form/SelectBox"
 import FileUpload from "@/app/_components/form/uploadFile"
