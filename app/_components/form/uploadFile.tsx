@@ -4,7 +4,7 @@ interface FileUploadProps {
     label: string;
     text?: string;
     onFileSelected?: (file: File | null) => void;
-    fileUrl?: string; // New optional parameter for file URL
+    fileUrl?: string;
 }
 
 const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: FileUploadProps) => {
@@ -27,11 +27,37 @@ const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: Fi
         onFileSelected?.(null);
     };
 
+    const renderPreview = () => {
+        if (typeof fileUrl === 'string') {
+            const ext = fileUrl.split('.').pop()?.toLowerCase();
+            if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
+                return <img src={fileUrl} alt="File Preview" className="w-10 h-10 object-cover rounded" />;
+            } else if (ext === 'mp4') {
+                return (
+                    <video controls className="w-10 h-10">
+                        <source src={fileUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                );
+            } else {
+                return null; // Unsupported file type
+            }
+        }
+        return null; // No file URL provided or fileUrl is not a string
+    };
+    
+
     const renderFileName = () => {
         if (fileName || fileUrl) {
             const displayText = fileName || fileUrl!;
             return (
-                <span className="truncate" title={displayText}>{displayText}</span>
+                <>
+                    {renderPreview()}
+                    <p></p>
+                    <span className="truncate" title={displayText}>
+                        {displayText}
+                    </span>
+                </>
             );
         }
         return <span>Select file</span>;

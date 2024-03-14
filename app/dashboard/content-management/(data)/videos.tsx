@@ -24,10 +24,12 @@ import UpdateExperiment from "../(crud)/update-experiment"
 import CreateVideo from "../(crud)/create-video"
 import UpdateVideo from "../(crud)/update-video"
 import { CustomDropDown } from "../(components)/custom_dropdown"
+import { get } from "http"
 
 interface Modal {
     videos: boolean,
-    edit: boolean
+    edit: boolean,
+    id: number
 }
 
 export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
@@ -41,7 +43,8 @@ export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
 
     const [modal, setModal] = useState<Modal>({
         videos: false,
-        edit: false
+        edit: false,
+        id: 0
     })
 
     const handleModal = (modalType: string): void => {
@@ -67,7 +70,7 @@ export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
     };
 
     const handleModalClose = (): void => {
-        setModal({ videos: false, edit: false })
+        setModal({ videos: false, edit: false, id: 0 })
         getData()
     }
 
@@ -78,7 +81,7 @@ export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
 
     useEffect(() => {
         getData()
-    }, [data])
+    }, [])
 
     const getData = async () => {
         try {
@@ -106,6 +109,7 @@ export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
                 ...prevData,
                 videos: prevData.videos.filter(video => video !== videoResults)
             }));
+            getData()
         } catch (error) {
             toast.error('An error occurred while deleting the experiment');
         }
@@ -154,8 +158,8 @@ export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
                                                 dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                                                 onEdit={() => {
                                                     modal.edit = true
+                                                    modal.id = info.row.index
                                                     handleModal('videos')
-                                                    data.UpdateVideo = info.row.original;
                                                 }}
                                                 onDelete={() => {
                                                     handleVideoDelete(info.row.original);
@@ -176,7 +180,7 @@ export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
         const itemAsVideo = item as Video;
         return {
             ref_no: '',
-            _id: itemAsVideo.id,
+            _id: itemAsVideo._id,
             name: itemAsVideo.name,
             subject: itemAsVideo.subject.name,
             videoType: itemAsVideo.videoType,
@@ -198,7 +202,10 @@ export const VideosContent = ({ subjectsResult, levelsResult, tab }) => {
             {modal.videos && (
                 modal.edit ? (
                     <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Edit Video"} subtitle={"Please edit the video’s information"}>
-                        <UpdateVideo subjects={data?.subjects} data={data.UpdateVideo} onRefresh={handleModalClose} />
+                        <UpdateVideo data={{
+                            data: data?.videos[modal.id],
+                            subjects: data?.subjects
+                        }} onRefresh={handleModalClose} />
                     </CustomModal>
                 ) : (
                     <CustomModal isOpen={modal.videos} onClose={handleModalClose} title={"Add Video"} subtitle={"Please add the video’s information"}>

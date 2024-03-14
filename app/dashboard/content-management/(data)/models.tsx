@@ -23,7 +23,8 @@ import { CustomDropDown } from "../(components)/custom_dropdown"
 
 interface Modal {
     models: boolean,
-    edit: boolean
+    edit: boolean,
+    id: number
 }
 
 export const ModelsContent = ({ tab }) => {
@@ -37,7 +38,8 @@ export const ModelsContent = ({ tab }) => {
 
     const [modal, setModal] = useState<Modal>({
         models: false,
-        edit: false
+        edit: false,
+        id: 0
     })
 
     const handleModal = (modalType: string): void => {
@@ -49,8 +51,6 @@ export const ModelsContent = ({ tab }) => {
     const toggleDropdownForRow = (rowId: any) => {
         setDropdownStates(prevStates => {
             const updatedStates: any = {};
-
-            // Close any open dropdowns
             Object.keys(prevStates).forEach(id => {
                 updatedStates[id] = false;
             });
@@ -63,7 +63,7 @@ export const ModelsContent = ({ tab }) => {
     };
 
     const handleModalClose = (): void => {
-        setModal({ models: false, edit: false })
+        setModal({ models: false, edit: false, id: 0 })
         getData()
     }
 
@@ -74,7 +74,7 @@ export const ModelsContent = ({ tab }) => {
 
     useEffect(() => {
         getData()
-    }, [data])
+    }, [])
 
     const getData = async () => {
         try {
@@ -161,8 +161,8 @@ export const ModelsContent = ({ tab }) => {
                                                 dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                                                 onEdit={() => {
                                                     modal.edit = true
+                                                    modal.id = info.row.index;
                                                     handleModal('models')
-                                                    data.UpdateModel = info.row.original;
                                                 }}
                                                 onDelete={() => {
                                                     handleModelDelete(info.row.original);
@@ -187,10 +187,16 @@ export const ModelsContent = ({ tab }) => {
                 </div>
                 <DataTable columns={modelsColumns} data={models} />
 
+
                 {modal.models && (
                     modal.edit ? (
                         <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Edit Model"} subtitle={"Please edit the model’s information"}>
-                            <UpdateModel subjects={data?.subjects} data={data.UpdateModel} onRefresh={handleModalClose} />
+                            <UpdateModel initialData={{
+                                data: data.models[modal.id ?? 0],
+                                syllabus: data.syllabus,
+                                subjects: data.subjects,
+                                levels: data.levels
+                            }} onRefresh={handleModalClose} />
                         </CustomModal>
                     ) : (
                         <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Add Model"} subtitle={"Please add the model’s information"}>

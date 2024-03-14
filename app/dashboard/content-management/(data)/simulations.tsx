@@ -19,7 +19,8 @@ import UpdateSimulation from "../(crud)/update-simulations"
 
 interface Modal {
     simulations: boolean,
-    edit: boolean
+    edit: boolean,
+    id: number,
   }
   
   export const SimulationsContent = ({ tab }) => {
@@ -33,7 +34,8 @@ interface Modal {
   
     const [modal, setModal] = useState<Modal>({
       simulations: false,
-      edit: false
+      edit: false,
+      id: 0
     })
   
     const handleModal = (modalType: string): void => {
@@ -59,7 +61,7 @@ interface Modal {
     };
   
     const handleModalClose = (): void => {
-      setModal({ simulations: false, edit: false })
+      setModal({ simulations: false, edit: false, id: 0 })
       getData()
     }
   
@@ -70,7 +72,7 @@ interface Modal {
   
     useEffect(() => {
       getData()
-    }, [data])
+    }, [])
   
     const getData = async () => {
       try {
@@ -156,8 +158,8 @@ interface Modal {
                           dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                           onEdit={() => {
                             modal.edit = true
+                            modal.id = info.row.index
                             handleModal('simulations')
-                            data.UpdateSimulation = info.row.original;
                           }}
                           onDelete={() => {
                             handleSimulationDelete(info.row.original);
@@ -186,7 +188,10 @@ interface Modal {
           {modal.simulations && (
             modal.edit ? (
               <CustomModal isOpen={modal.simulations} onClose={handleModalClose} title={"Edit Simulation"} subtitle={"Please edit the simulation’s information"}>
-                <UpdateSimulation subjects={data?.subjects} data={data.UpdateSimulation} onRefresh={handleModalClose} />
+                <UpdateSimulation subjects={data?.subjects} data={{
+                  data: data?.simulations[modal.id],
+                  subjects: data?.subjects
+                }} onRefresh={handleModalClose} />
               </CustomModal>
             ) : (
               <CustomModal isOpen={modal.simulations} onClose={handleModalClose} title={"Add Simulation"} subtitle={"Please add the simulation’s information"}>

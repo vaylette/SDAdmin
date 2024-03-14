@@ -86,7 +86,7 @@ export type Experiment = {
 }
 
 export type Video = {
-    id: any;
+    _id: any;
     ref_no: string | number | null | undefined
     name: string,
     subject: {},

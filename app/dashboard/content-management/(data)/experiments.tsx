@@ -25,7 +25,8 @@ import { CustomDropDown } from "../(components)/custom_dropdown"
 
 interface Modal {
   experiments: boolean,
-  edit: boolean
+  edit: boolean,
+  id: number
 }
 
 export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
@@ -39,7 +40,8 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
 
   const [modal, setModal] = useState<Modal>({
     experiments: false,
-    edit: false
+    edit: false,
+    id: 0
   })
 
   const handleModal = (modalType: string): void => {
@@ -65,7 +67,7 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
   };
 
   const handleModalClose = (): void => {
-    setModal({ experiments: false, edit: false })
+    setModal({ experiments: false, edit: false, id: 0 })
     getData()
   }
 
@@ -151,7 +153,7 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
       header: () => '',
       cell: (info) => (
         <>
-                  <div className='flex flex-row gap-6 font-medium'>
+          <div className='flex flex-row gap-6 font-medium'>
             <div className="inline-block">
               <div className="cursor__pointer">
                 <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)}>
@@ -164,8 +166,8 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
                         dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [info.row.id]: false }))}
                         onEdit={() => {
                           modal.edit = true
+                          modal.id = info.row.index
                           handleModal('experiments')
-                          data.UpdateExperiment = info.row.original;
                         }}
                         onDelete={() => {
                           handleExperimentDelete(info.row.original);
@@ -186,17 +188,20 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
   return (
     <>
       <div className="flex justify-end items-start mb-2">
-      <h1 className="text-2xl font-bold"></h1>
+        <h1 className="text-2xl font-bold"></h1>
         <button onClick={() => handleModal('experiments')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center mx-10'>Experiments +</button>
         <button onClick={() => handleModal('experiments')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>DIY Experiments +</button>
       </div>
-  
+
       <DataTable columns={experimentsColumns} data={experiments} />
-      
+
       {modal.experiments && (
         modal.edit ? (
           <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Edit Experiment"} subtitle={"Please edit the experiment’s information"}>
-            <UpdateExperiment subjects={data?.subjects} data={data.UpdateExperiment} onRefresh={handleModalClose} />
+            <UpdateExperiment data={{
+              data: data?.experiments[modal.id],
+              subjects: data?.subjects
+            }} onRefresh={handleModalClose} />
           </CustomModal>
         ) : (
           <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
@@ -206,6 +211,6 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
       )}
     </>
   );
-  
+
 
 }

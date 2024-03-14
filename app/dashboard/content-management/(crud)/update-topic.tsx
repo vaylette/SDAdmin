@@ -11,42 +11,36 @@ import { Subject } from './create-model';
 import { Level, Syllabus } from './create-topic';
 
 interface EditTopicProps {
-  subjects: Subject[];
-  levels: Level[];
-  syllabus: Syllabus[];
   onRefresh: () => void;
   initialData: {};
 }
 
 export default function EditTopic({
-  subjects,
-  levels,
-  syllabus,
-  onRefresh,
   initialData,
+  onRefresh,
 }: EditTopicProps) {
-  const subjectOptions = subjects?.map((subject) => ({
+  const subjectOptions = initialData?.subjects?.map((subject) => ({
     name: subject.name,
     id: subject._id,
   }));
 
-  const levelOpts = levels?.map((level) => ({
+  const levelOpts = initialData?.levels?.map((level) => ({
     name: level.name,
     id: level._id,
   }));
 
-  const syllabusOpts = syllabus?.map((syllabus) => ({
+  const syllabusOpts = initialData?.syllabus?.map((syllabus) => ({
     name: syllabus.name,
     id: syllabus._id,
   }));
 
   const [formData, setFormData] = useState({
-    name: initialData?.name,
-    subject: subjectOptions.find((opt) => opt.name === initialData?.subject?.name)?.id,
-    thumbnail: initialData?.thumbnail,
-    descriptions: initialData?.descriptions,
-    level: levelOpts.find((opt) => opt.name === initialData?.level?.name)?.id,
-    syllabus: syllabusOpts.find((opt) => opt.name === initialData?.syllabus)?.name,
+    name: initialData?.data.name,
+    subject: subjectOptions.find((opt) => opt.name === initialData?.data.subject?.name)?.id,
+    thumbnail: initialData?.data.thumbnail,
+    descriptions: initialData?.data.descriptions,
+    level: levelOpts.find((opt) => opt.name === initialData?.data.level?.name)?.id,
+    syllabus: syllabusOpts.find((opt) => opt.name === initialData?.data.syllabus)?.name,
   });
 
   const [loading, setLoading] = useState(false);
@@ -95,10 +89,9 @@ export default function EditTopic({
     send.append('level', level || '')
     send.append('syllabus', syllabusOpts.find(obj => obj.id === syllabus)?.name ?? "NECTA")
 
-
     setLoading(true);
     try {
-      const response = await patchData(`${apiUrls.patchTopics}/${initialData?._id}`, send, true);
+      const response = await patchData(`${apiUrls.patchTopics}/${initialData?.data?._id}`, send, true);
       if (response) {
         onRefresh();
       }

@@ -167,7 +167,6 @@ export const TopicsContent = ({ tab }) => {
                                 <Dropdown onSelect={() => toggleDropdownForRow(info.row.id)
                                 }>
                                     <Dropdown.Toggle btnStyle="link" noCaret onClick={() => {
-                                        console.log(info.row.id)
                                         toggleDropdownForRow(info.row.id)
                                     }}>
                                     <FiMoreVertical />
@@ -205,7 +204,12 @@ export const TopicsContent = ({ tab }) => {
             <DataTable columns={topicsColumns} data={topics} />
             {modal.topics && (modal.edit ? (
                 <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Edit Topic' : 'Edit'} subtitle={""}>
-                    <EditTopic subjects={data?.subjects} levels={data?.levels} syllabus={data?.syllabus} initialData={data.topics[modal.id ?? 0]} onRefresh={handleModalClose} />
+                    <EditTopic initialData={{
+                        data: data.topics[modal.id ?? 0],
+                        syllabus: data.syllabus,
+                        subjects: data.subjects,
+                        levels: data.levels
+                    }} onRefresh={handleModalClose} />
                 </CustomModal>
             ) : (
                 <CustomModal isOpen={modal.topics} onClose={handleModalClose} title={tab.topics ? 'Add Topic' : 'Add'} subtitle={""}>

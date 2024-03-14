@@ -22,35 +22,25 @@ interface UpdateSimulationProps {
     onRefresh: () => void;
 }
 
-export default function UpdateSimulation({ subjects, data, onRefresh }: UpdateSimulationProps) {
-    const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-    const fileTypeOptions = [{ name: "gif", id: "1" }]
+export default function UpdateSimulation({ data, onRefresh }: UpdateSimulationProps) {
+    const subjectOptions = data?.subjects?.map((subject: { name: any; _id: any; }) => ({ name: subject.name, id: subject._id }))
+    const fileTypeOptions =
+    [{ name: data?.data.fileType, id: "1" }]
 
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
-        name: data?.name || '',
-        subject: data?.subject?._id || null,
-        fileType: data?.fileType || null,
-        description: data?.description || '',
-        thumbnail: data?.thumbnail || '',
-        simulationFile: null,
+        name: data?.data?.name,
+        subject: subjectOptions.find((opt: { id: any; }) => opt.id == data?.data.subject)?.id,
+        fileType: fileTypeOptions.find((opt) => opt.name == data?.data.fileType)?.name,
+        description: data?.data.description || '',
+        thumbnail: data?.data.thumbnail || '',
+        simulationFile: data?.data.simulationFileUrl || '',
     })
 
     const patchData = usePatchData()
 
     const router = useRouter()
-
-    useEffect(() => {
-        setFormData({
-            name: data?.name || '',
-            subject: data?.subject?._id || null,
-            fileType: data?.fileType || null,
-            description: data?.description || '',
-            thumbnail: data?.thumbnail || '',
-            simulationFile: null,
-        });
-    }, [data]);
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
@@ -61,12 +51,9 @@ export default function UpdateSimulation({ subjects, data, onRefresh }: UpdateSi
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-
-        formData.fileType = "gif"
-
         setLoading(true)
         try {
-            const response = await patchData(`${apiUrls.patchSimulations}/${data._id}`, formData, true)
+            const response = await patchData(`${apiUrls.patchSimulations}/${data.data._id}`, formData, true)
             if (response) {
                 onRefresh();
             }
@@ -94,7 +81,7 @@ export default function UpdateSimulation({ subjects, data, onRefresh }: UpdateSi
                     <label>Subject</label>
                     <SelectBox
                         options={subjectOptions}
-                        selected={formData.subject !== null ? { name: subjectOptions.find(opt => opt.id === formData.subject)?.name || '', id: formData.subject } : null}
+                        selected={formData.subject !== null ? { name: subjectOptions.find((opt: { id: any; }) => opt.id === formData.subject)?.name || '', id: formData.subject } : null}
                         onChange={(value) => handleChange('subject', value?.id)}
                     />
                 </div>
@@ -111,8 +98,8 @@ export default function UpdateSimulation({ subjects, data, onRefresh }: UpdateSi
 
                     <SelectBox
                         options={fileTypeOptions}
-                        selected={formData.fileType !== null ? { name: fileTypeOptions.find(opt => opt.id === formData.fileType)?.name || '', id: formData.fileType } : null}
-                        onChange={(value) => handleChange('fileType', value)}
+                        selected={formData.fileType !== null ? { name: fileTypeOptions.find(opt => opt.name === formData.fileType)?.name, id: formData.fileType } : null}
+                        onChange={(value) => handleChange('fileType', value?.name)}
                     />
                 </div>
 
@@ -127,7 +114,13 @@ export default function UpdateSimulation({ subjects, data, onRefresh }: UpdateSi
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Simulation File"} onFileSelected={(file) => {
+                    <FileUpload fileUrl={formData.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
+                        handleChange('thumbnail', file)
+                    }} />
+                </div>
+
+                <div className='flex flex-col gap-2'>
+                    <FileUpload fileUrl={formData.simulationFile} label={"Simulation File"} onFileSelected={(file) => {
                         handleChange('simulationFile', file)
                     }} />
                 </div>

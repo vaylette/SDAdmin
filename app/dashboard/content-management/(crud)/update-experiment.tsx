@@ -17,24 +17,25 @@ export interface Subject {
 }
 
 interface CreateVideoProps {
-    subjects: Subject[];
     data: {},
     onRefresh: () => void;
 }
 
-export default function UpdateExperiment({ subjects, data, onRefresh }: CreateVideoProps) {
-    const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-    const categoryOptions = [{ name: "3D", id: "0" }]
+export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) {
+    const subjectOptions = data?.subjects?.map(subject => ({ name: subject.name, id: subject._id }))
+    const categoryOptions = [{ name: data?.data?.category, id: "0" }]
 
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
-        name: '',
-        subject: null as string | null,
-        category: null as string | null,
-        description: null as string | null,
-        modelFileUrl: null as string | null,
-        ARExperienceFileUrl: null as string | null,
+        name: data?.data?.name,
+        subject: subjectOptions.find((opt: { id: any; }) => opt.name === data?.data.subject?.name)?.id,
+        category: categoryOptions.find((opt: { id: any; }) => opt.name === data?.data.category)?.name,
+        description: data?.data?.description,
+        modelFile: data?.data?.modelFileUrl,
+        ARExperienceFile: data?.data?.ARExperienceFileUrl,
+        stepsFile: data?.data?.stepsFileUrl,
+        thumbnail: data?.data?.thumbnail,
     })
 
     const postData = usePatchData()
@@ -54,10 +55,9 @@ export default function UpdateExperiment({ subjects, data, onRefresh }: CreateVi
             toast.error('Please fill all the required fields!')
             return
         }
-        formData.category = categoryOptions.find(opt => opt.id === formData.category)?.name ?? null
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.postExperiments}`,formData,true)
+            const response = await postData(`${apiUrls.postExperiments}/${data?.data?._id}`,formData,true)
             if (response) {
                 onRefresh()
             }
@@ -101,8 +101,8 @@ export default function UpdateExperiment({ subjects, data, onRefresh }: CreateVi
 
                     <SelectBox
                         options={categoryOptions}
-                        selected={formData.category !== null ? { name: categoryOptions.find(opt => opt.id === formData.category)?.name || '', id: formData.category } : null}
-                        onChange={(value) => handleChange('category', value?.id)}
+                        selected={formData.category !== null ? { name: categoryOptions.find(opt => opt.name === formData.category)?.name || '', id: formData.category } : null}
+                        onChange={(value) => handleChange('category', value?.name)}
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
@@ -116,17 +116,28 @@ export default function UpdateExperiment({ subjects, data, onRefresh }: CreateVi
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Model File"} onFileSelected={(file) => {
-                        handleChange('modelFileUrl', file);
+                    <FileUpload fileUrl={formData.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
+                        handleChange('thumbnail', file);
+                    }} />
+                </div>
+
+                <div className='flex flex-col gap-2'>
+                    <FileUpload fileUrl={formData.modelFile} label={"Model File"} onFileSelected={(file) => {
+                        handleChange('modelFile', file);
                     }} />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"AR Experience file"} onFileSelected={(file) => {
-                        handleChange('ARExperienceFileUrl', file);
+                    <FileUpload fileUrl={formData.ARExperienceFile} label={"AR Experience file"} onFileSelected={(file) => {
+                        handleChange('ARExperienceFile', file);
+                    }} />
+                </div>
+                <div className='flex flex-col gap-2'>
+                    <FileUpload fileUrl={formData.stepsFile} label={"steps file"} onFileSelected={(file) => {
+                        handleChange('stepsFile', file);
                     }} />
                 </div>
                 <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
-                    <span>Add Experiment</span>
+                    <span>Update Experiment</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
                             <circle className="dot" cx="10" cy="20" r="3" />

@@ -5,39 +5,36 @@ import { usePatchData, usePostData } from "@/app/constants/hooks";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
+import { Subject, Level, Syllabus } from "./create-topic";
 
-export interface Subject {
-    _id: string;
-    isActive: boolean;
-    isDeleted: boolean;
-    name: string;
-    __v: number;
-    createdAt: string;
-    updatedAt: string;
-}
-
-interface CreateModelProps {
-    subjects: Subject[];
-    data: {},
+interface UpdateModelProps {
     onRefresh: () => void;
+    initialData: {};
 }
 
-export default function UpdateModel({ subjects,data, onRefresh }: CreateModelProps) {
-    const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-    const fileTypeOptions = [{ name: "glb", id: "1" }]
+export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps) {
+
+    const subjectOptions = initialData?.subjects?.map((subject) => ({
+        name: subject.name,
+        id: subject._id,
+    }));
+
+    const fileTypeOptions =
+        [{ name: initialData?.data.fileType, id: "1" }, { name: "glb", id: "2" }]
 
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
-        name: '',
-        subject: null as string | null,
-        fileType: null as string | null,
-        description: null as string | null,
-        modelFileUrl: null as string | null,
-        ARExperienceFileUrl: null as string | null,
+        name: initialData?.data.name,
+        subject: subjectOptions.find((opt) => opt.name === initialData?.data.subject?.name)?.id,
+        fileType: fileTypeOptions.find((opt) => opt.name === initialData?.data.fileType)?.name,
+        description: initialData?.data.description,
+        thumbnail: initialData?.data.thumbnail,
+        modelFileUrl: initialData?.data.modelFileUrl,
+        ARExperienceFileUrl: initialData?.data.ARExperienceFileUrl,
     })
 
-    const postData = usePatchData()
+    const patchData = usePatchData()
 
     const router = useRouter()
 
@@ -54,10 +51,11 @@ export default function UpdateModel({ subjects,data, onRefresh }: CreateModelPro
             toast.error('Please fill all the required fields!')
             return
         }
+        console.log(formData);
 
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.patchModels}`,formData,true)
+            const response = await patchData(`${apiUrls.patchModels}/${initialData?.data?._id}`, formData, true)
             if (response) {
                 onRefresh()
             }
@@ -100,8 +98,11 @@ export default function UpdateModel({ subjects,data, onRefresh }: CreateModelPro
 
                     <SelectBox
                         options={fileTypeOptions}
-                        selected={formData.fileType !== null ? { name: fileTypeOptions.find(opt => opt.id === formData.fileType)?.name || '', id: formData.fileType } : null}
-                        onChange={(value) => handleChange('fileType', value)}
+                        selected={formData.fileType !== null ? { name: fileTypeOptions.find(opt => opt.name === formData.fileType)?.name || '', id: formData.fileType } : null}
+                        onChange={(value) => {
+                            handleChange('fileType', value?.name)
+                        }
+                        }
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
@@ -113,20 +114,25 @@ export default function UpdateModel({ subjects,data, onRefresh }: CreateModelPro
                         className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
                     />
                 </div>
+                <div className='flex flex-col gap-2'>
+                    <FileUpload fileUrl={initialData?.data?.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
+                        handleChange('thumbnail', file)
+                    }} />
+                </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Model File"} onFileSelected={(file) => {
+                    <FileUpload fileUrl={initialData?.data?.modelFileUrl} label={"Model File"} onFileSelected={(file) => {
                         handleChange('modelFileUrl', file)
                     }} />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"AR Experience file"} onFileSelected={(file) => {
+                    <FileUpload fileUrl={initialData?.data?.ARExperienceFileUrl} label={"AR Experience file"} onFileSelected={(file) => {
                         handleChange('ARExperienceFileUrl', file)
                     }} />
                 </div>
 
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading} onClick={handleSubmit}>
-                    <span>Add Model</span>
+                    <span>Update Model</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
                             <circle className="dot" cx="10" cy="20" r="3" />

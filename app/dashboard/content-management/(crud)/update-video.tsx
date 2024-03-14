@@ -17,26 +17,25 @@ export interface Subject {
 }
 
 interface CreateVideoProps {
-    subjects: Subject[];
     data: {},
     onRefresh: () => void;
 }
 
-export default function UpdateVideo({ subjects, data, onRefresh }: CreateVideoProps) {
-    const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-    const videoTypeOptions = [{ name: "mp4", id: "1" }]
+export default function UpdateVideo({ data, onRefresh }: CreateVideoProps) {
+    const subjectOptions = data?.subjects?.map(subject => ({ name: subject.name, id: subject._id }))
+    const videoTypeOptions = [{ name: data?.data?.videoType, id: "0" }]
 
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
-        name: '',
-        subject: null as string | null,
-        videoType: null as string | null,
-        description: null as string | null,
-        videoFileUrl: null as string | null,
+        name: data?.data?.name,
+        subject: subjectOptions.find((opt: { id: any; }) => opt.name === data?.data.subject?.name)?.id,
+        videoType: videoTypeOptions.find((opt: { id: any; }) => opt.name === data?.data.videoType)?.name,
+        description: data?.data?.description,
+        videoFile: data?.data?.videoFileUrl,
     })
 
-    const postData = usePatchData()
+    const patchData = usePatchData()
 
     const router = useRouter()
 
@@ -51,15 +50,14 @@ export default function UpdateVideo({ subjects, data, onRefresh }: CreateVideoPr
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        if (formData.name === '' || formData.subject === null || formData.videoType === null || formData.description === null || formData.videoFileUrl === null) {
+        if (formData.name === '' || formData.subject === null || formData.videoType === null || formData.description === null || formData.videoFile === null) {
             toast.error('Please fill all the required fields!')
             return
         }
-        formData.videoType = videoTypeOptions.find(opt => opt.id === formData.videoType)?.name ?? null
         console.log(formData);
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.patchVideos}`, formData, true)
+            const response = await patchData(`${apiUrls.patchVideos}/${data?.data?._id}`, formData, true)
             if (response) {
                 onRefresh()
             }
@@ -102,8 +100,8 @@ export default function UpdateVideo({ subjects, data, onRefresh }: CreateVideoPr
 
                     <SelectBox
                         options={videoTypeOptions}
-                        selected={formData.videoType !== null ? { name: videoTypeOptions.find(opt => opt.id === formData.videoType)?.name || '', id: formData.videoType } : null}
-                        onChange={(value) => handleChange('videoType', value?.id)}
+                        selected={formData.videoType !== null ? { name: videoTypeOptions.find(opt => opt.name === formData.videoType)?.name || '', id: formData.videoType } : null}
+                        onChange={(value) => handleChange('videoType', value?.name)}
                     />
 
                 </div>
@@ -118,12 +116,12 @@ export default function UpdateVideo({ subjects, data, onRefresh }: CreateVideoPr
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Upload Video"} onFileSelected={(file) => {
-                        handleChange('videoFileUrl', file);
+                    <FileUpload fileUrl={formData.videoFile} label={"Upload Video"} onFileSelected={(file) => {
+                        handleChange('videoFile', file);
                     }} />
                 </div>
                 <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
-                    <span>Add Video</span>
+                    <span>Update Video</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
                             <circle className="dot" cx="10" cy="20" r="3" />
