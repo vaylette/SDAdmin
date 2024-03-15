@@ -49,7 +49,7 @@ export default function AuthWrapper() {
                 setAuthentication(true)
                 setUser(response.user)
                 setToken(response.access_token)
-                cookies.set('token', `${response.access_token}`, { secure: true })
+                cookies.set('token', `${response.access_token}`, { secure: false })
                 toast.success('Successfully authenticated!')
                 router.push('/dashboard')
             }
