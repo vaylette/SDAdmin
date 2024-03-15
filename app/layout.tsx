@@ -2,8 +2,10 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import { CookiesProvider } from 'next-client-cookies/server';
 
-const helvetica = localFont({ 
+
+const helvetica = localFont({
   src: [
     {
       path: '../public/fonts/helvetica/HelveticaNowDisplay-RegIta.woff2',
@@ -53,10 +55,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${helvetica.variable} font-sans hidden lg:block`}>
         <main className='min-w-screen min-h-screen'>
-          {children}
+          <CookiesProvider>
+            {children}
+          </CookiesProvider>
         </main>
         <Toaster />
       </body>
     </html>
   )
 }
+

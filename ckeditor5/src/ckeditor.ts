@@ -81,23 +81,25 @@ class Editor extends ClassicEditor {
 			]
 		},
 		language: 'en',
-		image: {
-			toolbar: [
-				'imageTextAlternative',
-				'toggleImageCaption',
-				'imageStyle:inline',
-				'imageStyle:block',
-				'imageStyle:side'
-			]
-		},
-		table: {
-			contentToolbar: [
-				'tableColumn',
-				'tableRow',
-				'mergeTableCells'
-			]
-		}
+		
 	};
 }
 
 export default Editor;
+
+// image: {
+// 	toolbar: [
+// 		'imageTextAlternative',
+// 		'toggleImageCaption',
+// 		'imageStyle:inline',
+// 		'imageStyle:block',
+// 		'imageStyle:side'
+// 	]
+// },
+// table: {
+// 	contentToolbar: [
+// 		'tableColumn',
+// 		'tableRow',
+// 		'mergeTableCells'
+// 	]
+// }
