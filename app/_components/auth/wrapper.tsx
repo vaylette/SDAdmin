@@ -9,10 +9,12 @@ import toast from 'react-hot-toast'
 import { authenticate } from '@/app/actions/authenticate'
 import useAuthStore, { AuthStore } from '@/app/store/useAuthStore'
 import { useRouter } from 'next/navigation'
+import { useCookies } from 'next-client-cookies';
 
 export default function AuthWrapper() {
     const router = useRouter()
     const authStore = useAuthStore((state) => state) as AuthStore
+    const cookies = useCookies();
 
     const setAuthentication = authStore.setAuthentication
     const setUser = authStore.setUser
@@ -47,7 +49,7 @@ export default function AuthWrapper() {
                 setAuthentication(true)
                 setUser(response.user)
                 setToken(response.access_token)
-                document.cookie = `token=${response.access_token};secure;`
+                cookies.set('token', `${response.access_token}`, { secure: true })
                 toast.success('Successfully authenticated!')
                 router.push('/dashboard')
             }
