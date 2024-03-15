@@ -195,11 +195,11 @@ export default function UserManagement() {
       cell: info => info.getValue(),
       size: 10,
     }),
-    columnHelper.accessor('phoneNumber', {
-      header: () => 'Phone',
-      cell: info => info.getValue(),
-      size: 10,
-    }),
+    // columnHelper.accessor('phoneNumber', {
+    //   header: () => 'Phone',
+    //   cell: info => info.getValue(),
+    //   size: 10,
+    // }),
     columnHelper.accessor('type', {
       header: () => 'Type',
       cell: info => info.getValue(),

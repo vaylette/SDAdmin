@@ -1,4 +1,4 @@
-export const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT
+export const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT_LOCAL
 
 export const apiUrls = {
     //--------> Authentication  ------->//
@@ -47,9 +47,14 @@ export const apiUrls = {
         deleteModels: `${baseUrl}/models`,
         deleteExperiments: `${baseUrl}/experiments`,
         deleteVideos: `${baseUrl}/videos`,
-        deleteSimulations: `${baseUrl}/simulations`
+        deleteSimulations: `${baseUrl}/simulations`,
 
     //-------->End Content Management ------->//
+
+
+    //-----------------OverView --------------------//
+        getOverview: `${baseUrl}/overview`,
+        getNotifications: `${baseUrl}/overview/notifications`
 
 
 
