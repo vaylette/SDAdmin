@@ -10,8 +10,10 @@ interface Props {
 }
 
 interface Notification {
+    _id?: string;
     title: string;
     subtitle: string;
+    createdAt?: string;
 }
 
 export const Notifications: React.FC<Props> = ({ user, onLogout, title, dismiss }) => {
@@ -59,8 +61,8 @@ export const Notifications: React.FC<Props> = ({ user, onLogout, title, dismiss 
         return hoursDifference < 24;
     };
     // Filter new and older notifications
-    const newNotifications = notifications.filter(notification => isNew(notification?.createdAt)); // Implement isNew function
-    const olderNotifications = notifications.filter(notification => !isNew(notification?.createdAt));
+    const newNotifications = notifications.filter(notification => isNew(notification?.createdAt ?? "")); // Implement isNew function
+    const olderNotifications = notifications.filter(notification => !isNew(notification?.createdAt ?? ""));
 
     return (
         <>
