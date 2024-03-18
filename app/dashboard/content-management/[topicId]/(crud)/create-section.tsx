@@ -33,7 +33,7 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
         name: '',
         chapterNo: '',
         content: '',
-        coverImageUrl: null as string | null,
+        thumbnail: null as string | null,
     })
 
     const handleChange = (fieldName: string, value: any) => {
@@ -49,10 +49,11 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        if (formData.name === '' || formData.chapterNo === null || formData.content === null || formData.coverImageUrl === null) {
+        if (formData.name === '' || formData.chapterNo === null || formData.content === null || formData.thumbnail === null) {
             toast.error('Please fill all the required fields!')
             return
         }
+        console.log(formData)
         setLoading(true)
         try {
             const response = await postData(`${apiUrls.postChapters}`, formData, true)
@@ -135,8 +136,8 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
                                 <CustomEditor initialData={formData.content} onChange={(data) => handleChange('content', data)} />
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
-                                <FileUpload label={"Upload file (*pdf)"} text={"Add file"} onFileSelected={(file) => {
-                                    handleChange('coverImageUrl', file)
+                                <FileUpload label={"Thumbnail file (*png)"} text={"Add file"} onFileSelected={(file) => {
+                                    handleChange('thumbnail', file)
                                 }} />
                             </div>
                             <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
