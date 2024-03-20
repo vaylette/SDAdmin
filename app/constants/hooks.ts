@@ -36,7 +36,7 @@ export const usePostData = () => {
       toast.success(`${response.data}`);
       return response.data;
     } catch (error: any) {
-      toast.error(`${error}` || 'An error occurred');
+      toast.error(`${JSON.stringify(error?.response?.data?.errors)}` || `${error}` || 'An error occurred');
     }
   };
 

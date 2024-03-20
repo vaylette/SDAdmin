@@ -77,7 +77,7 @@ export default function UserManagement() {
     } finally { }
   }
 
-  const admins: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Admin')?.map((item) => {
+  const admins: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Admin' || 'ContentAdmin' || 'ContentModerator' || 'CustomerCare')?.map((item) => {
     const itemsAsAdmin = item as User;
     return {
       ref_no: '',
@@ -262,7 +262,7 @@ export default function UserManagement() {
       </div>
       <CustomModal isOpen={modal.create || modal.invite} onClose={handleModalClose} title={modal.create ? 'Add Admin' : 'Invite Student'} subtitle = {modal.invite ? "Please add the student’s information and we will send invite email" : ""}>
         {modal.create && (<>
-          <CreateAdmin />
+          <CreateAdmin onRefresh={handleModalClose}  />
         </>)}
         {modal.invite && (<>
           <InviteStudent />

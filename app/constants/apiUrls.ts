@@ -34,6 +34,7 @@ export const apiUrls = {
         postChapters: `${baseUrl}/chapters`,
         postQuestions: `${baseUrl}/questions`,
         postSimulations: `${baseUrl}/simulations`,
+        postAdminUser: `${baseUrl}/users/admin`,
         //Put Endpoints
         patchTopics: `${baseUrl}/topics`,
         patchModels: `${baseUrl}/models`,
