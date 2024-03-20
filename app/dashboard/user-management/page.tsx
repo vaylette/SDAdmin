@@ -77,7 +77,7 @@ export default function UserManagement() {
     } finally { }
   }
 
-  const admins: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Admin' || 'ContentAdmin' || 'ContentModerator' || 'CustomerCare')?.map((item) => {
+  const admins: User[] | undefined = (data?.users as User[])?.filter(user => ['Admin', 'ContentAdmin', 'ContentModerator', 'CustomerCare'].includes(user.type ?? ""))?.map((item) => {
     const itemsAsAdmin = item as User;
     return {
       ref_no: '',

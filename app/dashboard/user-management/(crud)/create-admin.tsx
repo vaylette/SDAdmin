@@ -39,10 +39,7 @@ export default function CreateAdmin(
             toast.error('Please fill all the required fields!');
             return;
         }
-        console.log(formData)
-
         setLoading(true);
-
         try {
             const response = await postData(apiUrls.postAdminUser, formData, false);
             if (response) {
