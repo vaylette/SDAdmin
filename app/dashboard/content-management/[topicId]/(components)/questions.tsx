@@ -16,11 +16,12 @@ import { CustomDropDown } from "../../(components)/custom_dropdown";
 
 
 interface QuestionsProps {
-    onAddQuestionClick: () => void
+    onAddQuestionClick: () => void,
+    onEditQuestionClick: (question) => void 
 }
 
 
-export const Questions = ({ onAddQuestionClick }: QuestionsProps) => {
+export const Questions = ({ onAddQuestionClick, onEditQuestionClick }: QuestionsProps) => {
     const [showAll, setShowAll] = useState(false);
 
     const [data, setData] = useState({
@@ -31,7 +32,7 @@ export const Questions = ({ onAddQuestionClick }: QuestionsProps) => {
 
     useEffect(() => {
         getData()
-    }, [data.questions])
+    }, [])
 
     const getData = async () => {
         try {
@@ -54,12 +55,10 @@ export const Questions = ({ onAddQuestionClick }: QuestionsProps) => {
         setDropdownStates(prevStates => {
             const updatedStates: any = {};
 
-            // Close any open dropdowns
             Object.keys(prevStates).forEach(id => {
                 updatedStates[id] = false;
             });
 
-            // Toggle the state of the clicked dropdown
             updatedStates[rowId] = !prevStates[rowId];
 
             return updatedStates;
@@ -70,24 +69,24 @@ export const Questions = ({ onAddQuestionClick }: QuestionsProps) => {
 
     const handleQuestionDelete = async (data: any) => {
         try {
-          await deleteData(`${apiUrls.deleteQuestion}/${data._id}`);
-          let topicQuestions = retrieveData(`${apiUrls.getQuestions}`);
-          setData(prevData => ({
-            ...prevData,
-            questions: prevData.questions.filter(question => question !== topicQuestions)
-          }));
+            await deleteData(`${apiUrls.deleteQuestion}/${data._id}`);
+            let topicQuestions = retrieveData(`${apiUrls.getQuestions}`);
+            setData(prevData => ({
+                ...prevData,
+                questions: prevData.questions.filter(question => question !== topicQuestions)
+            }));
         } catch (error) {
-          toast.error('An error occurred while deleting the topic');
+            toast.error('An error occurred while deleting the topic');
         }
-      };
-    
+    };
+
 
     const renderQuestionItem = (question: any, index: any) => (
         <div className="flex gap-5 justify-between self-center mt-7 max-w-full whitespace-nowrap leading-[normal] w-full max-md:flex-wrap mb-5" key={question._id}>
-            <div className="flex gap-5 justify-between text-lg">
+            <div className="flex gap-5 justify-between text-lg overflow-auto">
                 <div className="not-italic text-neutral-800 text-opacity-60">{index + 1 < 10 ? `0${index + 1}.` : `${index + 1}.`}</div>
-                <div className="grow not-italic text-neutral-800 text-opacity-80">
-                <p dangerouslySetInnerHTML={{ __html: question?.question }} />
+                <div className="grow not-italic text-neutral-800 text-opacity-80"> 
+                <p className="whitespace-normal" dangerouslySetInnerHTML={{ __html: question?.question }} />
                 </div>
             </div>
             <div className="inline-block">
@@ -101,7 +100,7 @@ export const Questions = ({ onAddQuestionClick }: QuestionsProps) => {
                                 <CustomDropDown
                                     dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [question._id]: false }))}
                                     onEdit={() => {
-                                      toast.error("there is a problem fetching question details")
+                                        onEditQuestionClick(question);
                                     }}
                                     onDelete={() => {
                                         handleQuestionDelete(question);

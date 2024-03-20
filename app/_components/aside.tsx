@@ -45,7 +45,7 @@ export default function Aside() {
                         </Link>
                     </li>
                     <li>
-                        <Link href='/dashboard/revenue' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/revenue' && 'radial_active'}`}>
+                        <Link href='#' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/revenue' && 'radial_active'}`}>
                             <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M2.21429 0C0.991369 0 0 0.991369 0 2.21429V4H23.2857V2.21429C23.2857 0.991369 22.2943 0 21.0714 0H2.21429ZM0 15.0714V6H23.2857V15.0714C23.2857 16.2943 22.2943 17.2857 21.0714 17.2857H2.21429C0.991369 17.2857 0 16.2943 0 15.0714ZM14 12C13.4477 12 13 12.4477 13 13C13 13.5523 13.4477 14 14 14H19C19.5523 14 20 13.5523 20 13C20 12.4477 19.5523 12 19 12H14Z" fill="white" />
                             </svg>
@@ -53,7 +53,7 @@ export default function Aside() {
                         </Link>
                     </li>
                     <li>
-                        <Link href='/dashboard/reports' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/reports' && 'radial_active'}`}>
+                        <Link href='#' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/reports' && 'radial_active'}`}>
                             <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M19.2 0H4.8V4.88889H19.2V0ZM20.4 11C20.0817 11 19.7765 10.8712 19.5515 10.642C19.3264 10.4128 19.2 10.1019 19.2 9.77778C19.2 9.45362 19.3264 9.14275 19.5515 8.91354C19.7765 8.68433 20.0817 8.55556 20.4 8.55556C20.7183 8.55556 21.0235 8.68433 21.2485 8.91354C21.4736 9.14275 21.6 9.45362 21.6 9.77778C21.6 10.1019 21.4736 10.4128 21.2485 10.642C21.0235 10.8712 20.7183 11 20.4 11ZM16.8 19.5556H7.2V13.4444H16.8V19.5556ZM20.4 6.11111H3.6C2.64522 6.11111 1.72955 6.49742 1.05442 7.18505C0.379285 7.87269 0 8.80532 0 9.77778V17.1111H4.8V22H19.2V17.1111H24V9.77778C24 8.80532 23.6207 7.87269 22.9456 7.18505C22.2705 6.49742 21.3548 6.11111 20.4 6.11111Z" fill="white" />
                             </svg>
@@ -62,7 +62,7 @@ export default function Aside() {
                         </Link>
                     </li>
                     <li>
-                        <Link href='/dashboard/tickets' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/tickets' && 'radial_active'}`}>
+                        <Link href='#' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/tickets' && 'radial_active'}`}>
                             <svg width="24" height="19" viewBox="0 0 24 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M14.7745 0H2.59208C1.16051 0 0 1.16051 0 2.59208V6.04575C0 6.43864 0.265066 6.78206 0.645133 6.88159C1.7698 7.17613 2.59856 8.20033 2.59856 9.4159C2.59856 10.6315 1.7698 11.6557 0.645133 11.9502C0.265066 12.0497 0 12.3932 0 12.7861V16.2397C0 17.6713 1.16051 18.8318 2.59208 18.8318H14.7745V15.8681C14.7745 15.2716 15.258 14.788 15.8545 14.788C16.451 14.788 16.9346 15.2716 16.9346 15.8681V18.8318H21.4079C22.8395 18.8318 24 17.6713 24 16.2397V12.7784C24 12.3883 23.7386 12.0465 23.3621 11.9444C22.2484 11.6425 21.4303 10.6236 21.4303 9.4159C21.4303 8.2082 22.2484 7.18934 23.3621 6.88737C23.7386 6.78528 24 6.44356 24 6.05345V2.59207C24 1.16051 22.8395 0 21.4079 0H16.9346V2.97793C16.9346 3.57442 16.451 4.05796 15.8545 4.05796C15.258 4.05796 14.7745 3.57442 14.7745 2.97793V0ZM15.8545 6.59278C16.451 6.59278 16.9346 7.07633 16.9346 7.67281V11.1566C16.9346 11.7531 16.451 12.2367 15.8545 12.2367C15.258 12.2367 14.7745 11.7531 14.7745 11.1566V7.67281C14.7745 7.07633 15.258 6.59278 15.8545 6.59278Z" fill="white" />
                             </svg>
@@ -71,7 +71,7 @@ export default function Aside() {
                         </Link>
                     </li>
                     <li>
-                        <Link href='/dashboard/announcement' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/announcement' && 'radial_active'}`}>
+                        <Link href='#' className={`w-auto h-auto py-[22px] px-4 2xl:px-8 flex flex-row items-center gap-4 cursor-pointer radial rounded-lg ${pathname === '/dashboard/announcement' && 'radial_active'}`}>
                             <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0.787733 7.26473C0.467133 7.60019 0.150033 8.04178 0.0205333 8.50003L0 11.375V13.3873C0.007 13.4166 0.0163333 13.4454 0.0205333 13.4749C0.176633 14.5458 0.759266 15.3095 1.74673 15.7845C1.79247 15.8064 1.8396 15.8549 1.85593 15.9011C2.2127 16.915 2.56503 17.9305 2.91853 18.9453C3.52427 20.6837 4.12837 22.4227 4.7369 24.1601C4.99007 24.883 5.7799 25.2541 6.5191 25.0067C6.9965 24.847 7.47413 24.6879 7.95153 24.5283C8.7115 24.2742 9.10023 23.5093 8.84193 22.7662C8.13167 20.7212 7.41907 18.6771 6.70763 16.6326C6.64067 16.4401 6.5751 16.2468 6.50323 16.0378H7.64727V6.32261H7.49933C5.99457 6.32261 4.4898 6.32101 2.98503 6.32307C2.11423 6.32422 1.38133 6.64367 0.787733 7.26473Z" fill="white" />
                                 <path d="M27.9995 11.5127C27.9442 11.8077 27.9183 12.1116 27.8287 12.3963C27.2762 14.1499 26.0747 15.2224 24.2484 15.6235C24.2377 15.6258 24.2258 15.6223 24.2078 15.621V6.7356C24.5945 6.80054 24.9622 6.90801 25.3085 7.07357C26.838 7.80393 27.7263 8.99621 27.9715 10.6472C27.9815 10.7147 27.9902 10.7821 27.9995 10.8496V11.5127Z" fill="white" />

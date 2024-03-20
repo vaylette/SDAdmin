@@ -20,28 +20,31 @@ export default function EditTopic({
   initialData,
   onRefresh,
 }: EditTopicProps) {
-  const subjectOptions = initialData?.subjects?.map((subject:any) => ({
+  const subjectOptions = initialData?.subjects?.map((subject: any) => ({
     name: subject.name,
     id: subject._id,
   }));
 
-  const levelOpts = initialData?.levels?.map((level:any) => ({
+  const _levelOpts = initialData?.levels?.map((level: any) => ({
     name: level.name,
     id: level._id,
+    syllabus: level.syllabus
   }));
 
-  const syllabusOpts = initialData?.syllabus?.map((syllabus:any) => ({
+  const [levelOpts, setLevelOpts] = useState(_levelOpts as Level[]);
+
+  const syllabusOpts = initialData?.syllabus?.map((syllabus: any) => ({
     name: syllabus.name,
     id: syllabus._id,
   }));
 
   const [formData, setFormData] = useState({
     name: initialData?.data.name,
-    subject: subjectOptions.find((opt:any) => opt.name === initialData?.data.subject?.name)?.id,
+    subject: subjectOptions.find((opt: any) => opt.name === initialData?.data.subject?.name)?.id,
     thumbnail: initialData?.data.thumbnail,
     descriptions: initialData?.data.descriptions,
-    level: levelOpts.find((opt:any) => opt.name === initialData?.data.level?.name)?.id,
-    syllabus: syllabusOpts.find((opt:any) => opt.name === initialData?.data.syllabus)?.name,
+    level: levelOpts.find((opt: any) => opt.name === initialData?.data.level?.name)?.id,
+    syllabus: syllabusOpts.find((opt: any) => opt.name === initialData?.data.syllabus)?.name,
   });
 
   const [loading, setLoading] = useState(false);
@@ -53,6 +56,16 @@ export default function EditTopic({
       ...prevData,
       [fieldName]: value,
     }));
+    console.log(value, fieldName);
+    if (fieldName === 'syllabus') {
+      const filteredLevels: Level[] = [];
+      initialData?.levels.forEach(level => {
+        if (level.syllabus === value) {
+          filteredLevels.push(level);
+        }
+      });
+      setLevelOpts(filteredLevels);
+    }
   };
 
   const hasChanged = () => {
@@ -88,7 +101,7 @@ export default function EditTopic({
     send.append('descriptions', descriptions)
     send.append('thumbnail', thumbnail)
     send.append('level', level || '')
-    send.append('syllabus', syllabusOpts.find((obj:any) => obj.id === syllabus)?.name ?? "NECTA")
+    send.append('syllabus', syllabusOpts.find((obj: any) => obj.id === syllabus)?.name ?? "NECTA")
 
     setLoading(true);
     try {
@@ -120,18 +133,6 @@ export default function EditTopic({
             className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'
           />
         </div>
-        <div className='flex flex-col gap-2'>
-          <label>Level</label>
-          <SelectBox
-            options={levelOpts}
-            selected={
-              formData.level !== null
-                ? { name: levelOpts.find((opt:any) => opt.id === formData.level)?.name || '', id: formData.level }
-                : null
-            }
-            onChange={(value) => handleChange('level', value?.id)}
-          />
-        </div>
 
         <div className='flex flex-col gap-2'>
           <label>Syllabus</label>
@@ -143,6 +144,19 @@ export default function EditTopic({
                 : null
             }
             onChange={(value) => handleChange('syllabus', value?.name)}
+          />
+        </div>
+
+        <div className='flex flex-col gap-2'>
+          <label>Level</label>
+          <SelectBox
+            options={levelOpts}
+            selected={
+              formData.level !== null
+                ? { name: levelOpts.find((opt: any) => opt.id === formData.level)?.name || '', id: formData.level }
+                : null
+            }
+            onChange={(value) => handleChange('level', value?.id)}
           />
         </div>
 

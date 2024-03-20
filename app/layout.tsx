@@ -53,7 +53,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${helvetica.variable} font-sans hidden lg:block`}>
+      <body className={`${helvetica.variable} font-sans lg:block`}>
         <main className='min-w-screen min-h-screen'>
           <CookiesProvider>
             {children}

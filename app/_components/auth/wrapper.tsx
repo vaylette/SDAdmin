@@ -39,28 +39,31 @@ export default function AuthWrapper() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        setLoading(true)
-
-        try {
-            const response = await authenticate(form)
-            if (response.status === 401) {
-                toast.error(response.data.message)
-            } else {
-                if (response.user.type === "Admin") {
-                    setAuthentication(true)
-                    setUser(response.user)
-                    setToken(response.access_token)
-                    cookies.set('token', `${response.access_token}`, { secure: false })
-                    toast.success('Successfully authenticated!')
-                    router.push('/dashboard')
+        if (form.username === "" || form.password === "") {
+            toast.error("Please fill in all fields")
+        } else {
+            setLoading(true)
+            try {
+                const response = await authenticate(form)
+                if (response.status === 401) {
+                    toast.error("Invalid user inputs check your username and password")
                 } else {
-                    toast.error('Unauthorized to access admin')
+                    if (response.user.type === "Admin") {
+                        setAuthentication(true)
+                        setUser(response.user)
+                        setToken(response.access_token)
+                        cookies.set('token', `${response.access_token}`, { secure: false })
+                        toast.success('Successfully authenticated!')
+                        router.push('/dashboard')
+                    } else {
+                        toast.error('Unauthorized to access admin')
+                    }
                 }
+            } catch (error) {
+                toast.error('Authentication failed')
+            } finally {
+                setLoading(false)
             }
-        } catch (error) {
-            toast.error('Authentication failed')
-        } finally {
-            setLoading(false)
         }
 
     }

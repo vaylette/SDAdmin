@@ -32,8 +32,6 @@ export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) 
         subject: subjectOptions.find((opt: any) => opt.name === data?.data.subject?.name)?.id,
         category: categoryOptions.find((opt: any) => opt.name === data?.data.category)?.name,
         description: data?.data?.description,
-        modelFile: data?.data?.modelFileUrl,
-        ARExperienceFile: data?.data?.ARExperienceFileUrl,
         stepsFile: data?.data?.stepsFileUrl,
         thumbnail: data?.data?.thumbnail,
     })
@@ -51,7 +49,7 @@ export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) 
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.modelFile === null || formData.ARExperienceFile === null) {
+        if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null) {
             toast.error('Please fill all the required fields!')
             return
         }
@@ -72,7 +70,7 @@ export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) 
         <>
             <form onSubmit={() => { }} className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]' encType='multipart/form-data'>
                 <div className='flex flex-col gap-2'>
-                    <label>Experiment Name</label>
+                    <label>3D Simulation Name</label>
                     <input
                         type='text'
                         value={formData.name}
@@ -120,24 +118,13 @@ export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) 
                         handleChange('thumbnail', file);
                     }} />
                 </div>
-
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.modelFile} label={"Model File"} onFileSelected={(file) => {
-                        handleChange('modelFile', file);
-                    }} />
-                </div>
-                <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.ARExperienceFile} label={"AR Experience file"} onFileSelected={(file) => {
-                        handleChange('ARExperienceFile', file);
-                    }} />
-                </div>
-                <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.stepsFile} label={"steps file"} onFileSelected={(file) => {
+                    <FileUpload fileUrl={formData.stepsFile} label={"3D simulation Package"} onFileSelected={(file) => {
                         handleChange('stepsFile', file);
                     }} />
                 </div>
                 <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
-                    <span>Update Experiment</span>
+                    <span>Update 3D Simulation</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
                             <circle className="dot" cx="10" cy="20" r="3" />

@@ -42,16 +42,17 @@ export default function CreateAdmin() {
                 <label className=''>Identity</label>
                 <select className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
                     <option selected disabled>Select Identity</option>
-                    <option>Admin</option>
-                    <option>Teacher</option>
+                    <option value="admin">Admin</option>
                 </select>
             </div>
             <div className='flex flex-col gap-2'>
                 <label className=''>Permission level</label>
                 <select className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
                     <option selected disabled>Select permission</option>
-                    <option>Level 1 (Content upload)</option>
-                    <option>Level 2 (Content download)</option>
+                    <option value="superadmin">SuperAdmin</option>
+                    <option value="contentadmin">Content admin</option>
+                    <option value="contentmoderator">Content moderator</option>
+                    <option value="customercare">Customer Care</option>
                 </select>
             </div>
             <button className='w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl'>Confirm</button>

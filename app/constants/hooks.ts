@@ -52,7 +52,8 @@ export const usePatchData = () => {
       
       const headers = isMultipart ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
       const response = await axios.patch(url, data, { headers });
-      toast.success(`${response.data}`);
+      
+      toast.success(`${response.data?._id ? "Success" : "Completed"}`);
       return response.data;
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'An error occurred');

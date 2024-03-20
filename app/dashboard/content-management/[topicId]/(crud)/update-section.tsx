@@ -3,7 +3,7 @@ import SelectBox from "@/app/_components/form/SelectBox"
 import FileUpload from "@/app/_components/form/uploadFile"
 import { Divider } from "@/app/_components/header/notifications"
 import { apiUrls } from "@/app/constants/apiUrls"
-import { usePostData } from "@/app/constants/hooks"
+import { usePatchData, usePostData } from "@/app/constants/hooks"
 import { FormEvent, useState } from "react"
 import toast from "react-hot-toast"
 
@@ -12,7 +12,7 @@ interface CreateSectionsProps {
     onBack: () => void;
 }
 
-export default function CreateSections({ initialData, onBack }: CreateSectionsProps) {
+export default function UpdateSections({ initialData, onBack }: CreateSectionsProps) {
     const data = {
         topics: {
             name: initialData?.topic,
@@ -25,14 +25,14 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
             name: initialData?.level
         }
     }
-    const sectionOrders = [{ name: "1", id: "0" }]
+    const sectionOrders = [{ name: initialData?.data?.chapterNo, id: initialData?.data?.chapterNo }]
 
     const [formData, setFormData] = useState({
         topic: initialData?.topicId,
-        name: '',
-        chapterNo: '',
-        content: '',
-        thumbnail: null as string | null,
+        name: initialData?.data?.name,
+        chapterNo: initialData?.data?.chapterNo,
+        content: initialData?.data?.content,
+        thumbnail: initialData?.data?.thumbnail,
     })
 
     const handleChange = (fieldName: string, value: any) => {
@@ -43,7 +43,7 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
     }
     const [loading, setLoading] = useState(false)
 
-    const postData = usePostData()
+    const patchData = usePatchData()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -54,11 +54,10 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
         }
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.postChapters}`, formData, true)
+            const response = await patchData(`${apiUrls.patchChapters}/${initialData?.data?._id}`, formData, true)
             if (response) {
                 onBack()
             }
-            toast.success(`${response}`)
         } catch (error: any) {
             toast.error(error?.message)
         } finally {
@@ -134,12 +133,12 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
                                 <CustomEditor initialData={formData.content} onChange={(data) => handleChange('content', data)} />
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
-                                <FileUpload label={"Thumbnail file (*png)"} text={"Add file"} onFileSelected={(file) => {
+                                <FileUpload label={"Thumbnail file (*png)"} fileUrl={formData.thumbnail} text={"Add file"} onFileSelected={(file) => {
                                     handleChange('thumbnail', file)
                                 }} />
                             </div>
                             <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
-                                <span>Add Section</span>
+                                <span>Update Section</span>
                                 {loading && (
                                     <svg height="40" width="40" className="text-white-default">
                                         <circle className="dot" cx="10" cy="20" r="3" />

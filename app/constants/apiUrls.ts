@@ -40,6 +40,8 @@ export const apiUrls = {
         patchExperiments: `${baseUrl}/experiments`,
         patchVideos: `${baseUrl}/videos`,
         patchSimulations: `${baseUrl}/simulations`,
+        patchChapters: `${baseUrl}/chapters`,
+        patchQuestions : `${baseUrl}/questions`,
         // Delete Endpoints
         deleteTopic: `${baseUrl}/topics`,
         deleteChapter: `${baseUrl}/chapters`,

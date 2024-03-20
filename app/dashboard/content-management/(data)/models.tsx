@@ -99,11 +99,7 @@ export const ModelsContent = ({ tab }) => {
     const handleModelDelete = async (data: any) => {
         try {
             await deleteData(`${apiUrls.deleteModels}/${data._id}`);
-            let modelResults = retrieveData(`${apiUrls.getModels}`);
-            setData(prevData => ({
-                ...prevData,
-                models: prevData.models.filter(model => model !== modelResults)
-            }));
+            getData()
         } catch (error) {
             toast.error('An error occurred while deleting the model');
         }
@@ -184,14 +180,12 @@ export const ModelsContent = ({ tab }) => {
             <div className="flex flex-col">
                 <div className="flex justify-between items-start mb-4">
                     <h1 className="text-2xl font-bold"></h1>
-                    <button onClick={() => handleModal('models')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Model +</button>
+                    <button onClick={() => handleModal('models')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add 3D Model +</button>
                 </div>
                 <DataTable columns={modelsColumns} data={models} />
-
-
                 {modal.models && (
                     modal.edit ? (
-                        <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Edit Model"} subtitle={"Please edit the model’s information"}>
+                        <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Edit 3D Model"} subtitle={"Please edit the model’s information"}>
                             <UpdateModel initialData={{
                                 data: data.models[modal.id ?? 0],
                                 syllabus: data.syllabus,
@@ -200,7 +194,7 @@ export const ModelsContent = ({ tab }) => {
                             }} onRefresh={handleModalClose} />
                         </CustomModal>
                     ) : (
-                        <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Add Model"} subtitle={"Please add the model’s information"}>
+                        <CustomModal isOpen={modal.models} onClose={handleModalClose} title={"Add 3D Model"} subtitle={"Please add the model’s information"}>
                             <CreateModel subjects={data?.subjects} onRefresh={handleModalClose} />
                         </CustomModal>
                     )

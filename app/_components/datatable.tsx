@@ -47,7 +47,7 @@ export default function DataTable({ columns, data }: DataTableProps) {
                 {row.getVisibleCells().map(cell => (
                   <td key={cell.id} className='p-8 text-center'>
                     <div className="truncate text-center">
-                      <div className="inline-block" style={{ width: '100%', overflowX: 'auto' }}>
+                      <div className="inline-block whitespace-normal" style={{ width: '100%', overflowX: 'auto' }}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </div>
                     </div>

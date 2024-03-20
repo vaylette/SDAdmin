@@ -77,7 +77,7 @@ export default function UserManagement() {
     } finally { }
   }
 
-  const admins: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Administrator')?.map((item) => {
+  const admins: User[] | undefined = (data?.users as User[])?.filter(user => user.type === 'Admin')?.map((item) => {
     const itemsAsAdmin = item as User;
     return {
       ref_no: '',
@@ -177,7 +177,6 @@ export default function UserManagement() {
     };
   });
 
-  console.log(data.users);
 
   const usersColumns = [
     columnHelper.accessor('ref_no', {
@@ -195,11 +194,11 @@ export default function UserManagement() {
       cell: info => info.getValue(),
       size: 10,
     }),
-    // columnHelper.accessor('phoneNumber', {
-    //   header: () => 'Phone',
-    //   cell: info => info.getValue(),
-    //   size: 10,
-    // }),
+    columnHelper.accessor('phoneNumber', {
+      header: () => 'Phone',
+      cell: info => info.getValue(),
+      size: 10,
+    }),
     columnHelper.accessor('type', {
       header: () => 'Type',
       cell: info => info.getValue(),

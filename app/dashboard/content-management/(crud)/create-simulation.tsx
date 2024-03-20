@@ -128,7 +128,7 @@ export default function CreateSimulation({ subjects, onRefresh }: CreateSimulati
                 </div>
 
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading} type="submit">
-                    <span>Add Simulation</span>
+                    <span>Add 2D Simulation</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
                             <circle className="dot" cx="10" cy="20" r="3" />

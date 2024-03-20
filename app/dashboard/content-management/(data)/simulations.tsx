@@ -97,11 +97,7 @@ interface Modal {
     const handleSimulationDelete = async (data: any) => {
       try {
         await deleteData(`${apiUrls.deleteSimulations}/${data._id}`);
-        let simulationResults = retrieveData(`${apiUrls.getSimulations}`);
-        setData(prevData => ({
-          ...prevData,
-          simulations: prevData.simulations.filter(simulation => simulation !== simulationResults)
-        }));
+        getData()
       } catch (error) {
         toast.error('An error occurred while deleting the simulation');
       }
@@ -182,20 +178,20 @@ interface Modal {
         <div className="flex flex-col">
           <div className="flex justify-between items-start mb-4">
             <h1 className="text-2xl font-bold"></h1>
-            <button onClick={() => handleModal('simulations')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Simulation +</button>
+            <button onClick={() => handleModal('simulations')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add 2D Simulation +</button>
           </div>
           <DataTable columns={simulationsColumns} data={simulations} />
   
           {modal.simulations && (
             modal.edit ? (
-              <CustomModal isOpen={modal.simulations} onClose={handleModalClose} title={"Edit Simulation"} subtitle={"Please edit the simulation’s information"}>
+              <CustomModal isOpen={modal.simulations} onClose={handleModalClose} title={"Edit 2D Simulation"} subtitle={"Please edit the simulation’s information"}>
                 <UpdateSimulation subjects={data?.subjects} data={{
                   data: data?.simulations[modal.id],
                   subjects: data?.subjects
                 }} onRefresh={handleModalClose} />
               </CustomModal>
             ) : (
-              <CustomModal isOpen={modal.simulations} onClose={handleModalClose} title={"Add Simulation"} subtitle={"Please add the simulation’s information"}>
+              <CustomModal isOpen={modal.simulations} onClose={handleModalClose} title={"Add 2D Simulation"} subtitle={"Please add the simulation’s information"}>
                 <CreateSimulation subjects={data?.subjects} onRefresh={handleModalClose} />
               </CustomModal>
             )

@@ -29,7 +29,7 @@ export default function Dashboard() {
       {data.map((item: any, index) => (
           <OverviewCard key={index} title={item.title} count={item.quantity} growth={item.growth} />
         ))}
-        {data.length === 0 && <div>No data available</div>}
+        {data.length === 0 && <div className='text-center'>No data available</div>}
       </div>
     </div>
   );

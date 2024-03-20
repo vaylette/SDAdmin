@@ -23,6 +23,7 @@ import UpdateModel from "../(crud)/update-model"
 import CreateExperiment from "../(crud)/create-experiment"
 import UpdateExperiment from "../(crud)/update-experiment"
 import { CustomDropDown } from "../(components)/custom_dropdown"
+import { get } from "http"
 
 interface Modal {
   experiments: boolean,
@@ -102,11 +103,7 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
   const handleExperimentDelete = async (data: any) => {
     try {
       await deleteData(`${apiUrls.deleteExperiments}/${data._id}`);
-      let experimentResults = retrieveData(`${apiUrls.getExperiments}`);
-      setData(prevData => ({
-        ...prevData,
-        experiments: prevData.experiments.filter(experiment => experiment !== experimentResults)
-      }));
+      getData()
     } catch (error) {
       toast.error('An error occurred while deleting the experiment');
     }
@@ -190,7 +187,7 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
     <>
       <div className="flex justify-end items-start mb-2">
         <h1 className="text-2xl font-bold"></h1>
-        <button onClick={() => handleModal('experiments')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center mx-10'>Experiments +</button>
+        <button onClick={() => handleModal('experiments')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center mx-10'>3D Simulations +</button>
         <button onClick={() => handleModal('experiments')} className='w-[148px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>DIY Experiments +</button>
       </div>
 
@@ -198,14 +195,14 @@ export const ExperimentsContent = ({ subjectsResult, levelsResult, tab }) => {
 
       {modal.experiments && (
         modal.edit ? (
-          <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Edit Experiment"} subtitle={"Please edit the experiment’s information"}>
+          <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Edit 3D Simulation"} subtitle={"Please edit the experiment’s information"}>
             <UpdateExperiment data={{
               data: data?.experiments[modal.id],
               subjects: data?.subjects
             }} onRefresh={handleModalClose} />
           </CustomModal>
         ) : (
-          <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Add Experiment"} subtitle={"Please add information"}>
+          <CustomModal isOpen={modal.experiments} onClose={handleModalClose} title={"Add 3D Simulation"} subtitle={"Please add information"}>
             <CreateExperiment subjects={data?.subjects} onRefresh={handleModalClose} />
           </CustomModal>
         )

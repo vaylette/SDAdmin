@@ -1,18 +1,20 @@
+//@ts-nocheck
 import CustomEditor from "@/app/_components/custom_editor"
 import SelectBox from "@/app/_components/form/SelectBox"
 import FileUpload from "@/app/_components/form/uploadFile"
 import { Divider } from "@/app/_components/header/notifications"
 import { apiUrls } from "@/app/constants/apiUrls"
-import { usePostData } from "@/app/constants/hooks"
+import { usePatchData, usePostData } from "@/app/constants/hooks"
 import { FormEvent, useState } from "react"
 import toast from "react-hot-toast"
+import { MultipleChoiceForm } from "../(components)/multiple_choice"
 
 interface CreateSectionsProps {
     initialData: any,
     onBack: () => void;
 }
 
-export default function CreateSections({ initialData, onBack }: CreateSectionsProps) {
+export default function UpdateQuestions({ initialData, onBack }: CreateSectionsProps) {
     const data = {
         topics: {
             name: initialData?.topic,
@@ -25,15 +27,22 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
             name: initialData?.level
         }
     }
-    const sectionOrders = [{ name: "1", id: "0" }]
+    const questionType = [
+        { name: "Choice", id: initialData?.data?.questionType },
+    ];
 
     const [formData, setFormData] = useState({
         topic: initialData?.topicId,
-        name: '',
-        chapterNo: '',
-        content: '',
-        thumbnail: null as string | null,
+        questionType: initialData?.data?.questionType,
+        question: initialData?.data?.question,
+        answer: initialData?.data?.answer,
+        choices: initialData?.data?.choices,
     })
+
+    const handleMultipleChoiceSubmit = ({ choices, correctAnswer }) => {
+        handleChange('choices', choices);
+        handleChange('answer', correctAnswer);
+    };
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
@@ -43,29 +52,28 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
     }
     const [loading, setLoading] = useState(false)
 
-    const postData = usePostData()
+    const patchData = usePatchData()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
-        if (formData.name === '' || formData.chapterNo === null || formData.content === null || formData.thumbnail === null) {
+        if (formData.questionType === '' || formData.question === '' || formData.answer === '' || formData.choices.length == 0) {
             toast.error('Please fill all the required fields!')
             return
         }
         setLoading(true)
         try {
-            const response = await postData(`${apiUrls.postChapters}`, formData, true)
+
+            const response = await patchData(`${apiUrls.postQuestions}/${initialData?.data?._id}`, formData, false)
             if (response) {
                 onBack()
             }
-            toast.success(`${response}`)
         } catch (error: any) {
             toast.error(error?.message)
         } finally {
             setLoading(false)
         }
     }
-
     return (
         <>
             <div className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default'>
@@ -83,7 +91,7 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
                     <div className="flex gap-5 justify-between self-start mt-8 ml-10 text-lg leading-[normal] text-neutral-800 text-opacity-60 max-md:flex-wrap max-md:ml-0 max-md:max-w-full">
                         <div className="grow not-italic whitespace-nowrap">
                             <span className="text-neutral-800">Topic:</span>{" "}
-                            <span className="font-medium text-orange-200">{data?.topics.name}</span>
+                            <span className="font-medium text-orange-200">{data?.topics?.name}</span>
                         </div>
                         <div className="grow not-italic whitespace-nowrap">
                             <span className="text-neutral-800">Subject:</span>{" "}
@@ -98,48 +106,44 @@ export default function CreateSections({ initialData, onBack }: CreateSectionsPr
                             <span className="font-medium">{data?.topics?.syllabus}</span>
                         </div>
                     </div>
-
                     <div className="pl-9 mt-6">
                         <Divider />
-                        <form onSubmit={() => { }} className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>
+                        <form className='flex flex-col gap-5 text-lg text-black-400 pb-[92px]'>
+
                             <div className='grid grid-cols-2 gap-4 w-full'>
                                 <div className='flex flex-col items-start gap-2'>
-                                    <label className='text-right'>Section name:</label>
-                                    <input type='text' value={formData.name}
-                                        onChange={(e) => handleChange('name', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0' />
+                                    <label className='text-right'>Question:</label>
+                                    <input type='text' value={formData.question}
+                                        onChange={(e) => handleChange('question', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0' />
                                 </div>
-                                <div className='flex flex-col items-start gap-2'>
-                                    <div className='flex flex-col gap-2 w-full'>
-                                        <div className="flex items-center">
-                                            <label htmlFor="fileType">Selection Order</label>
-                                            <span className="ml-2 flex items-center">
-                                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7 14C10.866 14 14 10.866 14 7C14 3.13401 10.866 0 7 0C3.13401 0 0 3.13401 0 7C0 10.866 3.13401 14 7 14ZM5.49982 9.50004C5.22368 9.50004 4.99982 9.7239 4.99982 10C4.99982 10.2762 5.22368 10.5 5.49982 10.5L6.99978 10.5L8.49982 10.5C8.77596 10.5 8.99982 10.2762 8.99982 10C8.99982 9.7239 8.77596 9.50004 8.49982 9.50004H7.49978V6.50004C7.49978 6.2239 7.27592 6.00004 6.99978 6.00004H5.99978C5.72364 6.00004 5.49978 6.2239 5.49978 6.50004C5.49978 6.77619 5.72364 7.00004 5.99978 7.00004H6.49978V9.50004H5.49982ZM7.99978 4.00004C7.99978 4.55233 7.55206 5.00004 6.99978 5.00004C6.44749 5.00004 5.99978 4.55233 5.99978 4.00004C5.99978 3.44776 6.44749 3.00004 6.99978 3.00004C7.55206 3.00004 7.99978 3.44776 7.99978 4.00004Z" fill="#222222" fill-opacity="0.4" />
-                                                </svg>
-                                            </span>
-                                        </div>
-
-                                        <SelectBox
-                                            options={sectionOrders}
-                                            selected={{ name: sectionOrders.find(opt => opt.id === formData.chapterNo)?.name || '', id: formData.chapterNo }}
-                                            onChange={(value) => {
-                                                handleChange('chapterNo', value?.id)
-                                            }}
-                                        />
+                                <div className='flex flex-col gap-2 w-full'>
+                                    <div className="flex items-center">
+                                        <label htmlFor="fileType">Question Type</label>
                                     </div>
+
+                                    <SelectBox
+                                        options={questionType}
+                                        selected={formData.questionType !== '' ? { name: questionType.find(opt => opt.id === formData.questionType)?.name || '', id: formData.questionType } : null}
+                                        onChange={(value) => handleChange('questionType', value?.id)}
+                                    />
                                 </div>
                             </div>
-                            <div className='flex flex-col gap-1 w-full'>
-                                <label className='text-start'>Content</label>
-                                <CustomEditor initialData={formData.content} onChange={(data) => handleChange('content', data)} />
+                            <div className='grid grid-cols-2 gap-4 w-full'>
+                                <MultipleChoiceForm onSubmit={handleMultipleChoiceSubmit} initialChoices={formData.choices} initalAnswer={formData.answer} />
                             </div>
-                            <div className='flex flex-col gap-1 w-full'>
-                                <FileUpload label={"Thumbnail file (*png)"} text={"Add file"} onFileSelected={(file) => {
-                                    handleChange('thumbnail', file)
+                            {/* <div className='flex flex-col gap-1 w-full'>
+                                <label className='text-start'>Question</label>
+                                <CustomEditor initialData={formData.question} onChange={(data) => {
+                                    handleChange('question', data)
                                 }} />
                             </div>
+                            <div className='flex flex-col gap-1 w-full'>
+                                <label className='text-start'>Answer</label>
+                                <CustomEditor initialData={formData.answer} onChange={(data) => handleChange('answer', data)} />
+                            </div> */}
+
                             <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
-                                <span>Add Section</span>
+                                <span>Update Question</span>
                                 {loading && (
                                     <svg height="40" width="40" className="text-white-default">
                                         <circle className="dot" cx="10" cy="20" r="3" />

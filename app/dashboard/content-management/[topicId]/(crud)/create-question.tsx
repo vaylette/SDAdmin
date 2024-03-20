@@ -42,7 +42,6 @@ export default function CreateQuestions({ initialData, onBack }: CreateSectionsP
     const handleMultipleChoiceSubmit = ({ choices, correctAnswer }) => {
         handleChange('choices', choices);
         handleChange('answer', correctAnswer);
-        console.log(formData);
     };
 
     const handleChange = (fieldName: string, value: any) => {
@@ -50,7 +49,6 @@ export default function CreateQuestions({ initialData, onBack }: CreateSectionsP
             ...prevData,
             [fieldName]: value,
         }))
-        console.log(fieldName, value)
     }
     const [loading, setLoading] = useState(false)
 

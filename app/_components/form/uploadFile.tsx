@@ -5,14 +5,14 @@ interface FileUploadProps {
     text?: string;
     onFileSelected?: (file: File | null) => void;
     fileUrl?: string;
+    allowedFileTypes?: string[];
 }
 
-const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: FileUploadProps) => {
+const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl, allowedFileTypes }: FileUploadProps) => {
     const [fileName, setFileName] = useState('');
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        console.log(file);
         if (file) {
             setFileName(file.name);
             onFileSelected?.(file);
@@ -27,6 +27,10 @@ const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: Fi
         onFileSelected?.(null);
     };
 
+    // Construct accept string from allowed file types
+    const acceptString = allowedFileTypes ? allowedFileTypes.join(',') : undefined;
+
+
     const renderPreview = () => {
         if (typeof fileUrl === 'string') {
             const ext = fileUrl.split('.').pop()?.toLowerCase();
@@ -39,13 +43,22 @@ const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: Fi
                         Your browser does not support the video tag.
                     </video>
                 );
+            } else if (ext === 'glb') {
+                // const modelUrl = fileUrl;
+                // const object3D = viewerUtils.loadGLB(modelUrl);
+                // return (
+                //     <div className="small-preview-wrapper">
+                //         <Viewer object3D={object3D} />
+                //     </div>
+                // )
             } else {
-                return null; // Unsupported file type
+                return null;
             }
         }
-        return null; // No file URL provided or fileUrl is not a string
+        return null;
     };
-    
+
+
 
     const renderFileName = () => {
         if (fileName || fileUrl) {
@@ -69,6 +82,7 @@ const FileUpload = ({ label, text = "Upload file", onFileSelected, fileUrl }: Fi
             <div className='relative flex items-center'>
                 <input
                     type='file'
+                    accept={acceptString}
                     className='absolute inset-0 opacity-0 w-full h-full z-10 cursor-pointer'
                     onChange={handleFileChange}
                 />

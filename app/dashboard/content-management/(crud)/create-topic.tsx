@@ -1,15 +1,12 @@
-'use client'
-
-import { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, useEffect } from 'react'
 import SelectBox from '@/app/_components/form/SelectBox'
-import { curriculumOptions } from '@/app/types/types'
 import { usePostData } from '@/app/constants/hooks'
 import toast from 'react-hot-toast'
 import { apiUrls } from '@/app/constants/apiUrls'
 import { useRouter } from 'next/navigation'
 import FileUpload from '@/app/_components/form/uploadFile'
 
-export interface Subject {
+interface Subject {
     _id: string;
     isActive: boolean;
     isDeleted: boolean;
@@ -19,17 +16,13 @@ export interface Subject {
     updatedAt: string;
 }
 
-export interface Level {
+interface Level {
     _id: string;
-    isActive: boolean;
-    isDeleted: boolean;
     name: string;
-    __v: number;
-    createdAt: string;
-    updatedAt: string;
+    syllabus: string;
 }
 
-export interface Syllabus {
+interface Syllabus {
     _id: string;
     name: string;
 }
@@ -41,14 +34,10 @@ interface CreateTopicProps {
     onRefresh: () => void;
 }
 
-
 export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: CreateTopicProps) {
     const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-
-    const levelOpts = levels?.map(level => ({ name: level.name, id: level._id }))
-
+    const [levelOpts, setLevelOpts] = useState([] as Level[]);
     const syllabusOpts = syllabus?.map(syllabus => ({ name: syllabus.name, id: syllabus._id }))
-
     const [formData, setFormData] = useState({
         name: '',
         subject: null as string | null,
@@ -57,18 +46,21 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
         level: null as string | null,
         syllabus: null as string | null,
     })
-
     const [loading, setLoading] = useState(false)
-
     const postData = usePostData()
-
     const router = useRouter()
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value,
-        }))
+        }));
+
+        if (fieldName === 'syllabus') {
+            const syllabusName = syllabusOpts.find(opt => opt.id === value)?.name;
+            const filteredLevels = levels.filter(level => level.syllabus === syllabusName);
+            setLevelOpts(filteredLevels);
+        }
     }
 
     const handleSubmit = async (e: FormEvent) => {
@@ -94,7 +86,7 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
         send.append('syllabus', syllabusOpts.find(obj => obj.id === syllabus)?.name ?? "NECTA")
 
         try {
-            const response = await postData(`${apiUrls.postTopics}`,send,true)
+            const response = await postData(`${apiUrls.postTopics}`, send, true)
             if (response) {
                 onRefresh()
             }
@@ -137,25 +129,26 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Add thumbnail"} onFileSelected={(file)=>{
+                    <FileUpload label={"Add thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file);
                     }} />
                 </div>
-                <div className='flex flex-col gap-2'>
-                    <label>Level</label>
-                    <SelectBox
-                        options={levelOpts}
-                        selected={formData.level !== null ? { name: levelOpts.find(opt => opt.id === formData.level)?.name || '', id: formData.level } : null}
-                        onChange={(value) => handleChange('level', value?.id)}
-                    />
-                </div>
-
                 <div className='flex flex-col gap-2'>
                     <label>Syllabus</label>
                     <SelectBox
                         options={syllabusOpts}
                         selected={formData.syllabus !== null ? { name: syllabusOpts.find(opt => opt.id === formData.syllabus)?.name || '', id: formData.syllabus } : null}
-                        onChange={(value) => handleChange('syllabus', value?.id)}
+                        onChange={(value) => {
+                            handleChange('syllabus', value?.id)
+                        }}
+                    />
+                </div>
+                <div className='flex flex-col gap-2'>
+                    <label>Level</label>
+                    <SelectBox
+                        options={levelOpts}
+                        selected={formData.level !== null ? { name: levelOpts.find(opt => opt._id === formData.level)?.name || '', _id: formData.level, syllabus: formData.syllabus } : null}
+                        onChange={(value) => handleChange('level', value?._id)}
                     />
                 </div>
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>

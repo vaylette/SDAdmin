@@ -5,7 +5,7 @@ import { useDeleteData, useRetrieveData } from "@/app/constants/hooks";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiMoreVertical } from "react-icons/fi";
-import { CustomDropDown } from "../../page";
+import { CustomDropDown } from "../../(components)/custom_dropdown";
 import Dropdown, {
     DropdownToggle,
     DropdownMenu,
@@ -16,10 +16,11 @@ import Dropdown, {
 import { info } from "console";
 
 interface SectionsProps {
-    onAddSectionClick: () => void
+    onAddSectionClick: () => void,
+    onEditSectionClick: (chapter) => void,
 }
 
-export function Sections({ onAddSectionClick }: SectionsProps) {
+export function Sections({ onAddSectionClick, onEditSectionClick }: SectionsProps) {
     const [showAll, setShowAll] = useState(false);
 
     const [data, setData] = useState({
@@ -30,7 +31,7 @@ export function Sections({ onAddSectionClick }: SectionsProps) {
 
     useEffect(() => {
         getData()
-    }, [data.chapters])
+    }, [])
 
     const getData = async () => {
         try {
@@ -53,12 +54,9 @@ export function Sections({ onAddSectionClick }: SectionsProps) {
         setDropdownStates(prevStates => {
             const updatedStates: any = {};
 
-            // Close any open dropdowns
             Object.keys(prevStates).forEach(id => {
                 updatedStates[id] = false;
             });
-
-            // Toggle the state of the clicked dropdown
             updatedStates[rowId] = !prevStates[rowId];
 
             return updatedStates;
@@ -67,9 +65,9 @@ export function Sections({ onAddSectionClick }: SectionsProps) {
 
     const deleteData = useDeleteData()
 
-    const handleChapterDelete = async (data: any) => {
+    const handleChapterDelete = async (chapterId: any) => {
         try {
-            await deleteData(`${apiUrls.deleteChapter}/${data._id}`);
+            await deleteData(`${apiUrls.deleteChapter}/${chapterId}`);
             let topicChapters = retrieveData(`${apiUrls.getChapters}`);
             setData(prevData => ({
                 ...prevData,
@@ -82,28 +80,29 @@ export function Sections({ onAddSectionClick }: SectionsProps) {
 
 
     const renderChapterItem = (chapter, index) => (
+
         <div key={index} className="flex gap-5 justify-between self-center mt-7 max-w-full whitespace-nowrap leading-[normal] w-full max-md:flex-wrap mb-5">
             <div className="flex gap-5 justify-between text-lg">
                 <div className="not-italic text-neutral-800 text-opacity-60">{index + 1 < 10 ? `0${index + 1}.` : `${index + 1}.`}</div>
                 <div className="grow not-italic text-neutral-800 text-opacity-80">
-                    {`${chapter?.name}`}
+                    <p className="whitespace-normal"> {`${chapter?.name}`}</p>
                 </div>
             </div>
             <div className="inline-block">
                 <div className="cursor__pointer">
-                    <Dropdown onSelect={() => toggleDropdownForRow(chapter)}>
-                        <Dropdown.Toggle btnStyle="link" noCaret onClick={() => toggleDropdownForRow(chapter)}>
+                    <Dropdown onSelect={() => toggleDropdownForRow(chapter?._id)}>
+                        <Dropdown.Toggle btnStyle="link" noCaret onClick={() => toggleDropdownForRow(chapter?._id)}>
                             <FiMoreVertical />
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {dropdownStates[chapter] && (
+                            {dropdownStates[chapter?._id] && (
                                 <CustomDropDown
-                                    dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [chapter]: false }))}
+                                    dismiss={() => setDropdownStates(prevStates => ({ ...prevStates, [chapter?._id]: false }))}
                                     onEdit={() => {
-                                        toast.success("Cant edit")
+                                        onEditSectionClick(chapter);
                                     }}
                                     onDelete={() => {
-                                        handleChapterDelete(chapter);
+                                        handleChapterDelete(chapter?._id);
                                     }}
                                 />
                             )}

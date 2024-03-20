@@ -9,6 +9,8 @@ import CreateSections from "./(crud)/create-section";
 import CreateQuestions from "./(crud)/create-question";
 import { Sections } from "./(components)/sections";
 import { Questions } from "./(components)/questions";
+import UpdateQuestions from "./(crud)/update-question";
+import UpdateSections from "./(crud)/update-section";
 
 type Params = {
   topicId: string;
@@ -25,13 +27,30 @@ const TopicPage = ({ params }: { params: Params }) => {
   })
   const retrieveData = useRetrieveData()
 
-  const [addSection, setAddSection] = useState({
-    show: false,
-  })
+  const handleAddSectionClick = () => {
+    setUIState({ showAddSection: true });
+  };
 
-  const [addQuestion, setAddQuestion] = useState({
-    show: false,
-  })
+  const handleEditSectionClick = (data) => {
+    setUIState({ showUpdateSection: true, updateSectionInitialData: data });
+  };
+
+  const handleAddQuestionClick = () => {
+    setUIState({ showAddQuestion: true });
+  };
+
+  const handleEditQuestionClick = (data) => {
+    setUIState({ showUpdateQuestion: true, updateQuestionInitialData: data });
+  };
+
+  const [uiState, setUIState] = useState({
+    showAddSection: false,
+    showUpdateSection: false,
+    showAddQuestion: false,
+    showUpdateQuestion: false,
+    updateSectionInitialData: {},
+    updateQuestionInitialData: {}
+  });
 
   useEffect(() => {
     getData()
@@ -82,20 +101,10 @@ const TopicPage = ({ params }: { params: Params }) => {
   }
   return (
     <>
-      {addSection.show && !addQuestion.show &&
+      {uiState.showAddSection &&
         <CreateSections onBack={() => {
-        setAddSection({ show: false });
-      } } initialData={{
-        topic: data?.topics?.name,
-        topicId: data?.topics._id,
-        syllabus: data?.topics.syllabus,
-        level: data?.level?.name,
-        subject: data?.subject?.name,
-      }} />
-      }
-      {!addSection.show && addQuestion.show &&
-        <CreateQuestions onBack={() => {
-          setAddQuestion({ show: false })
+          getData();
+          setUIState({ showAddSection: false });
         }} initialData={{
           topic: data?.topics?.name,
           topicId: data?.topics._id,
@@ -104,7 +113,51 @@ const TopicPage = ({ params }: { params: Params }) => {
           subject: data?.subject?.name,
         }} />
       }
-      {!addSection.show && !addQuestion.show &&
+
+      {uiState.showUpdateSection &&
+        <UpdateSections onBack={() => {
+          setUIState({ showUpdateSection: false, updateSectionInitialData: {} });
+        }} initialData={{
+          topic: data?.topics?.name,
+          topicId: data?.topics._id,
+          syllabus: data?.topics.syllabus,
+          level: data?.level?.name,
+          subject: data?.subject?.name,
+          data: uiState.updateSectionInitialData,
+        }} />
+      }
+
+      {uiState.showAddQuestion &&
+        <CreateQuestions onBack={() => {
+          getData();
+          setUIState({ showAddQuestion: false })
+        }} initialData={{
+          topic: data?.topics?.name,
+          topicId: data?.topics._id,
+          syllabus: data?.topics.syllabus,
+          level: data?.level?.name,
+          subject: data?.subject?.name,
+        }} />
+      }
+      {uiState.showUpdateQuestion && (
+        <>
+          <UpdateQuestions onBack={() => {
+            setUIState({ showUpdateQuestion: false, UpdateQuestionInitialData: {} });
+          }} initialData={{
+            topic: data?.topics?.name,
+            topicId: data?.topics._id,
+            syllabus: data?.topics.syllabus,
+            level: data?.level?.name,
+            subject: data?.subject?.name,
+            data: uiState.updateQuestionInitialData,
+          }} />
+        </>
+      )
+      }
+      {!uiState.showAddSection &&
+        !uiState.showAddQuestion &&
+        !uiState.showUpdateSection &&
+        !uiState.showUpdateQuestion &&
         <div className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default'>
           <div className="flex flex-col px-7 pt-10">
             <div className="flex gap-5 justify-between self-start items-center">
@@ -140,8 +193,8 @@ const TopicPage = ({ params }: { params: Params }) => {
               </div>
             </div>
             <div className="pl-9">
-              <Sections onAddSectionClick={() => { setAddSection({ show: true }) }} />
-              <Questions onAddQuestionClick={() => { setAddQuestion({ show: true }) }} />
+              <Sections onAddSectionClick={handleAddSectionClick} onEditSectionClick={(data) => handleEditSectionClick(data)} />
+              <Questions onAddQuestionClick={handleAddQuestionClick} onEditQuestionClick={(data) => handleEditQuestionClick(data)} />
             </div>
           </div>
         </div>

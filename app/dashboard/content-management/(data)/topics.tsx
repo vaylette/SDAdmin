@@ -32,7 +32,7 @@ export const TopicsContent = ({ tab }) => {
         topics: [],
         subjects: [],
         levels: [],
-        syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "0" }, { name: "Montessori", _id: "2" }],
+        syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "1" }, { name: "Montessori", _id: "2" }],
         UpdateTopic: {id: 0},
     })
 
@@ -54,8 +54,6 @@ export const TopicsContent = ({ tab }) => {
             Object.keys(prevStates).forEach(id => {
                 updatedStates[id] = false;
             });
-
-            // Toggle the state of the clicked dropdown
             updatedStates[rowId] = !prevStates[rowId];
 
             return updatedStates;

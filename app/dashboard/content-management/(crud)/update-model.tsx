@@ -5,7 +5,6 @@ import { usePatchData, usePostData } from "@/app/constants/hooks";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
-import { Subject, Level, Syllabus } from "./create-topic";
 
 interface UpdateModelProps {
     onRefresh: () => void;
@@ -20,7 +19,7 @@ export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps
     }));
 
     const fileTypeOptions =
-        [{ name: initialData?.data.fileType, id: "1" }, { name: "glb", id: "2" }]
+        [{ name: initialData?.data.fileType, id: "1" }]
 
     const [loading, setLoading] = useState(false)
 
@@ -31,12 +30,9 @@ export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps
         description: initialData?.data.description,
         thumbnail: initialData?.data.thumbnail,
         modelFileUrl: initialData?.data.modelFileUrl,
-        ARExperienceFileUrl: initialData?.data.ARExperienceFileUrl,
     })
 
     const patchData = usePatchData()
-
-    const router = useRouter()
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
@@ -47,12 +43,10 @@ export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (formData.name === '' || formData.subject === null || formData.fileType === '' || formData.description === null || formData.modelFileUrl === null || formData.ARExperienceFileUrl === null) {
+        if (formData.name === '' || formData.subject === null || formData.fileType === '' || formData.description === null || formData.modelFileUrl === null) {
             toast.error('Please fill all the required fields!')
             return
         }
-        console.log(formData);
-
         setLoading(true)
         try {
             const response = await patchData(`${apiUrls.patchModels}/${initialData?.data?._id}`, formData, true)
@@ -122,15 +116,9 @@ export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps
 
                 <div className='flex flex-col gap-2'>
                     <FileUpload fileUrl={initialData?.data?.modelFileUrl} label={"Model File"} onFileSelected={(file) => {
-                        handleChange('modelFileUrl', file)
+                        handleChange('modelFile', file)
                     }} />
                 </div>
-                <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={initialData?.data?.ARExperienceFileUrl} label={"AR Experience file"} onFileSelected={(file) => {
-                        handleChange('ARExperienceFileUrl', file)
-                    }} />
-                </div>
-
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading} onClick={handleSubmit}>
                     <span>Update Model</span>
                     {loading && (

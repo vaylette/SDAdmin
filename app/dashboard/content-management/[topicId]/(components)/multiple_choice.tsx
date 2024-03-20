@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 
 // New MultipleChoiceForm component
-export const MultipleChoiceForm = ({ onSubmit }) => {
-    const [choices, setChoices] = useState(['', '', '', '']);
-    const [correctAnswer, setCorrectAnswer] = useState('');
+export const MultipleChoiceForm = ({ onSubmit, initialChoices, initalAnswer }) => {
+    const [choices, setChoices] = useState(initialChoices ?? ['', '', '', '']);
+    const [correctAnswer, setCorrectAnswer] = useState(initalAnswer ?? '');
 
     useEffect(() => {
         onSubmit({

@@ -34,12 +34,9 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
         description: null as string | null,
         thumbnail: null as string | null,
         modelFile: null as string | null,
-        ARExperienceFile: null as string | null,
     })
 
     const postData = usePostData()
-
-    const router = useRouter()
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
@@ -50,14 +47,10 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        // if (formData.name === '' || formData.subject === null || formData.description === null || formData.modelFile === null || formData.ARExperienceFile === null) {
-        //     toast.error('Please fill all the required fields!')
-        //     return
-        // }
-        formData.fileType = "glb"
-        formData.ARExperienceFile = formData.modelFile
-        formData.thumbnail = formData.ARExperienceFile
-
+        if (formData.name === '' || formData.subject === null || formData.description === null || formData.modelFile === null || formData.fileType === null || formData.thumbnail  === null) {
+            toast.error('Please fill all the required fields!')
+            return
+        }
         setLoading(true)
         try {
             const response = await postData(`${apiUrls.postModels}`,formData,true)
@@ -103,8 +96,8 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
 
                     <SelectBox
                         options={fileTypeOptions}
-                        selected={formData.fileType !== null ? { name: fileTypeOptions.find(opt => opt.id === formData.fileType)?.name || '', id: formData.fileType } : null}
-                        onChange={(value) => handleChange('fileType', value)}
+                        selected={formData.fileType !== null ? { name: fileTypeOptions.find(opt => opt.name === formData.fileType)?.name || '', id: formData.fileType } : null}
+                        onChange={(value) => handleChange('fileType', value?.name)}
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
@@ -118,18 +111,18 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
                 </div>
 
                 <div className='flex flex-col gap-2'>
+                    <FileUpload label={"Model Thumbnail"} onFileSelected={(file) => {
+                        handleChange('thumbnail', file)
+                    }} />
+                </div>
+
+                <div className='flex flex-col gap-2'>
                     <FileUpload label={"Model File"} onFileSelected={(file) => {
                         handleChange('modelFile', file)
                     }} />
                 </div>
-                <div className='flex flex-col gap-2'>
-                    <FileUpload label={"AR Experience file"} onFileSelected={(file) => {
-                        handleChange('ARExperienceFile', file)
-                    }} />
-                </div>
-
                 <button className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading} onClick={handleSubmit}>
-                    <span>Add Model</span>
+                    <span>Add 3D Model</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
                             <circle className="dot" cx="10" cy="20" r="3" />

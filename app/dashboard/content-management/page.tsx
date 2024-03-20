@@ -9,12 +9,6 @@ import toast from "react-hot-toast"
 import { apiUrls, baseUrl } from "@/app/constants/apiUrls"
 import { Topic, Model, Experiment, Video } from "@/app/types/types"
 import Modal from "@/app/_components/modal"
-import CreateTopic from "./(crud)/create-topic"
-import CustomModal from "@/app/_components/aside-modal/aside-modal"
-import CreateModel from "./(crud)/create-model"
-import CreateVideo from "./(crud)/create-video"
-import CreateExperiment from "./(crud)/create-experiment"
-import CreateDiyExperiment from "./(crud)/create-diy-experiment"
 import Dropdown, {
   DropdownToggle,
   DropdownMenu,
@@ -73,7 +67,7 @@ export default function ContentManagement() {
     videos: [],
     subjects: [],
     levels: [],
-    syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "0" }, { name: "Montessori", _id: "2" }],
+    syllabus: [{ name: "Cambridge", _id: "0" }, { name: "NECTA", _id: "1" }, { name: "Montessori", _id: "2" }],
     UpdateTopic: {},
     UpdateModel: {},
     UpdateExperiment: {},
@@ -440,9 +434,9 @@ export default function ContentManagement() {
 
   const tabList: TabItem<string>[] = [
     { name: 'Topics', tab: 'topics', columns: topicsColumns },
-    { name: 'Models', tab: 'models', columns: modelsColumns },
-    { name: 'Simulations', tab: 'simulations', columns: simulationsColumns },
-    { name: 'Experiments', tab: 'experiments', columns: experimentsColumns },
+    { name: '3D Models', tab: 'models', columns: modelsColumns },
+    { name: '2D Simulations', tab: 'simulations', columns: simulationsColumns },
+    { name: '3D Simulations', tab: 'experiments', columns: experimentsColumns },
     { name: 'Videos', tab: 'videos', columns: videoColumns },
   ]
 

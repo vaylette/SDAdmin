@@ -32,8 +32,7 @@ export default function CreateExperiment({ subjects, onRefresh }: CreateVideoPro
         subject: null as string | null,
         category: null as string | null,
         description: null as string | null,
-        modelFile: null as string | null,
-        ARExperienceFile: null as string | null,
+        thumbnail: null as string | null,
         stepsFile: null as string | null
     })
 
@@ -50,11 +49,10 @@ export default function CreateExperiment({ subjects, onRefresh }: CreateVideoPro
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        // if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.modelFileUrl === null || formData.ARExperienceFileUrl === null) {
-        //     toast.error('Please fill all the required fields!')
-        //     return
-        // }
-        formData.category = categoryOptions.find(opt => opt.id === formData.category)?.name ?? null
+        if (formData.name === '' || formData.subject === null || formData.category === '' || formData.description === null || formData.thumbnail === null || formData.stepsFile === null) {
+            toast.error('Please fill all the required fields!')
+            return
+        }
         setLoading(true)
         try {
             const response = await postData(`${apiUrls.postExperiments}`,formData,true)
@@ -72,7 +70,7 @@ export default function CreateExperiment({ subjects, onRefresh }: CreateVideoPro
         <>
             <form onSubmit={() => { }} className='flex flex-col gap-8 text-lg text-black-400 pb-[92px]' encType='multipart/form-data'>
                 <div className='flex flex-col gap-2'>
-                    <label>Experiment Name</label>
+                    <label>3D Simulation Name</label>
                     <input
                         type='text'
                         value={formData.name}
@@ -101,8 +99,8 @@ export default function CreateExperiment({ subjects, onRefresh }: CreateVideoPro
 
                     <SelectBox
                         options={categoryOptions}
-                        selected={formData.category !== null ? { name: categoryOptions.find(opt => opt.id === formData.category)?.name || '', id: formData.category } : null}
-                        onChange={(value) => handleChange('category', value?.id)}
+                        selected={formData.category !== null ? { name: categoryOptions.find(opt => opt.name === formData.category)?.name || '', id: formData.category } : null}
+                        onChange={(value) => handleChange('category', value?.name)}
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
@@ -116,22 +114,18 @@ export default function CreateExperiment({ subjects, onRefresh }: CreateVideoPro
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Model File"} onFileSelected={(file) => {
-                        handleChange('modelFile', file);
+                    <FileUpload label={"Thumbnail"} onFileSelected={(file) => {
+                        handleChange('thumbnail', file);
                     }} />
                 </div>
+
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"AR Experience file"} onFileSelected={(file) => {
-                        handleChange('ARExperienceFile', file);
-                    }} />
-                </div>
-                <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Steps file"} onFileSelected={(file) => {
+                    <FileUpload label={"3D simulation Package"} onFileSelected={(file) => {
                         handleChange('stepsFile', file);
                     }} />
                 </div>
                 <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
-                    <span>Add Experiment</span>
+                    <span>Add 3D Simulation</span>
                     {loading && (
                         <svg height="40" width="40" className="text-white-default">
                             <circle className="dot" cx="10" cy="20" r="3" />
