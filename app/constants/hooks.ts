@@ -67,14 +67,14 @@ export const useDeleteData = () => {
   const authStore = useAuthStore((state) => state) as AuthStore;
   const { token } = authStore;
 
-  const deleteData = async (url:string) => {
+  const deleteData = async (url:string, message?:string ) => {
     try {
       const headers = {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       };
       const response = await axios.delete(url, {headers});
-      toast.success('Deleted successfully')
+      toast.success(message ?? 'Deleted successfully' )
       return response.data;
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'An error occurred')

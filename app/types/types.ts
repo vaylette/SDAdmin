@@ -32,6 +32,7 @@ export type Topic = {
 
 export type User = {
     ref_no: string | number | null | undefined
+    _id: string, 
     name: string,
     email: string,
     gender: string | null,
@@ -44,7 +45,8 @@ export type User = {
     status: string | number,
     school: string | null,
     type: string | null,
-    action: null
+    action: null,
+    isActive: boolean,
 }
 
 export type Model = {

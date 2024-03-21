@@ -3,13 +3,14 @@
 import CustomModal from '@/app/_components/aside-modal/aside-modal'
 import DataTable from '@/app/_components/datatable'
 import { apiUrls } from '@/app/constants/apiUrls'
-import { useRetrieveData } from '@/app/constants/hooks'
+import { useDeleteData, usePatchData, useRetrieveData } from '@/app/constants/hooks'
 import { User } from '@/app/types/types'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useState, useEffect } from "react"
 import toast from 'react-hot-toast'
 import CreateAdmin from './(crud)/create-admin'
 import InviteStudent from './(crud)/invite-student'
+import UpdateAdmin from './(crud)/update-admin'
 
 interface Tab {
   admins: boolean
@@ -23,7 +24,8 @@ interface Tab {
 interface Modal {
   create: boolean,
   invite: boolean,
-  edit: boolean
+  edit: boolean,
+  id: number,
 }
 
 export default function UserManagement() {
@@ -44,7 +46,8 @@ export default function UserManagement() {
   const [modal, setModal] = useState<Modal>({
     create: false,
     invite: false,
-    edit: false
+    edit: false,
+    id: 0
   })
 
   const handleModal = (modalType: string): void => {
@@ -52,7 +55,7 @@ export default function UserManagement() {
   }
 
   const handleModalClose = (): void => {
-    setModal({ create: false, invite: false, edit: false })
+    setModal({ create: false, invite: false, edit: false, id: 0 })
     getData()
   }
 
@@ -77,10 +80,32 @@ export default function UserManagement() {
     } finally { }
   }
 
+  const deleteData = useDeleteData()
+
+  const handleRestrictUser = async (id: any) => {
+    try {
+      await deleteData(`${apiUrls.restrictUser}/${id}`, "Restricted successfully");
+      getData()
+    } catch (error) {
+      toast.error('An error occurred while restricting a user');
+    }
+  };
+
+  const handleUnRestrictUser = async (id: any) => {
+    try {
+      await deleteData(`${apiUrls.unrestrictUser}/${id}`, "Unrestricted successfully");
+      getData()
+    } catch (error) {
+      toast.error('An error occurred while unrestricting a user');
+    }
+  };
+
+
   const admins: User[] | undefined = (data?.users as User[])?.filter(user => ['Admin', 'SuperAdmin', 'ContentAdmin', 'ContentModerator', 'CustomerCare'].includes(user.type ?? ""))?.map((item) => {
     const itemsAsAdmin = item as User;
     return {
       ref_no: '',
+      _id: itemsAsAdmin._id,
       name: itemsAsAdmin.name,
       email: itemsAsAdmin.email,
       gender: itemsAsAdmin.gender,
@@ -93,7 +118,8 @@ export default function UserManagement() {
       status: itemsAsAdmin.status,
       school: itemsAsAdmin.school,
       type: itemsAsAdmin.type,
-      action: null
+      action: null,
+      isActive: itemsAsAdmin.isActive
     };
   });
 
@@ -101,6 +127,7 @@ export default function UserManagement() {
     const itemsAsStudent = item as User;
     return {
       ref_no: '',
+      _id: itemsAsStudent._id,
       name: itemsAsStudent.name,
       email: itemsAsStudent.email,
       gender: itemsAsStudent.gender,
@@ -113,7 +140,8 @@ export default function UserManagement() {
       status: itemsAsStudent.status,
       school: itemsAsStudent.school,
       type: itemsAsStudent.type,
-      action: null
+      action: null,
+      isActive: itemsAsStudent.isActive
     };
   });
 
@@ -121,6 +149,7 @@ export default function UserManagement() {
     const itemsAsTeacher = item as User;
     return {
       ref_no: '',
+      _id: itemsAsTeacher._id,
       name: itemsAsTeacher.name,
       email: itemsAsTeacher.email,
       gender: itemsAsTeacher.gender,
@@ -133,7 +162,8 @@ export default function UserManagement() {
       status: itemsAsTeacher.status,
       school: itemsAsTeacher.school,
       type: itemsAsTeacher.type,
-      action: null
+      action: null,
+      isActive: itemsAsTeacher.isActive
     };
   });
 
@@ -141,6 +171,7 @@ export default function UserManagement() {
     const itemsAsParent = item as User;
     return {
       ref_no: '',
+      _id: itemsAsParent._id,
       name: itemsAsParent.name,
       email: itemsAsParent.email,
       gender: itemsAsParent.gender,
@@ -153,7 +184,8 @@ export default function UserManagement() {
       status: itemsAsParent.status,
       school: itemsAsParent.school,
       type: itemsAsParent.type,
-      action: null
+      action: null,
+      isActive: itemsAsParent.isActive
     };
   });
 
@@ -161,6 +193,7 @@ export default function UserManagement() {
     const itemsAsUnVerified = item as User;
     return {
       ref_no: '',
+      _id: itemsAsUnVerified._id,
       name: itemsAsUnVerified.name,
       email: itemsAsUnVerified.email,
       gender: itemsAsUnVerified.gender,
@@ -173,7 +206,8 @@ export default function UserManagement() {
       status: itemsAsUnVerified.status,
       school: itemsAsUnVerified.school,
       type: itemsAsUnVerified.type,
-      action: null
+      action: null,
+      isActive: itemsAsUnVerified.isActive
     };
   });
 
@@ -206,11 +240,36 @@ export default function UserManagement() {
     }),
     columnHelper.accessor('action', {
       header: () => '',
-      cell: (info) => (
+      cell: (info: any) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            <button className='text-orange-default'>Edit</button>
-            <button className='text-red-default'>Restrict</button>
+            {tab.admins && (
+              <>
+                <button onClick={() => {
+                  modal.id = info.row.index
+                  handleModal('edit')
+                }} className='text-orange-default'>Edit</button>
+              </>
+            )}
+            {info.row.original.isActive && (
+              <>
+              <button onClick={() => {
+              const id = info.row.original._id
+              handleRestrictUser(id)
+            }
+            } className='text-red-default'>Restrict</button>
+              </>
+            )}
+            {!info.row.original.isActive && (
+              <>
+              <button onClick={() => {
+              const id = info.row.original._id
+              handleUnRestrictUser(id)
+            }
+            } className='text-red-default'>Un Restrict</button>
+              </>
+            )}
+            
           </div>
         </>
       )
@@ -260,10 +319,15 @@ export default function UserManagement() {
         {tab.parents && <DataTable columns={usersColumns} data={parents ?? parents} />}
         {tab.unVerified && <DataTable columns={usersColumns} data={unverified_users ?? unverified_users} />}
       </div>
-      <CustomModal isOpen={modal.create || modal.invite} onClose={handleModalClose} title={modal.create ? 'Add Admin' : 'Invite Student'} subtitle = {modal.invite ? "Please add the student’s information and we will send invite email" : ""}>
+      <CustomModal isOpen={modal.create || modal.invite || modal.edit} onClose={handleModalClose} title={modal.create ? 'Add Admin' : modal.edit ? 'Edit User' : 'Invite Student'} subtitle={modal.invite ? "Please add the student’s information and we will send invite email" : ""}>
         {modal.create && (<>
-          <CreateAdmin onRefresh={handleModalClose}  />
+          <CreateAdmin onRefresh={handleModalClose} />
         </>)}
+        {modal.edit && tab.admins && (
+          <>
+            <UpdateAdmin initialData={admins[modal.id]} onRefresh={handleModalClose} />
+          </>
+        )}
         {modal.invite && (<>
           <InviteStudent />
         </>)}
