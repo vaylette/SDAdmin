@@ -114,12 +114,12 @@ export default function UpdateExperiment({ data, onRefresh }: CreateVideoProps) 
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} fileUrl={formData.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file);
                     }} />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.stepsFile} label={"3D simulation Package"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".zip"]} fileUrl={formData.stepsFile} label={"3D simulation Package"} onFileSelected={(file) => {
                         handleChange('stepsFile', file);
                     }} />
                 </div>

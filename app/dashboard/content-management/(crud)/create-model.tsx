@@ -111,13 +111,13 @@ export default function CreateModel({ subjects, onRefresh }: CreateModelProps) {
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Model Thumbnail"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} label={"Model Thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file)
                     }} />
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Model File"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".glb"]} label={"Model File"} onFileSelected={(file) => {
                         handleChange('modelFile', file)
                     }} />
                 </div>

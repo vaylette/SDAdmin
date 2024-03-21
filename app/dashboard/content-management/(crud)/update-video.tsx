@@ -118,7 +118,7 @@ export default function UpdateVideo({ data, onRefresh }: CreateVideoProps) {
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.videoFile} label={"Upload Video"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".mp4"]} fileUrl={formData.videoFile} label={"Upload Video"} onFileSelected={(file) => {
                         handleChange('videoFile', file);
                     }} />
                 </div>

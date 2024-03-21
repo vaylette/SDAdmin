@@ -114,13 +114,13 @@ export default function CreateExperiment({ subjects, onRefresh }: CreateVideoPro
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Thumbnail"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} label={"Thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file);
                     }} />
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"3D simulation Package"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".zip"]} label={"3D simulation Package"} onFileSelected={(file) => {
                         handleChange('stepsFile', file);
                     }} />
                 </div>

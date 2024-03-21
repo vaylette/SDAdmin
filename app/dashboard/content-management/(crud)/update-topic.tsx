@@ -184,6 +184,7 @@ export default function EditTopic({
         </div>
         <div className='flex flex-col gap-2'>
           <FileUpload
+          allowedFileTypes={[".png",".jpg", ".jpeg"]}
             fileUrl={`${formData.thumbnail}`}
             label={'Add thumbnail'}
             onFileSelected={(file) => {

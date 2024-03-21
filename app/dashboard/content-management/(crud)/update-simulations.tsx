@@ -114,13 +114,13 @@ export default function UpdateSimulation({ data, onRefresh }: UpdateSimulationPr
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} fileUrl={formData.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file)
                     }} />
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={formData.simulationFile} label={"Simulation File"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".gif"]} fileUrl={formData.simulationFile} label={"Simulation File"} onFileSelected={(file) => {
                         handleChange('simulationFile', file)
                     }} />
                 </div>

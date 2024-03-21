@@ -116,13 +116,13 @@ export default function CreateSimulation({ subjects, onRefresh }: CreateSimulati
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Thumbnail"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} label={"Thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file)
                     }} />
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Simulation File"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".gif"]} label={"Simulation File"} onFileSelected={(file) => {
                         handleChange('simulationFile', file)
                     }} />
                 </div>

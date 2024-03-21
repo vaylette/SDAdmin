@@ -129,7 +129,7 @@ export default function CreateTopic({ subjects, levels, syllabus, onRefresh }: C
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload label={"Add thumbnail"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} label={"Add thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file);
                     }} />
                 </div>

@@ -109,13 +109,13 @@ export default function UpdateModel({ initialData, onRefresh }: UpdateModelProps
                     />
                 </div>
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={initialData?.data?.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} fileUrl={initialData?.data?.thumbnail} label={"Thumbnail"} onFileSelected={(file) => {
                         handleChange('thumbnail', file)
                     }} />
                 </div>
 
                 <div className='flex flex-col gap-2'>
-                    <FileUpload fileUrl={initialData?.data?.modelFileUrl} label={"Model File"} onFileSelected={(file) => {
+                    <FileUpload allowedFileTypes={[".glb"]} fileUrl={initialData?.data?.modelFileUrl} label={"Model File"} onFileSelected={(file) => {
                         handleChange('modelFile', file)
                     }} />
                 </div>

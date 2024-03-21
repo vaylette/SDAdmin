@@ -130,7 +130,7 @@ export default function UpdateQuestions({ initialData, onBack }: CreateSectionsP
                                 </div>
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
-                                <FileUpload fileUrl={formData.thumbnail} allowedFileTypes={[".jpg", ".png"]} label={"Thumbnail"} text={"Add Image"} onFileSelected={(file) => {
+                                <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} fileUrl={formData.thumbnail} allowedFileTypes={[".jpg", ".png"]} label={"Thumbnail"} text={"Add Image"} onFileSelected={(file) => {
                                     handleChange('thumbnail', file)
                                 }} />
                             </div>
