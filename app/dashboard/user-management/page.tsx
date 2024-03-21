@@ -11,6 +11,9 @@ import toast from 'react-hot-toast'
 import CreateAdmin from './(crud)/create-admin'
 import InviteStudent from './(crud)/invite-student'
 import UpdateAdmin from './(crud)/update-admin'
+import RBAC from '@/app/constants/control'
+import useAuthStore, { AuthStore } from '@/app/store/useAuthStore'
+import AccessControl from '@/app/constants/control'
 
 interface Tab {
   admins: boolean
@@ -29,6 +32,11 @@ interface Modal {
 }
 
 export default function UserManagement() {
+  const authStore = useAuthStore((state) => state) as AuthStore;
+  const { user } = authStore;
+
+  const accessControl = new AccessControl(user);
+
   const [tab, setTab] = useState<Tab>({
     admins: true,
     students: false,
@@ -243,7 +251,7 @@ export default function UserManagement() {
       cell: (info: any) => (
         <>
           <div className='flex flex-row gap-6 font-medium'>
-            {tab.admins && (
+            {tab.admins && accessControl.isSuperAdmin() && (
               <>
                 <button onClick={() => {
                   modal.id = info.row.index
@@ -253,23 +261,23 @@ export default function UserManagement() {
             )}
             {info.row.original.isActive && (
               <>
-              <button onClick={() => {
-              const id = info.row.original._id
-              handleRestrictUser(id)
-            }
-            } className='text-red-default'>Restrict</button>
+                <button onClick={() => {
+                  const id = info.row.original._id
+                  handleRestrictUser(id)
+                }
+                } className='text-red-default'>Restrict</button>
               </>
             )}
             {!info.row.original.isActive && (
               <>
-              <button onClick={() => {
-              const id = info.row.original._id
-              handleUnRestrictUser(id)
-            }
-            } className='text-red-default'>Un Restrict</button>
+                <button onClick={() => {
+                  const id = info.row.original._id
+                  handleUnRestrictUser(id)
+                }
+                } className='text-red-default'>Un Restrict</button>
               </>
             )}
-            
+
           </div>
         </>
       )
@@ -306,7 +314,7 @@ export default function UserManagement() {
               </button>
             ))}
           </div>
-          {tab.admins && (
+          {tab.admins && accessControl.isSuperAdmin() && (
             <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
           )}
           {/* {tab.students && (

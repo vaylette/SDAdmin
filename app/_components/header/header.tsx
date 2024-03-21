@@ -15,10 +15,9 @@ export default function Header() {
     const [title, setTitle] = useState<string | null>(null)
 
     const authStore = useAuthStore((state) => state) as AuthStore
+    const { user } = authStore
 
     const logout = Logout()
-
-    const { user } = authStore
 
     const [drop, setDrop] = useState<Drop>({
         notifications: false,
