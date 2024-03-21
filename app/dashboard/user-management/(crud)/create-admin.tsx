@@ -103,9 +103,9 @@ export default function CreateAdmin(
                     <label className=''>Permission level</label>
                     <select value={formData.permissionLevel} onChange={(e) => handleChange('permissionLevel', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
                         <option value='' disabled>Select permission</option>
-                        <option value="superadmin">SuperAdmin</option>
-                        <option value="contentadmin">Content admin</option>
-                        <option value="contentmoderator">Content moderator</option>
+                        <option value="superadmin">Super Admin</option>
+                        <option value="contentadmin">Content Admin</option>
+                        <option value="contentmoderator">Content Moderator</option>
                         <option value="customercare">Customer Care</option>
                     </select>
                 </div>

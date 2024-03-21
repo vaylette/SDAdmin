@@ -37,6 +37,7 @@ export default function UpdateQuestions({ initialData, onBack }: CreateSectionsP
         question: initialData?.data?.question,
         answer: initialData?.data?.answer,
         choices: initialData?.data?.choices,
+        thumbnail: initialData?.data?.thumbnail,
     })
 
     const handleMultipleChoiceSubmit = ({ choices, correctAnswer }) => {
@@ -64,7 +65,7 @@ export default function UpdateQuestions({ initialData, onBack }: CreateSectionsP
         setLoading(true)
         try {
 
-            const response = await patchData(`${apiUrls.postQuestions}/${initialData?.data?._id}`, formData, false)
+            const response = await patchData(`${apiUrls.postQuestions}/${initialData?.data?._id}`, formData, true)
             if (response) {
                 onBack()
             }
@@ -128,20 +129,14 @@ export default function UpdateQuestions({ initialData, onBack }: CreateSectionsP
                                     />
                                 </div>
                             </div>
+                            <div className='flex flex-col gap-1 w-full'>
+                                <FileUpload fileUrl={formData.thumbnail} allowedFileTypes={[".jpg", ".png"]} label={"Thumbnail"} text={"Add Image"} onFileSelected={(file) => {
+                                    handleChange('thumbnail', file)
+                                }} />
+                            </div>
                             <div className='grid grid-cols-2 gap-4 w-full'>
                                 <MultipleChoiceForm onSubmit={handleMultipleChoiceSubmit} initialChoices={formData.choices} initalAnswer={formData.answer} />
                             </div>
-                            {/* <div className='flex flex-col gap-1 w-full'>
-                                <label className='text-start'>Question</label>
-                                <CustomEditor initialData={formData.question} onChange={(data) => {
-                                    handleChange('question', data)
-                                }} />
-                            </div>
-                            <div className='flex flex-col gap-1 w-full'>
-                                <label className='text-start'>Answer</label>
-                                <CustomEditor initialData={formData.answer} onChange={(data) => handleChange('answer', data)} />
-                            </div> */}
-
                             <button onClick={handleSubmit} className={`w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[50px] text-white-default text-xl ${loading ? 'flex flex-row gap-2 items-center' : ''}`} disabled={loading}>
                                 <span>Update Question</span>
                                 {loading && (

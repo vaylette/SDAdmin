@@ -16,12 +16,13 @@ import { CustomDropDown } from "../../(components)/custom_dropdown";
 
 
 interface QuestionsProps {
+    topicId: string,
     onAddQuestionClick: () => void,
     onEditQuestionClick: (question) => void 
 }
 
 
-export const Questions = ({ onAddQuestionClick, onEditQuestionClick }: QuestionsProps) => {
+export const Questions = ({ topicId, onAddQuestionClick, onEditQuestionClick }: QuestionsProps) => {
     const [showAll, setShowAll] = useState(false);
 
     const [data, setData] = useState({
@@ -37,7 +38,7 @@ export const Questions = ({ onAddQuestionClick, onEditQuestionClick }: Questions
     const getData = async () => {
         try {
             const [questionsResults] = await Promise.all([
-                retrieveData(`${apiUrls.getQuestions}`),
+                retrieveData(`${apiUrls.getQuestions}?topic=${topicId}`),
             ])
 
             setData(prev => ({

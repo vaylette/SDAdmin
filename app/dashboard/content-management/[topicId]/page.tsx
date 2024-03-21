@@ -157,7 +157,7 @@ const TopicPage = ({ params }: { params: Params }) => {
       {!uiState.showAddSection &&
         !uiState.showAddQuestion &&
         !uiState.showUpdateSection &&
-        !uiState.showUpdateQuestion &&
+        !uiState.showUpdateQuestion && data?.topics?._id &&
         <div className='min-w-full h-auto rounded-[10px] text-black-100 bg-white-default'>
           <div className="flex flex-col px-7 pt-10">
             <div className="flex gap-5 justify-between self-start items-center">
@@ -193,8 +193,8 @@ const TopicPage = ({ params }: { params: Params }) => {
               </div>
             </div>
             <div className="pl-9">
-              <Sections onAddSectionClick={handleAddSectionClick} onEditSectionClick={(data) => handleEditSectionClick(data)} />
-              <Questions onAddQuestionClick={handleAddQuestionClick} onEditQuestionClick={(data) => handleEditQuestionClick(data)} />
+              <Sections topicId={data?.topics?._id} onAddSectionClick={handleAddSectionClick} onEditSectionClick={(data) => handleEditSectionClick(data)} />
+              <Questions topicId={data?.topics?._id} onAddQuestionClick={handleAddQuestionClick} onEditQuestionClick={(data) => handleEditQuestionClick(data)} />
             </div>
           </div>
         </div>

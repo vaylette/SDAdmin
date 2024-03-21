@@ -13,14 +13,14 @@ import Dropdown, {
     MenuItem,
     DropdownButton
 } from "@trendmicro/react-dropdown";
-import { info } from "console";
 
 interface SectionsProps {
+    topicId: string,
     onAddSectionClick: () => void,
     onEditSectionClick: (chapter) => void,
 }
 
-export function Sections({ onAddSectionClick, onEditSectionClick }: SectionsProps) {
+export function Sections({ topicId, onAddSectionClick, onEditSectionClick }: SectionsProps) {
     const [showAll, setShowAll] = useState(false);
 
     const [data, setData] = useState({
@@ -32,11 +32,10 @@ export function Sections({ onAddSectionClick, onEditSectionClick }: SectionsProp
     useEffect(() => {
         getData()
     }, [])
-
     const getData = async () => {
         try {
             const [chapterResults] = await Promise.all([
-                retrieveData(`${apiUrls.getChapters}`),
+                retrieveData(`${apiUrls.getChapters}?topic=${topicId}`),
             ])
 
             setData(prev => ({
