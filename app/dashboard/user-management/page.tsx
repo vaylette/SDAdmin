@@ -309,9 +309,9 @@ export default function UserManagement() {
           {tab.admins && (
             <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
           )}
-          {tab.students && (
+          {/* {tab.students && (
             <button onClick={() => handleModal('invite')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Invite Student +</button>
-          )}
+          )} */}
         </div>
         {tab.admins && <DataTable columns={usersColumns} data={admins ?? admins} />}
         {tab.students && <DataTable columns={usersColumns} data={students ?? students} />}
@@ -328,9 +328,9 @@ export default function UserManagement() {
             <UpdateAdmin initialData={admins[modal.id]} onRefresh={handleModalClose} />
           </>
         )}
-        {modal.invite && (<>
+        {/* {modal.invite && (<>
           <InviteStudent />
-        </>)}
+        </>)} */}
       </CustomModal>
     </>
   )
