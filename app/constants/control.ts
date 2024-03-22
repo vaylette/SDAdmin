@@ -8,18 +8,18 @@ export default class AccessControl {
     }
 
     isSuperAdmin() {
-        return this.user.type.toLowerCase() === 'superadmin' || this.user.type.toLowerCase() === 'admin';
+        return this.user?.type.toLowerCase() === 'superadmin' || this.user?.type.toLowerCase() === 'admin';
     }
 
     isContentAdmin() {
-        return this.user.type.toLowerCase() === 'contentadmin';
+        return this.user?.type.toLowerCase() === 'contentadmin';
     }
 
     isContentModerator() {
-        return this.user.type.toLowerCase() === 'contentmoderator';
+        return this.user?.type.toLowerCase() === 'contentmoderator';
     }
 
     isCustomerCare() {
-        return this.user.type.toLowerCase() === 'customercare';
+        return this.user?.type.toLowerCase() === 'customercare';
     }
 }

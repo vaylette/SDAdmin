@@ -48,13 +48,13 @@ export default function AuthWrapper() {
                 if (response.status === 401) {
                     toast.error("Invalid user inputs check your username and password")
                 } else {
-                    if (response.user.type === "Admin") {
-                        setAuthentication(true)
-                        setUser(response.user)
-                        setToken(response.access_token)
-                        cookies.set('token', `${response.access_token}`, { secure: false })
-                        toast.success('Successfully authenticated!')
-                        router.push('/dashboard')
+                    if (["admin", "superadmin", "contentmoderator", "contentadmin", "customercare"].includes(response.user.type.toLowerCase())) {
+                        setAuthentication(true);
+                        setUser(response.user);
+                        setToken(response.access_token);
+                        cookies.set('token', response.access_token, { secure: false });
+                        toast.success('Successfully authenticated!');
+                        router.push('/dashboard');
                     } else {
                         toast.error('Unauthorized to access admin')
                     }

@@ -8,10 +8,9 @@ const Logout = () => {
   const cookies = useCookies();
 
   const logout = () => {
-    authStore.logout();
     cookies.remove('token')
-    // localStorage.removeItem("token");
     router.push("/");
+    authStore.logout();
   }
 
   return logout
