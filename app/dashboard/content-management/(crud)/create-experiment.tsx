@@ -23,7 +23,7 @@ interface CreateVideoProps {
 
 export default function CreateExperiment({ subjects, onRefresh }: CreateVideoProps) {
     const subjectOptions = subjects?.map(subject => ({ name: subject.name, id: subject._id }))
-    const categoryOptions = [{ name: "3D", id: "0" }]
+    const categoryOptions = [{ name: "3D Simulations", id: "0" }]
 
     const [loading, setLoading] = useState(false)
 

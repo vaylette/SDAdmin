@@ -1,5 +1,8 @@
+'use client'
+import { useLayoutEffect } from "react"
 import Aside from "../_components/aside"
 import Header from "../_components/header/header"
+import { useAccessControl } from "../constants/control"
 
 export default function DashboardLayout({
     children

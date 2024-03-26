@@ -2,6 +2,7 @@ import { useState, FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import { usePatchData, usePostData } from '@/app/constants/hooks';
 import { apiUrls } from '@/app/constants/apiUrls';
+import { useAccessControl } from '@/app/constants/control';
 
 interface CreateAdminProps {
     initialData: any,
@@ -10,6 +11,7 @@ interface CreateAdminProps {
 export default function UpdateAdmin(
     { initialData, onRefresh }: CreateAdminProps
 ) {
+    const accessControl = useAccessControl()
     const _name = initialData?.name.split(" ")
     const [formData, setFormData] = useState({
         firstName: _name[0],
@@ -93,7 +95,7 @@ export default function UpdateAdmin(
 
                 <div className='flex flex-col gap-2'>
                     <label className=''>Identity</label>
-                    <select value={formData.identity} onChange={(e) => handleChange('identity', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
+                    <select disabled={!accessControl?.isSuperAdmin()} value={formData.identity} onChange={(e) => handleChange('identity', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
                         <option value='' disabled>Select Identity</option>
                         <option value="admin">Admin</option>
                     </select>
@@ -101,7 +103,7 @@ export default function UpdateAdmin(
 
                 <div className='flex flex-col gap-2'>
                     <label className=''>Permission level</label>
-                    <select value={formData.permissionLevel} onChange={(e) => handleChange('permissionLevel', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
+                    <select disabled={!accessControl?.isSuperAdmin()} value={formData.permissionLevel} onChange={(e) => handleChange('permissionLevel', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
                         <option value='' disabled>Select permission</option>
                         <option value="superadmin">Super Admin</option>
                         <option value="contentadmin">Content Admin</option>

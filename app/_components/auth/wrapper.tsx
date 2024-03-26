@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../../../public/images/logo.png'
@@ -36,6 +36,10 @@ export default function AuthWrapper() {
             }
         })
     }
+
+    useLayoutEffect(()=>{
+        console.log("we are still in auth wrapper")
+    })
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()

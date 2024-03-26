@@ -2,6 +2,7 @@ import { useState, FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import { usePostData } from '@/app/constants/hooks';
 import { apiUrls } from '@/app/constants/apiUrls';
+import { useAccessControl } from '@/app/constants/control';
 
 interface CreateAdminProps {
 
@@ -22,6 +23,7 @@ export default function CreateAdmin(
 
     const [loading, setLoading] = useState(false);
     const postData = usePostData();
+    const accessControl = useAccessControl();
 
     const handleChange = (fieldName: string, value: any) => {
         setFormData((prevData) => ({
@@ -103,10 +105,20 @@ export default function CreateAdmin(
                     <label className=''>Permission level</label>
                     <select value={formData.permissionLevel} onChange={(e) => handleChange('permissionLevel', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0'>
                         <option value='' disabled>Select permission</option>
-                        <option value="superadmin">Super Admin</option>
-                        <option value="contentadmin">Content Admin</option>
-                        <option value="contentmoderator">Content Moderator</option>
-                        <option value="customercare">Customer Care</option>
+                        {accessControl?.isSuperAdmin() &&
+                            <>
+                                <option value="superadmin">Super Admin</option>
+                                <option value="contentadmin">Content Admin</option>
+                                <option value="contentmoderator">Content Moderator</option>
+                                <option value="customercare">Customer Care</option>
+                            </>
+                        }
+                        {accessControl?.isContentAdmin() &&
+                            <>
+                                <option value="contentadmin">Content Admin</option>
+                                <option value="contentmoderator">Content Moderator</option>
+                            </>
+                        }
                     </select>
                 </div>
                 <button type="submit" className='w-full h-[60px] rounded-[30px] bg-orange-default flex items-center justify-center mt-[89px] text-white-default text-xl'>{loading ? 'Loading...' : 'Confirm'}</button>

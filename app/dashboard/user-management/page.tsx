@@ -9,11 +9,8 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useState, useEffect } from "react"
 import toast from 'react-hot-toast'
 import CreateAdmin from './(crud)/create-admin'
-import InviteStudent from './(crud)/invite-student'
 import UpdateAdmin from './(crud)/update-admin'
-import RBAC from '@/app/constants/control'
-import useAuthStore, { AuthStore } from '@/app/store/useAuthStore'
-import AccessControl from '@/app/constants/control'
+import { useAccessControl, useAccessControlRedirect } from '@/app/constants/control'
 
 interface Tab {
   admins: boolean
@@ -32,10 +29,8 @@ interface Modal {
 }
 
 export default function UserManagement() {
-  const authStore = useAuthStore((state) => state) as AuthStore;
-  const { user } = authStore;
-
-  const accessControl = new AccessControl(user);
+  const accessControl = useAccessControl();
+  useAccessControlRedirect();
 
   const [tab, setTab] = useState<Tab>({
     admins: true,
@@ -109,7 +104,12 @@ export default function UserManagement() {
   };
 
 
-  const admins: User[] | undefined = (data?.users as User[])?.filter(user => ['Admin', 'SuperAdmin', 'ContentAdmin', 'ContentModerator', 'CustomerCare'].includes(user.type ?? ""))?.map((item) => {
+  const admins: User[] | undefined = (data?.users as User[])?.filter(user =>
+    (accessControl?.isSuperAdmin() ?
+      ['Admin', 'SuperAdmin', 'ContentAdmin', 'ContentModerator', 'CustomerCare'] :
+      ['ContentAdmin', 'ContentModerator'])
+      .includes(user?.type ?? "")
+  )?.map((item) => {
     const itemsAsAdmin = item as User;
     return {
       ref_no: '',
@@ -220,77 +220,137 @@ export default function UserManagement() {
   });
 
 
-  const usersColumns = [
-    columnHelper.accessor('ref_no', {
-      header: () => 'REF NO',
-      cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
-      size: 5,
-    }),
-    columnHelper.accessor('name', {
-      header: () => 'Name',
-      cell: info => info.getValue(),
-      size: 10,
-    }),
-    columnHelper.accessor('email', {
-      header: () => 'Email',
-      cell: info => info.getValue(),
-      size: 10,
-    }),
-    columnHelper.accessor('phoneNumber', {
-      header: () => 'Phone',
-      cell: info => info.getValue(),
-      size: 10,
-    }),
-    columnHelper.accessor('type', {
-      header: () => 'Type',
-      cell: info => info.getValue(),
-      size: 30,
-    }),
-    columnHelper.accessor('action', {
-      header: () => '',
-      cell: (info: any) => (
-        <>
-          <div className='flex flex-row gap-6 font-medium'>
-            {tab.admins && accessControl.isSuperAdmin() && (
-              <>
-                <button onClick={() => {
-                  modal.id = info.row.index
-                  handleModal('edit')
-                }} className='text-orange-default'>Edit</button>
-              </>
-            )}
-            {info.row.original.isActive && (
-              <>
-                <button onClick={() => {
-                  const id = info.row.original._id
-                  handleRestrictUser(id)
-                }
-                } className='text-red-default'>Restrict</button>
-              </>
-            )}
-            {!info.row.original.isActive && (
-              <>
-                <button onClick={() => {
-                  const id = info.row.original._id
-                  handleUnRestrictUser(id)
-                }
-                } className='text-red-default'>Un Restrict</button>
-              </>
-            )}
+  let usersColumns =
 
-          </div>
-        </>
-      )
-    }),
-  ]
+    accessControl?.isSuperAdmin() ?
+      [
+        columnHelper.accessor('ref_no', {
+          header: () => 'REF NO',
+          cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
+          size: 5,
+        }),
+        columnHelper.accessor('name', {
+          header: () => 'Name',
+          cell: info => info.getValue(),
+          size: 10,
+        }),
+        columnHelper.accessor('email', {
+          header: () => 'Email',
+          cell: info => info.getValue(),
+          size: 10,
+        }),
+        columnHelper.accessor('phoneNumber', {
+          header: () => 'Phone',
+          cell: info => info.getValue(),
+          size: 10,
+        }),
+        columnHelper.accessor('type', {
+          header: () => 'Type',
+          cell: info => info.getValue(),
+          size: 30,
+        }),
+        columnHelper.accessor('action', {
+          header: () => '',
+          cell: (info: any) => (
+            <>
+              <div className='flex flex-row gap-6 font-medium'>
+                {tab.admins && (
+                  <>
+                    <button onClick={() => {
+                      modal.id = info.row.index
+                      handleModal('edit')
+                    }} className='text-orange-default'>Edit</button>
+                  </>
+                )}
+                {info.row.original.isActive && (
+                  <>
+                    <button onClick={() => {
+                      const id = info.row.original._id
+                      handleRestrictUser(id)
+                    }
+                    } className='text-red-default'>Restrict</button>
+                  </>
+                )}
+                {!info.row.original.isActive && (
+                  <>
+                    <button onClick={() => {
+                      const id = info.row.original._id
+                      handleUnRestrictUser(id)
+                    }
+                    } className='text-red-default'>Un Restrict</button>
+                  </>
+                )}
 
-  const tabList = [
-    { name: 'Admins', tab: 'admins' },
-    { name: 'Students', tab: 'students' },
-    { name: 'Parents', tab: 'parents' },
-    { name: 'Teachers', tab: 'teachers' },
-    { name: 'Un Verified', tab: 'unVerified' },
-  ]
+              </div>
+            </>
+          )
+        }),
+      ] : [
+        columnHelper.accessor('ref_no', {
+          header: () => 'REF NO',
+          cell: (info) => (info.row.index + 1 + "").padStart(2, "0"),
+          size: 5,
+        }),
+        columnHelper.accessor('name', {
+          header: () => 'Name',
+          cell: info => info.getValue(),
+          size: 10,
+        }),
+        columnHelper.accessor('email', {
+          header: () => 'Email',
+          cell: info => info.getValue(),
+          size: 10,
+        }),
+        columnHelper.accessor('phoneNumber', {
+          header: () => 'Phone',
+          cell: info => info.getValue(),
+          size: 10,
+        }),
+        columnHelper.accessor('type', {
+          header: () => 'Type',
+          cell: info => info.getValue(),
+          size: 30,
+        }),
+        columnHelper.accessor('action', {
+          header: () => '',
+          cell: (info: any) => (
+            <>
+              <div className='flex flex-row gap-6 font-medium'>
+                {info.row.original.isActive && (
+                  <>
+                    <button onClick={() => {
+                      const id = info.row.original._id
+                      handleRestrictUser(id)
+                    }
+                    } className='text-red-default'>Restrict</button>
+                  </>
+                )}
+                {!info.row.original.isActive && (
+                  <>
+                    <button onClick={() => {
+                      const id = info.row.original._id
+                      handleUnRestrictUser(id)
+                    }
+                    } className='text-red-default'>Un Restrict</button>
+                  </>
+                )}
+
+              </div>
+            </>
+          )
+        })
+      ]
+
+  const tabList =
+    accessControl?.isSuperAdmin() ?
+
+      [
+        { name: 'Admins', tab: 'admins' },
+        { name: 'Students', tab: 'students' },
+        { name: 'Parents', tab: 'parents' },
+        { name: 'Teachers', tab: 'teachers' },
+        { name: 'Un Verified', tab: 'unVerified' },
+      ] : [{ name: 'Admins', tab: 'admins' },]
 
   const handleActiveTab = (activeTab: keyof Tab): void => {
     setTab((prev) => ({
@@ -308,13 +368,14 @@ export default function UserManagement() {
       <div className='flex flex-col gap-5'>
         <div className='flex flex-row justify-between text-[20px]'>
           <div className='flex flex-row gap-[10px]'>
+
             {tabList?.map((item, index) => (
               <button key={index} className={`w-[128px] h-[60px] rounded-[5px] flex items-center justify-center ${tab[item.tab as keyof Tab] ? 'bg-orange-default text-white-default' : 'text-orange-default border-[0.5px] border-solid border-orange-200 bg-orange-400'}`} onClick={() => handleActiveTab(item.tab as keyof Tab)}>
                 {item.name}
               </button>
             ))}
           </div>
-          {tab.admins && accessControl.isSuperAdmin() && (
+          {(tab.admins && accessControl?.isSuperAdmin() || accessControl?.isContentAdmin()) && (
             <button onClick={() => handleModal('create')} className='w-[178px] h-[60px] rounded-[5px] bg-orange-default text-white-default flex items-center justify-center'>Add Admin +</button>
           )}
           {/* {tab.students && (

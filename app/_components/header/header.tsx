@@ -40,6 +40,18 @@ export default function Header() {
             case pathname.startsWith('/dashboard/content-management'):
                 setTitle('Content Management');
                 break;
+                case pathname.startsWith('/dashboard/revenue'):
+                setTitle('Revenue')
+                break;
+            case pathname.startsWith('/dashboard/reports'):
+                setTitle('Reports')
+                break;
+            case pathname.startsWith('/dashboard/tickets'):
+                setTitle('Tickets')
+                break;
+            case pathname.startsWith('/dashboard/announcements'):
+                setTitle('Announcements')
+                break;
             default:
                 setTitle('Overview');
         }

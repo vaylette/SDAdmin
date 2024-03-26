@@ -30,6 +30,7 @@ import { VideosContent } from "./(data)/videos"
 import { CustomDropDown } from "./(components)/custom_dropdown"
 import { OverviewCard } from "./(components)/overview"
 import SimulationsContent from "./(data)/simulations"
+import { useAccessControlRedirect } from "@/app/constants/control"
 
 interface ContentTab {
   topics: boolean
@@ -51,6 +52,7 @@ interface Modal {
 }
 
 export default function ContentManagement() {
+  useAccessControlRedirect()
   const [tab, setTab] = useState<ContentTab>({
     topics: true,
     models: false,
