@@ -1,48 +1,55 @@
-import React from 'react';
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import Editor from '@/ckeditor5/build/ckeditor';
-
-const editorConfiguration = {
-    toolbar: [
-        'heading',
-        '|',
-        'bold',
-        'italic',
-        'link',
-        'bulletedList',
-        'numberedList',
-        '|',
-        'outdent',
-        'indent',
-        '|',
-        'imageUpload',
-        'blockQuote',
-        'insertTable',
-        'mediaEmbed',
-        'undo',
-        'redo'
-    ],
-    height: "900px"
-};
+import React, { useEffect, useRef } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 
 interface EditorProps {
     initialData: any,
     onChange?: (data: any | null) => void
 }
 
+
+export function TinyMCE({ initialData, onChange }: EditorProps) {
+    const editorRef: any = useRef();
+    const _apiKey = process.env.NEXT_PUBLIC_TINYMCE_API_KEY
+    useEffect(() => {
+        onChange?.(editorRef.current?.getContent())
+    }, [editorRef.current?.getContent()])
+    return (
+        <>
+            <form>
+                <Editor
+                    apiKey={_apiKey}
+                    onInit={(evt, editor: any) => editorRef.current = editor}
+                    initialValue={initialData}
+                    init={{
+                        height: 500,
+                        menubar: true,
+                        plugins: [
+                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'codesample'
+                        ],
+                        toolbar: 'undo redo | blocks | ' +
+                            'bold italic forecolor | alignleft aligncenter ' +
+                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                            'code' +
+                            'removeformat | help',
+                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                    }}
+                />
+            </form>
+        </>
+    )
+
+}
+
+
 function CustomEditor({ initialData, onChange }: EditorProps) {
-    const handleEditorChange = (event: any, editor: any) => {
-        const data = editor.getData();
-        onChange?.(data);
+    const handleEditorChange = (markdown: string) => {
+        onChange?.(markdown);
     };
 
     return (
-        <CKEditor
-            editor={Editor}
-            config={editorConfiguration}
-            data={initialData}
-            onChange={handleEditorChange}
-        />
+        <TinyMCE initialData={initialData} onChange={handleEditorChange} />
     );
 }
 
