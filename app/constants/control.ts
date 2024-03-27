@@ -47,14 +47,21 @@ export const useAccessControl = () => {
 export const useAccessControlRedirect = () => {
   const accessControl = useAccessControl()
   const router = useRouter();
+  const authStore = useAuthStore((state) => state) as AuthStore; // Assuming useAuthStore returns the authentication state
+  const { user } = authStore;
 
-  useEffect(() => {
-    if (accessControl?.isContentAdmin()) {
-      router.push('/dashboard/user-management');
-    } else if (accessControl?.isContentModerator()) {
-      router.push('/dashboard/content-management');
-    } else if (accessControl?.isCustomerCare()) {
-      router.push('/dashboard/tickets');
-    }
-  }, [accessControl, router]);
+  if (user) {
+
+    useEffect(() => {
+      if (accessControl?.isContentAdmin()) {
+        router.push('/dashboard/user-management');
+      } else if (accessControl?.isContentModerator()) {
+        router.push('/dashboard/content-management');
+      } else if (accessControl?.isCustomerCare()) {
+        router.push('/dashboard/tickets');
+      }
+    }, [accessControl, router]);
+  } else {
+    router.push("/dashboard")
+  }
 };
