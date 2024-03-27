@@ -1,4 +1,4 @@
-export const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT_LOCAL
+export const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT
 
 export const apiUrls = {
     //--------> Authentication  ------->//
