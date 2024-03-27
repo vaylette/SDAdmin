@@ -10,15 +10,17 @@ interface EditorProps {
 export function TinyMCE({ initialData, onChange }: EditorProps) {
     const editorRef: any = useRef();
     const _apiKey = process.env.NEXT_PUBLIC_TINYMCE_API_KEY
-    useEffect(() => {
+    const handleChange = () => {
         onChange?.(editorRef.current?.getContent())
-    }, [editorRef.current?.getContent()])
+    }
     return (
         <>
             <form>
                 <Editor
                     apiKey={_apiKey}
-                    onInit={(evt, editor: any) => editorRef.current = editor}
+                    onInit={(evt, editor: any) => {
+                        editorRef.current = editor
+                    }}
                     initialValue={initialData}
                     init={{
                         height: 500,
@@ -35,6 +37,7 @@ export function TinyMCE({ initialData, onChange }: EditorProps) {
                             'removeformat | help',
                         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     }}
+                    onChange={handleChange}
                 />
             </form>
         </>

@@ -130,7 +130,7 @@ export default function UpdateSections({ initialData, onBack }: CreateSectionsPr
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
                                 <label className='text-start'>Content</label>
-                                <CustomEditor initialData={formData.content} onChange={(data) => handleChange('content', data)} />
+                                <CustomEditor initialData={formData.content} onChange={(data:any) => handleChange('content', data)} />
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
                                 <FileUpload allowedFileTypes={[".png",".jpg", ".jpeg"]} label={"Thumbnail file (*png)"} fileUrl={formData.thumbnail} text={"Add file"} onFileSelected={(file) => {
