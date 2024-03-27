@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import useAuthStore, { AuthStore } from "../store/useAuthStore";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 
 export default class AccessControl {
@@ -49,14 +49,15 @@ export const useAccessControlRedirect = () => {
   const router = useRouter();
   const authStore = useAuthStore((state) => state) as AuthStore; // Assuming useAuthStore returns the authentication state
   const { user } = authStore;
+  const pathname = usePathname()
 
   useEffect(() => {
     if (user) {
-      if (accessControl?.isContentAdmin()) {
+      if (accessControl?.isContentAdmin() && pathname === "/dashboard") {
         router.push('/dashboard/user-management');
-      } else if (accessControl?.isContentModerator()) {
+      } else if (accessControl?.isContentModerator() && pathname === "/dashboard") {
         router.push('/dashboard/content-management');
-      } else if (accessControl?.isCustomerCare()) {
+      } else if (accessControl?.isCustomerCare() && pathname === "/dashboard") {
         router.push('/dashboard/tickets');
       }
     } else {

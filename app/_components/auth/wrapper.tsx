@@ -37,10 +37,6 @@ export default function AuthWrapper() {
         })
     }
 
-    useLayoutEffect(()=>{
-        console.log("we are still in auth wrapper")
-    })
-
     const handleSubmit = async (e: any) => {
         e.preventDefault()
         if (form.username === "" || form.password === "") {

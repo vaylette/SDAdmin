@@ -27,7 +27,7 @@ const PhoneNumberInput = ({ handleChange, formData }: phoneInputProps) => {
                 <PhoneInput
                     className='bg-transparent rounded-r-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0 flex-grow'
                     country="TZ"
-                    value={formData.phoneNumber}
+                    value={formData}
                     onChange={(e) => {
                         handleChange('phoneNumber', e)
                     }} />

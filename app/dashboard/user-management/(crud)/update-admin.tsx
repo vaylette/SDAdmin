@@ -81,7 +81,7 @@ export default function UpdateAdmin(
                     <input type='password' value={formData.password} onChange={(e) => handleChange('password', e.target.value)} className='w-full bg-black-500 rounded-[4px] h-[60px] text-black-400 px-2 focus:outline-none focus:ring-0' />
                 </div> */}
 
-                <PhoneNumberInput handleChange={handleChange} formData={formData.phoneNumber} />
+                <PhoneNumberInput handleChange={handleChange} formData={initialData?.phoneNumber} />
 
                 <div className='flex flex-col gap-2'>
                     <label className=''>Identity</label>
