@@ -1,4 +1,4 @@
-export const baseUrl = 'http://34.207.195.210/api/v1'
+export const baseUrl = 'http://172.233.130.174:3002/api/v1'
 
 export const apiUrls = {
     //--------> Authentication  ------->//
