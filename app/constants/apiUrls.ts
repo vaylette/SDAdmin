@@ -1,4 +1,4 @@
-export const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT_LOCAL
+export const baseUrl = 'http://34.207.195.210/api/v1'
 
 export const apiUrls = {
     //--------> Authentication  ------->//
@@ -16,14 +16,11 @@ export const apiUrls = {
     //--------> Content Management ------->//
         // Get Endpoints
         getTopics: `${baseUrl}/topics`,
-        getModels: `${baseUrl}/models`,
-        getExperiments: `${baseUrl}/experiments`,
-        getVideos: `${baseUrl}/videos`,
+        getModels: `${baseUrl}/models/all`,
+        getExperiments: `${baseUrl}/experiments/all`,
+        getVideos: `${baseUrl}/videos/all`,
         getSubjects: `${baseUrl}/subjects`,
         getLevels: `${baseUrl}/levels`,
-        getChapters: `${baseUrl}/chapters`,
-        getQuestions: `${baseUrl}/questions`,
-        getSimulations: `${baseUrl}/simulations`,
 
         //Post Endpoints
         postTopics: `${baseUrl}/topics`,
@@ -31,36 +28,8 @@ export const apiUrls = {
         postExperiments: `${baseUrl}/experiments`,
         postVideos: `${baseUrl}/videos`,
         postSubjects: `${baseUrl}/subjects`,
-        postChapters: `${baseUrl}/chapters`,
-        postQuestions: `${baseUrl}/questions`,
-        postSimulations: `${baseUrl}/simulations`,
-        postAdminUser: `${baseUrl}/users/admin`,
-        //Put Endpoints
-        patchTopics: `${baseUrl}/topics`,
-        patchModels: `${baseUrl}/models`,
-        patchExperiments: `${baseUrl}/experiments`,
-        patchVideos: `${baseUrl}/videos`,
-        patchSimulations: `${baseUrl}/simulations`,
-        patchChapters: `${baseUrl}/chapters`,
-        patchQuestions : `${baseUrl}/questions`,
-        patchAdminUser: `${baseUrl}/users/admin`,
-        restrictUser: `${baseUrl}/users/restrict`,
-        unrestrictUser: `${baseUrl}/users/unrestrict`,
-        // Delete Endpoints
-        deleteTopic: `${baseUrl}/topics`,
-        deleteChapter: `${baseUrl}/chapters`,
-        deleteQuestion: `${baseUrl}/questions`,
-        deleteModels: `${baseUrl}/models`,
-        deleteExperiments: `${baseUrl}/experiments`,
-        deleteVideos: `${baseUrl}/videos`,
-        deleteSimulations: `${baseUrl}/simulations`,
 
     //-------->End Content Management ------->//
-
-
-    //-----------------OverView --------------------//
-        getOverview: `${baseUrl}/overview`,
-        getNotifications: `${baseUrl}/overview/notifications`
 
 
 
